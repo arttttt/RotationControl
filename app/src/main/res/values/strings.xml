@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Rotation Control V2</string>
+    <string name="start_service_pref_text">Start rotation service</string>
+    <string name="start_on_boot_pref_text">Start rotation service on boot</string>
+    <string name="start_service_pref_key">pref_start_service</string>
+    <string name="start_on_boot_pref_key">pref_start_on_boot</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

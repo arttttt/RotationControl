@@ -1,6 +1,8 @@
 package com.artt.rotationcontrolv2;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -22,6 +24,8 @@ public class RotationService extends Service implements AccelerometerRotationObs
     //private static final String TAG = "RotationControlV2";
     private static final String INTENT_CLICKED_BUTTON_ID = "BUTTON_ID";
     private static final String INTENT_ACTION = "ACTION";
+    private static final String NOTIFICATION_CHANNEL = "Rotation Control";
+    private static final String NOTIFICATION_CHANNEL_ID = "rotation_service_notification_channel_id";
 
     private static final int NOTIFICATION_ID = 999;
     private static final int ACTION_CLICK = 2;
@@ -68,6 +72,14 @@ public class RotationService extends Service implements AccelerometerRotationObs
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL, NotificationManager.IMPORTANCE_DEFAULT);
+            if (manager != null)
+                manager.createNotificationChannel(channel);
         }
 
         WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -173,12 +185,23 @@ public class RotationService extends Service implements AccelerometerRotationObs
         notificationContent.setInt(buttonId, "setBackgroundResource", R.drawable.btnback_active);
         notificationContent.setInt(buttonId, "setColorFilter", android.R.color.transparent);
 
-        Notification notification = new Notification.Builder(this)
-                .setContent(notificationContent)
-                .setContentIntent(activity)
-                .setSmallIcon(smallIconId)
-                .setPriority(Notification.PRIORITY_MAX)
-                .build();
+        Notification notification;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
+                    .setCustomContentView(notificationContent)
+                    .setContentIntent(activity)
+                    .setSmallIcon(smallIconId)
+                    .build();
+        }
+        else
+            notification = new Notification.Builder(this)
+                    .setContent(notificationContent)
+                    .setContentIntent(activity)
+                    .setSmallIcon(smallIconId)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .build();
+
 
         showNotification(notification);
     }

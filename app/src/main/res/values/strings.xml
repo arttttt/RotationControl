@@ -5,6 +5,9 @@
     <string name="start_service_pref_key">pref_start_service</string>
     <string name="start_on_boot_pref_key">pref_start_on_boot</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_request_write_perm_title">Permission request</string>
+    <string name="dialog_request_write_perm_text">In order for the application to work properly, you must enable the writing of system settings.</string>
+    <string name="dialog_permission_denied">Denied</string>
+
+    <string name="service_write_denied">Can not write system settings without permission</string>
 </resources>

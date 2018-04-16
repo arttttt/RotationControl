@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 public class RotationService extends Service implements AccelerometerRotationObserver.Callback {
 
@@ -42,11 +43,16 @@ public class RotationService extends Service implements AccelerometerRotationObs
 
     @Override
     public void update() {
-        if (mScreenOrientation != ORIENTATION_AUTO)
+        if (mScreenOrientation != ORIENTATION_AUTO && PermissionManager.CanWriteSettings(getApplicationContext()))
             System.putInt(getContentResolver(), System.ACCELEROMETER_ROTATION, 0);
     }
 
     private void setOrientation(int orientation){
+        if (!PermissionManager.CanWriteSettings(getApplicationContext())) {
+            Toast.makeText(this, R.string.service_write_denied, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (mScreenOrientation != ORIENTATION_AUTO) {
             System.putInt(getContentResolver(), System.USER_ROTATION, orientation);
 
@@ -64,15 +70,6 @@ public class RotationService extends Service implements AccelerometerRotationObs
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!System.canWrite(this)) {
-                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                intent.setData(Uri.parse("package:" + getPackageName()));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

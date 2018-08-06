@@ -74,7 +74,7 @@ public class RotationService extends Service implements AccelerometerRotationObs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                    NOTIFICATION_CHANNEL, NotificationManager.IMPORTANCE_DEFAULT);
+                    NOTIFICATION_CHANNEL, NotificationManager.IMPORTANCE_HIGH);
             if (manager != null)
                 manager.createNotificationChannel(channel);
         }
@@ -190,6 +190,7 @@ public class RotationService extends Service implements AccelerometerRotationObs
                     .setContentIntent(activity)
                     .setSmallIcon(smallIconId)
                     .build();
+            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
         }
         else
             notification = new Notification.Builder(this)

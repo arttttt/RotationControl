@@ -13,13 +13,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private CheckBoxPreference mStartService;
     private CheckBoxPreference mStartOnBoot;
 
+    private static SettingsFragment sInstance;
+
     public static SettingsFragment getInstance(Bundle args) {
-        SettingsFragment fragment = new SettingsFragment();
+
+        if (sInstance == null)
+            sInstance = new SettingsFragment();
 
         if (args != null)
-            fragment.setArguments(args);
+            sInstance.setArguments(args);
 
-        return fragment;
+        return sInstance;
     }
 
     @Override

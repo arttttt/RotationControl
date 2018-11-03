@@ -14,11 +14,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         PermissionManager.RequestWriteSettingsPermission(this);
 
-        SettingsFragment fragment = SettingsFragment.getInstance(null);
+        if (savedInstanceState == null) {
+            SettingsFragment fragment = SettingsFragment.getInstance(null);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.container, fragment)
-                .commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
     }
 }

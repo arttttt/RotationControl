@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Контроль орієнтації екрану</string>
+    <string name="start_service">Запустити сервіс орієнтації екрану</string>
+    <string name="start_on_boot">Запускати сервіс орієнтації екрану при старті системи</string>
+    <string name="notification_title">Орієнтація екрана</string>
+    <string name="auto_mode">Автоматично</string>
+    <string name="portrait_mode">Портретна</string>
+    <string name="portrait_reverse_mode">Портретна перевернута</string>
+    <string name="landscape_mode">Ландшафтна</string>
+    <string name="landscape_reverse_mode">Ландшафтна перевернута</string>
+</resources>

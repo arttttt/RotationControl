@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="btn_inactive">#ff757575</color>
+    <color name="highlight">#ff009688</color>
+    <color name="notification_secondary_text_color">#707070</color>
+</resources>

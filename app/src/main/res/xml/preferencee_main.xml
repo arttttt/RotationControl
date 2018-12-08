@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="@string/app_name"
+                  xmlns:android="http://schemas.android.com/apk/res/android">
+        <CheckBoxPreference android:title="@string/start_service" android:key="@string/prefkey_start_service" android:defaultValue="false" />
+        <CheckBoxPreference android:title="@string/start_on_boot" android:key="@string/prefkey_start_on_boot" android:defaultValue="false" />
+</PreferenceScreen>

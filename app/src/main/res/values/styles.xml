@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Material.Light"/>
+
+    <style name="AppTheme.NotificationButton" parent="@style/AppTheme">
+        <item name="android:background">#00ffffff</item>
+        <item name="android:padding">2.0dip</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:tint">@color/btn_inactive</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:layout_margin">5.0dip</item>
+    </style>
+
+    <style name="AppTheme.NotificationIcon" parent="AppTheme">
+        <item name="android:padding">2.0dip</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageView
+            android:layout_width="40.0dip"
+            android:layout_height="40.0dip"
+            android:id="@+id/notificationIcon"
+            android:src="@drawable/ic_launcher_gray"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/notificationIcon"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/notification_title"
+                style="@android:style/TextAppearance.Material.Medium"
+                android:textColor="@android:color/primary_text_light"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/rotationMode"
+                style="@android:style/TextAppearance.Material.Small"
+                android:textColor="@color/notification_secondary_text_color"/>
+        </LinearLayout>
+    <LinearLayout android:layout_alignParentRight="true"
+                  android:layout_centerVertical="true"
+                  android:orientation="horizontal"
+                  android:id="@+id/btn_group"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content">
+        <ImageView android:id="@+id/btn_auto"
+                   android:layout_width="50.0dip"
+                   android:layout_height="50.0dip"
+                   android:src="@drawable/btn_auto"
+                   style="@style/AppTheme.NotificationButton"/>
+        <ImageView android:id="@+id/btn_portrait"
+                   android:layout_width="50.0dip"
+                   android:layout_height="50.0dip"
+                   android:src="@drawable/btn_portrait"
+                   style="@style/AppTheme.NotificationButton"/>
+        <ImageView android:id="@+id/btn_portrait_reverse"
+                   android:layout_width="50.0dip"
+                   android:layout_height="50.0dip"
+                   android:src="@drawable/btn_portrait_reverse"
+                   style="@style/AppTheme.NotificationButton"/>
+        <ImageView android:id="@+id/btn_landscape"
+                   android:layout_width="50.0dip"
+                   android:layout_height="50.0dip"
+                   android:src="@drawable/btn_landscape"
+                   style="@style/AppTheme.NotificationButton"/>
+        <ImageView android:id="@+id/btn_landscape_reverse"
+                   android:layout_width="50.0dip"
+                   android:layout_height="50.0dip"
+                   android:src="@drawable/btn_landscape_reverse"
+                   style="@style/AppTheme.NotificationButton"/>
+    </LinearLayout>
+</RelativeLayout>

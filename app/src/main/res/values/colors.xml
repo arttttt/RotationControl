@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorActiveButtonTint">@android:color/black</color>
     <color name="colorInactiveButtonTint">@android:color/white</color>
+    <color name="colorActiveButtonTintMiui">@android:color/white</color>
+    <color name="colorInactiveButtonTintMiui">@android:color/black</color>
 </resources>

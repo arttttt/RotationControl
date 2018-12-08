@@ -18,6 +18,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.arttttt.rotationcontrolv3.model.permissions.base.PermissionsChecker
+import com.arttttt.rotationcontrolv3.utils.OsUtils
 import org.koin.standalone.StandAloneContext
 
 
@@ -164,21 +165,27 @@ class RotationService: Service() {
                 buttonData.first,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT))
+
             if (buttonData.first == activeButtonId) {
                 notificationContent.setInt(buttonData.first,
                     "setBackgroundResource",
                     R.drawable.active_button_background)
+
+                val colorRes = if (OsUtils.isMiui()) R.color.colorActiveButtonTintMiui else R.color.colorActiveButtonTint
+
                 notificationContent.setInt(buttonData.first,
                     "setColorFilter",
-                    ContextCompat.getColor(this, R.color.colorActiveButtonTint))
-            }
-            else {
+                    ContextCompat.getColor(this, colorRes))
+            } else {
                 notificationContent.setInt(buttonData.first,
                     "setBackgroundResource",
                     android.R.color.transparent)
+
+                val colorRes = if (OsUtils.isMiui()) R.color.colorInactiveButtonTintMiui else R.color.colorInactiveButtonTint
+
                 notificationContent.setInt(buttonData.first,
                     "setColorFilter",
-                    ContextCompat.getColor(this, R.color.colorInactiveButtonTint))
+                    ContextCompat.getColor(this, colorRes))
             }
         }
 

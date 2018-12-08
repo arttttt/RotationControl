@@ -2,5 +2,5 @@
     <string name="start_on_boot_text">Запускать Rotation Сontrol при старте системы</string>
     <string name="notice_text">Предупреждение</string>
     <string name="can_write_settings_permission_text">Для правильной работы, приложению необходимо разрешение на запись системных настроек</string>
-    <string name="can_not_write_settings">Отсутствует разрешение на запись системных настроек. Работа сервиса завершена.</string>
+    <string name="can_not_write_settings_toast">Rotation Control: Отсутствует разрешение на запись системных настроек. Работа сервиса завершена.</string>
 </resources>

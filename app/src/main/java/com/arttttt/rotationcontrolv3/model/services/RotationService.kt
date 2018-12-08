@@ -36,8 +36,11 @@ class RotationService: Service() {
         override fun isStarted(): LiveData<Boolean> = mStarted
 
         override fun startService(context: Context) {
-            if (!permissionsChecker.canWriteSettings(context))
+            if (!permissionsChecker.canWriteSettings(context)) {
+                Toast.makeText(context, R.string.can_not_write_settings_toast, Toast.LENGTH_LONG).show()
+
                 return
+            }
 
             Intent(context, RotationService::class.java).let {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -195,7 +198,7 @@ class RotationService: Service() {
 
     private fun handleNotificationClick(buttonId: Int) {
         if (!permissionsChecker.canWriteSettings(this)) {
-            Toast.makeText(this, R.string.can_not_write_settings, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.can_not_write_settings_toast, Toast.LENGTH_LONG).show()
 
             stopSelf()
             return

@@ -3,5 +3,5 @@
     <string name="start_on_boot_text">Start Rotation Control at system boot</string>
     <string name="notice_text">Notice</string>
     <string name="can_write_settings_permission_text">To work properly, the application needs permission to write system settings</string>
-    <string name="can_not_write_settings">Write settings permission is not granted. The service is shut down.</string>
+    <string name="can_not_write_settings_toast">Rotation Control: Write settings permission is not granted. The service is shut down.</string>
 </resources>

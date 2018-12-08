@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="launcher_icon_inset">12dp</dimen>
+</resources>

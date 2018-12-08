@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog.ButtonBar" parent="Widget.AppCompat.Button.Borderless">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/AppTheme.AlertDialog.ButtonBar</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AppTheme.AlertDialog.ButtonBar</item>
+    </style>
+
+    <style name="AppTheme.BottomAppBar" parent="AppTheme">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="AppTheme.FloatingActionButton" parent="AppTheme">
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Notification.Button" parent="AppTheme">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="tintMode">src_in</item>
+    </style>
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="launcher_icon_inset">8dp</dimen>
+</resources>

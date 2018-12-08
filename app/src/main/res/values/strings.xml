@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RotationControlV3</string>
+    <string name="start_on_boot_text">Start Rotation control at system boot</string>
+    <string name="service_status_text">Service status:</string>
+    <string name="status_started_text">Started</string>
+    <string name="status_not_started_text">Not started</string>
+    <string name="notice_text">Notice</string>
+    <string name="can_write_settings_permission_text">To work properly, the application needs permission to write system settings</string>
+    <string name="can_not_write_settings">Write settings permission is not granted. The service is shut down.</string>
+</resources>

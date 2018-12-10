@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="rectangle">
+        <shape android:shape="oval">
             <solid android:color="@color/colorPrimary"/>
         </shape>
     </item>
     <item>
         <inset android:drawable="@drawable/ic_rotate"
+               android:insetBottom="@dimen/launcher_icon_inset"
                android:insetTop="@dimen/launcher_icon_inset"
                android:insetLeft="@dimen/launcher_icon_inset"
-               android:insetRight="@dimen/launcher_icon_inset"
-               android:insetBottom="@dimen/launcher_icon_inset"/>
+               android:insetRight="@dimen/launcher_icon_inset"/>
     </item>
 </layer-list>

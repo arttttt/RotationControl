@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.view
+package com.arttttt.rotationcontrolv3.view.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

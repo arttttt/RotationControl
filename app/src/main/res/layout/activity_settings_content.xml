@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:showIn="@layout/activity_settings"
-        tools:context=".view.SettingsActivity">
+        tools:context=".view.activities.SettingsActivity">
 
     <android.support.v7.widget.SwitchCompat android:layout_width="match_parent"
                                             android:layout_height="wrap_content"

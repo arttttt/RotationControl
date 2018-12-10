@@ -8,12 +8,11 @@
                  android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name"
                  android:name=".base.BaseApplication"
-                 android:roundIcon="@drawable/ic_launcher_round"
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme"
                  tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".view.SettingsActivity">
+        <activity android:name=".view.activities.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -43,18 +43,18 @@ class RotationService: Service() {
                 return
             }
 
-            Intent(context, RotationService::class.java).let {
+            Intent(context, RotationService::class.java).let { intent ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(it)
+                    context.startForegroundService(intent)
                 } else {
-                    context.startService(it)
+                    context.startService(intent)
                 }
             }
         }
 
         override fun stopService(context: Context) {
-            Intent(context, RotationService::class.java).let {
-                context.stopService(it)
+            Intent(context, RotationService::class.java).let {intent ->
+                context.stopService(intent)
             }
         }
     }
@@ -82,12 +82,12 @@ class RotationService: Service() {
 
     private var mScreenOrientation = orientationAuto
 
-    private val buttonsData = arrayOf(
-        Pair(R.id.btn_auto, R.drawable.ic_portrait_auto),
-        Pair(R.id.btn_portrait, R.drawable.ic_portrait),
-        Pair(R.id.btn_portrait_reverse, R.drawable.ic_portrait_reverse),
-        Pair(R.id.btn_landscape, R.drawable.ic_landscape),
-        Pair(R.id.btn_landscape_reverse, R.drawable.ic_landscape_reverse))
+    private val buttonsIds = arrayOf(
+        R.id.btn_auto,
+        R.id.btn_portrait,
+        R.id.btn_portrait_reverse,
+        R.id.btn_landscape,
+        R.id.btn_landscape_reverse)
 
     override fun onCreate() {
         super.onCreate()
@@ -156,34 +156,34 @@ class RotationService: Service() {
             else ->  R.id.btn_auto
         }
 
-        for (buttonData in buttonsData) {
+        for (buttonId in buttonsIds) {
             val intent = Intent(this, RotationService::class.java).apply {
                 putExtra(intentAction, intentActionClick)
-                putExtra(intentClickedButtonId, buttonData.first)
+                putExtra(intentClickedButtonId, buttonId)
             }
-            notificationContent.setOnClickPendingIntent(buttonData.first, PendingIntent.getService(this,
-                buttonData.first,
+            notificationContent.setOnClickPendingIntent(buttonId, PendingIntent.getService(this,
+                buttonId,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT))
 
-            if (buttonData.first == activeButtonId) {
-                notificationContent.setInt(buttonData.first,
+            if (buttonId == activeButtonId) {
+                notificationContent.setInt(buttonId,
                     "setBackgroundResource",
                     R.drawable.active_button_background)
 
                 val colorRes = if (OsUtils.isMiui()) R.color.colorActiveButtonTintMiui else R.color.colorActiveButtonTint
 
-                notificationContent.setInt(buttonData.first,
+                notificationContent.setInt(buttonId,
                     "setColorFilter",
                     ContextCompat.getColor(this, colorRes))
             } else {
-                notificationContent.setInt(buttonData.first,
+                notificationContent.setInt(buttonId,
                     "setBackgroundResource",
                     android.R.color.transparent)
 
                 val colorRes = if (OsUtils.isMiui()) R.color.colorInactiveButtonTintMiui else R.color.colorInactiveButtonTint
 
-                notificationContent.setInt(buttonData.first,
+                notificationContent.setInt(buttonId,
                     "setColorFilter",
                     ContextCompat.getColor(this, colorRes))
             }

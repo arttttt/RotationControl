@@ -13,19 +13,15 @@ class SettingsPresenter(private val preferences: AppPreferences,
         mView?.run {
             val startOnBoot = preferences.getBool(Parameters.START_ON_BOOT)
             setSwitchViewChecked(startOnBoot)
-            serviceHelper.isStarted().value?.let { setFabIcon(it) }
+            serviceHelper.isStarted().value?.let(::setFabIcon)
             if (preferences.getBool(Parameters.FIRST_BOOT, true)) {
                 checkAndRequestPermissions()
                 preferences.putBool(Parameters.FIRST_BOOT, false)
             }
         }
 
-        serviceHelper.isStarted().observeForever {
-            it?.let { value ->
-                mView?.run {
-                    setFabIcon(value)
-                }
-            }
+        serviceHelper.isStarted().observeForever { value ->
+            value?.let { mView?.run { setFabIcon(it) } }
         }
     }
 
@@ -33,7 +29,5 @@ class SettingsPresenter(private val preferences: AppPreferences,
         mView?.run { startOrStopService(serviceHelper) }
     }
 
-    override fun onStartOnBootStateChanged(checked: Boolean) {
-        preferences.putBool(AppPreferences.Companion.Parameters.START_ON_BOOT, checked)
-    }
+    override fun onStartOnBootStateChanged(checked: Boolean) = preferences.putBool(Parameters.START_ON_BOOT, checked)
 }

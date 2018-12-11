@@ -3,4 +3,8 @@
     <string name="notice_text">Предупреждение</string>
     <string name="can_write_settings_permission_text">Для правильной работы, приложению необходимо разрешение на запись системных настроек</string>
     <string name="can_not_write_settings_toast">Rotation Control: Отсутствует разрешение на запись системных настроек. Работа сервиса завершена.</string>
+    <string name="menu_item_settings">Настройки</string>
+    <string name="menu_item_about">О приложении</string>
+    <string name="button_sources_text">Исходный код</string>
+    <string name="button_donate_text">Поддержать автора</string>
 </resources>

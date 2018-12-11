@@ -2,6 +2,7 @@
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="bottomSheetDialogTheme">@style/AppTheme.BottomSheetDialog</item>
     </style>
 
     <style name="AppTheme.AlertDialog.ButtonBar" parent="Widget.AppCompat.Button.Borderless">
@@ -31,4 +32,21 @@
         <item name="android:scaleType">centerInside</item>
         <item name="tintMode">src_in</item>
     </style>
+
+    <style name="AppTheme.BottomSheetDialogBase" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheetDialog.BottomSheet</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AppTheme.BottomSheetDialog" parent="AppTheme.BottomSheetDialogBase"/>
+
+    <style name="AppTheme.BottomSheetDialog.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_dialog_background</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
 </resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.activities.HostActivity">
+
+    <fragment android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/navHostFragment"
+              android:name="androidx.navigation.fragment.NavHostFragment"
+              app:defaultNavHost="true"
+              app:navGraph="@navigation/main_graph"/>
+
+    <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:id="@+id/fab"
+                                                        app:layout_anchor="@id/bottomToolbar"
+                                                        style="@style/AppTheme.FloatingActionButton"/>
+
+    <android.support.design.bottomappbar.BottomAppBar android:layout_width="match_parent"
+                                                      android:layout_height="wrap_content"
+                                                      android:id="@+id/bottomToolbar"
+                                                      android:layout_gravity="bottom"
+                                                      app:fabAlignmentMode="center"
+                                                      app:navigationIcon="@drawable/ic_menu"
+                                                      style="@style/AppTheme.BottomAppBar"/>
+
+</android.support.design.widget.CoordinatorLayout>

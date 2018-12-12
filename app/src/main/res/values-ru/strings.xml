@@ -7,4 +7,5 @@
     <string name="menu_item_about">О приложении</string>
     <string name="button_sources_text">Исходный код</string>
     <string name="button_donate_text">Поддержать автора</string>
+    <string name="rotation_control_version">Версия приложения: %s</string>
 </resources>

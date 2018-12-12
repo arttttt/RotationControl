@@ -1,0 +1,11 @@
+<resources>
+    <string name="start_on_boot_text">Starten Sie Rotation Control beim system start</string>
+    <string name="notice_text">Beachten</string>
+    <string name="can_write_settings_permission_text">Um ordnungsgemäß zu funktionieren, benötigt die anwendung die berechtigung zum schreiben von systemeinstellungen</string>
+    <string name="can_not_write_settings_toast">Rotation Control: Schreibberechtigung wird nicht erteilt. Der Dienst ist heruntergefahren.</string>
+    <string name="menu_item_settings">Die Einstellungen</string>
+    <string name="menu_item_about">Über die Anwendung</string>
+    <string name="button_sources_text">Quellen anzeigen</string>
+    <string name="button_donate_text">Spenden</string>
+    <string name="rotation_control_version">Anwendungsversion: %s</string>
+</resources>

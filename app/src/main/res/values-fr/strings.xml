@@ -1,0 +1,11 @@
+<resources>
+    <string name="start_on_boot_text">Démarrer le contrôle de rotation au démarrage du système</string>
+    <string name="notice_text">Remarquer</string>
+    <string name="can_write_settings_permission_text">Pour fonctionner correctement, l\'application a besoin de l\'autorisation d'écrire les paramètres système.</string>
+    <string name="can_not_write_settings_toast">Rotation Control: L\'écriture des paramètres d\'autorisation n'est pas accordée. Le service est arrêté.</string>
+    <string name="menu_item_settings">Réglages</string>
+    <string name="menu_item_about">A propos de l\'application</string>
+    <string name="button_sources_text">Voir les sources</string>
+    <string name="button_donate_text">Faire un don</string>
+    <string name="rotation_control_version">Version de l\'application: %s</string>
+</resources>

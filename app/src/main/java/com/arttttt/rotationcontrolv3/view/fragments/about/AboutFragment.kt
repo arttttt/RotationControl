@@ -2,6 +2,7 @@ package com.arttttt.rotationcontrolv3.view.fragments.about
 
 import android.content.Intent
 import android.net.Uri
+import com.arttttt.rotationcontrolv3.BuildConfig
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.presenter.about.AboutContract
 import com.arttttt.rotationcontrolv3.view.fragments.base.BaseFragment
@@ -15,8 +16,13 @@ class AboutFragment: BaseFragment<AboutContract.View, AboutContract.Presenter>()
     override val presenter: AboutContract.Presenter by inject()
 
     override fun initializeUI() {
+        presenter.onInitialization()
         donateButton.setOnClickListener { presenter.onDonateClicked() }
         sourcesButton.setOnClickListener { presenter.onSourcesClicked() }
+    }
+
+    override fun setVersion() {
+        applicationVersion.text = getString(R.string.rotation_control_version, BuildConfig.VERSION_NAME)
     }
 
     override fun showDonationPage() = startActivity(createViewIntent(R.string.paypal_link))

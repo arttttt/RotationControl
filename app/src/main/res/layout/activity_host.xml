@@ -7,13 +7,6 @@
         android:layout_height="match_parent"
         tools:context=".view.activities.HostActivity">
 
-    <fragment android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/navHostFragment"
-              android:name="androidx.navigation.fragment.NavHostFragment"
-              app:defaultNavHost="true"
-              app:navGraph="@navigation/main_graph"/>
-
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:id="@+id/fab"
@@ -27,5 +20,12 @@
                                                       app:fabAlignmentMode="center"
                                                       app:navigationIcon="@drawable/ic_menu"
                                                       style="@style/AppTheme.BottomAppBar"/>
+
+    <fragment android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/navHostFragment"
+              android:name="androidx.navigation.fragment.NavHostFragment"
+              app:defaultNavHost="true"
+              app:navGraph="@navigation/main_graph"/>
 
 </android.support.design.widget.CoordinatorLayout>

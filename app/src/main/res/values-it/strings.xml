@@ -1,0 +1,11 @@
+<resources>
+    <string name="start_on_boot_text">Avvia controllo rotazione all\'avvio del sistema</string>
+    <string name="notice_text">Avviso</string>
+    <string name="can_write_settings_permission_text">Per funzionare correttamente, l\'applicazione necessita dell\'autorizzazione per scrivere le impostazioni di sistema</string>
+    <string name="can_not_write_settings_toast">Rotation Control: L\'autorizzazione di scrittura delle impostazioni non è concessa. Il servizio è spento.</string>
+    <string name="menu_item_settings">Impostazioni</string>
+    <string name="menu_item_about">Informazioni sull\'applicazione</string>
+    <string name="button_sources_text">Visualizza fonti</string>
+    <string name="button_donate_text">Donare</string>
+    <string name="rotation_control_version">Versione dell\'applicazione: %s</string>
+</resources>

@@ -6,5 +6,9 @@ import com.arttttt.rotationcontrolv3.model.preferences.AppPreferences.Companion.
 class SettingsPresenter(private val preferences: AppPreferences): SettingsContract.Presenter {
     override var mView: SettingsContract.View? = null
 
+    override fun onInitialization() {
+        mView?.setStartOnBootState(preferences.getBool(Parameters.START_ON_BOOT))
+    }
+
     override fun onStartOnBootStateChanged(checked: Boolean) = preferences.putBool(Parameters.START_ON_BOOT, checked)
 }

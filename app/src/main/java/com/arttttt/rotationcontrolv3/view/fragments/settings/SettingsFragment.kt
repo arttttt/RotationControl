@@ -13,6 +13,11 @@ class SettingsFragment: BaseFragment<SettingsContract.View, SettingsContract.Pre
     override val presenter: SettingsContract.Presenter by inject()
 
     override fun initializeUI() {
+        presenter.onInitialization()
         startOnBootSwitch.setOnCheckedChangeListener { _, isChecked -> presenter.onStartOnBootStateChanged(isChecked) }
+    }
+
+    override fun setStartOnBootState(checked: Boolean) {
+        startOnBootSwitch.isChecked = checked
     }
 }

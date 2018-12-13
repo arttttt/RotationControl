@@ -49,4 +49,8 @@
         <item name="backgroundTint">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Switch">
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
 </resources>

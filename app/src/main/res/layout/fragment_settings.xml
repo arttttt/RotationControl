@@ -16,6 +16,7 @@
                                             app:layout_constraintEnd_toEndOf="parent"
                                             android:layout_marginEnd="8dp"
                                             android:layout_marginRight="8dp"
-                                            android:id="@+id/startOnBootSwitch"/>
+                                            android:id="@+id/startOnBootSwitch"
+                                            android:theme="@style/AppTheme.Switch"/>
 
 </android.support.constraint.ConstraintLayout>

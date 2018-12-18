@@ -20,7 +20,7 @@ class AppPermissions: PermissionsChecker, PermissionsRequester {
         if (System.canWrite(context))
             return
 
-        AlertDialog.Builder(context, R.style.AppTheme_AlertDialog)
+        AlertDialog.Builder(context, R.style.AppTheme_Dialog_Alert)
             .setTitle(R.string.notice_text)
             .setMessage(R.string.can_write_settings_permission_text)
             .setPositiveButton(android.R.string.ok) { _, _ ->

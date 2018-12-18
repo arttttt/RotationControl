@@ -11,7 +11,7 @@
                                                         android:layout_height="wrap_content"
                                                         android:id="@+id/fab"
                                                         app:layout_anchor="@id/bottomToolbar"
-                                                        style="@style/AppTheme.FloatingActionButton"/>
+                                                        style="@style/AppTheme.Widget.FloatingActionButton"/>
 
     <android.support.design.bottomappbar.BottomAppBar android:layout_width="match_parent"
                                                       android:layout_height="wrap_content"

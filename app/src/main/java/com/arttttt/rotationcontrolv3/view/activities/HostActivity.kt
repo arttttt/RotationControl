@@ -1,10 +1,11 @@
 package com.arttttt.rotationcontrolv3.view.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.model.permissions.AppPermissions
+import com.arttttt.rotationcontrolv3.model.permissions.base.PermissionsChecker
+import com.arttttt.rotationcontrolv3.model.permissions.base.PermissionsRequester
 import com.arttttt.rotationcontrolv3.model.services.base.ServiceHelper
 import com.arttttt.rotationcontrolv3.presenter.main.MainContract
 import com.arttttt.rotationcontrolv3.view.fragments.mainmenu.MainMenuFragment
@@ -13,7 +14,8 @@ import org.koin.android.ext.android.inject
 
 class HostActivity : AppCompatActivity(), MainContract.View {
 
-    private val permissions: AppPermissions by inject()
+    private val permissionsChecker: PermissionsChecker by inject()
+    private val permissionsRequester: PermissionsRequester by inject()
     private val presenter: MainContract.Presenter by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +28,8 @@ class HostActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun checkAndRequestPermissions() {
-        if (!permissions.canWriteSettings(this))
-            permissions.requestWriteSettingsPermission(this)
+        if (!permissionsChecker.canWriteSettings(this))
+            permissionsRequester.requestWriteSettingsPermission(this)
     }
 
     override fun onInitialize() {
@@ -65,8 +67,8 @@ class HostActivity : AppCompatActivity(), MainContract.View {
             if (it)
                 serviceHelper.stopService(applicationContext)
             else {
-                if (!permissions.canWriteSettings(this)) {
-                    permissions.requestWriteSettingsPermission(this)
+                if (!permissionsChecker.canWriteSettings(this)) {
+                    permissionsRequester.requestWriteSettingsPermission(this)
 
                     return
                 }

@@ -19,16 +19,16 @@ import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.arttttt.rotationcontrolv3.model.permissions.base.PermissionsChecker
 import com.arttttt.rotationcontrolv3.utils.OsUtils
-import org.koin.standalone.StandAloneContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 
 class RotationService: Service() {
     override fun onBind(intent: Intent?) = null
 
-    companion object: ServiceHelper {
-        private val koinContext = StandAloneContext.getKoin().koinContext
+    companion object: ServiceHelper, KoinComponent {
         private val mStarted = MutableLiveData<Boolean>()
-        private val permissionsChecker: PermissionsChecker = koinContext.get()
+        private val permissionsChecker: PermissionsChecker by inject()
 
         init {
             mStarted.value = false
@@ -123,12 +123,11 @@ class RotationService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            val action = it.getIntExtra(intentAction, 0)
-            when(action) {
-                intentActionClick -> { handleNotificationClick(it.getIntExtra(intentClickedButtonId, 0)) }
+            when(intent.getIntExtra(intentAction, 0)) {
+                intentActionClick -> { handleNotificationClick(intent.getIntExtra(intentClickedButtonId, 0)) }
             }
         }
-        return Service.START_STICKY
+        return START_STICKY
     }
 
     private fun checkCurrentMode() {

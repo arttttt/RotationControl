@@ -1,6 +1,6 @@
 package com.arttttt.rotationcontrolv3.device.services.base
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import android.content.Context
 
 interface ServiceHelper {

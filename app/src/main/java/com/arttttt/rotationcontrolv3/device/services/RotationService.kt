@@ -10,12 +10,12 @@ import android.view.Surface
 import com.arttttt.rotationcontrolv3.R
 import android.widget.RemoteViews
 import android.app.PendingIntent
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.res.Configuration
 import android.database.ContentObserver
-import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import android.widget.Toast
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.IPermissionsCheckerDelegate
 import com.arttttt.rotationcontrolv3.utils.OsUtils

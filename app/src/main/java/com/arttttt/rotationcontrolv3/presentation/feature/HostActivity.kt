@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.presentation.feature
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.IPermissionsCheckerDelegate

@@ -1,13 +1,13 @@
 package com.arttttt.rotationcontrolv3.presentation.base
 
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class BaseFragment<V: MvpView,P: MvpPresenter<V>>: Fragment() {
+abstract class BaseFragment<V: MvpView,P: MvpPresenter<V>>: androidx.fragment.app.Fragment() {
     @LayoutRes
     protected abstract fun getLayoutResource(): Int
 

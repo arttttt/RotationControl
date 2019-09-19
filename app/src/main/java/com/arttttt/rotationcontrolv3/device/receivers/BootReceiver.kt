@@ -7,19 +7,15 @@ import com.arttttt.rotationcontrolv3.utils.delegates.preferences.PreferencesDele
 import com.arttttt.rotationcontrolv3.device.services.base.ServiceHelper
 import com.arttttt.rotationcontrolv3.utils.START_ON_BOOT
 import org.koin.core.KoinComponent
+import org.koin.core.get
 
 class BootReceiver: BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context?, intent: Intent?) {
-        intent?.let {
-            if (it.action == Intent.ACTION_BOOT_COMPLETED) {
-                context?.run {
-                    with(getKoin().get<PreferencesDelegate>()) {
-                        if (this.getBool(START_ON_BOOT))
-                            with(getKoin().get<ServiceHelper>()) {
-                                startService(context)
-                            }
-                    }
-                }
+        if (intent == null || context == null) return
+
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            if (get<PreferencesDelegate>().getBool(START_ON_BOOT)) {
+                get<ServiceHelper>().startService(context)
             }
         }
     }

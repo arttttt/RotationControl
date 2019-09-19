@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".model.receivers.BootReceiver">
+        <receiver android:name="com.arttttt.rotationcontrolv3.device.receivers.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

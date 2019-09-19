@@ -4,10 +4,10 @@
             android:id="@+id/main_graph" app:startDestination="@id/settingsFragment">
 
     <fragment android:id="@+id/settingsFragment"
-              android:name="com.arttttt.rotationcontrolv3.view.fragments.settings.SettingsFragment"
+              android:name="com.arttttt.rotationcontrolv3.presentation.feature.settings.view.SettingsFragment"
               android:label="SettingsFragment"/>
     <fragment android:id="@+id/aboutFragment"
-              android:name="com.arttttt.rotationcontrolv3.view.fragments.about.AboutFragment"
+              android:name="com.arttttt.rotationcontrolv3.presentation.feature.about.view.AboutFragment"
               android:label="AboutFragment"/>
 
 </navigation>

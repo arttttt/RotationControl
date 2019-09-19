@@ -10,14 +10,14 @@
             tools:ignore="ProtectedPermissions"/>
 
     <application
-            android:name=".base.BaseApplication"
+            android:name=".App"
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.activities.HostActivity">
+        <activity android:name=".presentation.feature.HostActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -32,7 +32,7 @@
         </receiver>
 
         <service
-                android:name=".model.services.RotationService"
+                android:name="com.arttttt.rotationcontrolv3.device.services.RotationService"
                 android:exported="false"/>
 
     </application>

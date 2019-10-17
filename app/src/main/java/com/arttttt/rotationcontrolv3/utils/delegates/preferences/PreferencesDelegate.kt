@@ -16,4 +16,21 @@ class PreferencesDelegate(
             .putBoolean(name, value)
             .apply()
     }
+
+    override fun getInt(name: String): Int? {
+        val result = prefs.getInt(name, Int.MIN_VALUE)
+
+        return if (result == Int.MIN_VALUE) {
+            null
+        } else {
+            result
+        }
+    }
+
+    override fun putInt(name: String, value: Int) {
+        prefs
+            .edit()
+            .putInt(name, value)
+            .apply()
+    }
 }

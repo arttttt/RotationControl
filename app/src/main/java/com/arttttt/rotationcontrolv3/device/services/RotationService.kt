@@ -19,7 +19,9 @@ import com.arttttt.rotationcontrolv3.device.services.base.BaseService
 import com.arttttt.rotationcontrolv3.device.services.di.rotationServiceModule
 import com.arttttt.rotationcontrolv3.device.services.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.utils.OsUtils
+import com.arttttt.rotationcontrolv3.utils.SAVED_ORIENTATION
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.ICanWriteSettingsChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
@@ -89,6 +91,7 @@ class RotationService: BaseService() {
     )
 
     private val accelerometerObserver: AccelerometerObserver by inject()
+    private val preferencesDelegate: IPreferencesDelegate by inject()
 
     override fun onCreate() {
         loadKoinModules(rotationServiceModule)
@@ -238,6 +241,7 @@ class RotationService: BaseService() {
                     contentResolver.putInt(Settings.System.USER_ROTATION, newOrientation)
                 }
                 currentOrientation = newOrientation
+                preferencesDelegate.putInt(SAVED_ORIENTATION, currentOrientation)
             }
             .ignoreElement()
     }
@@ -259,7 +263,7 @@ class RotationService: BaseService() {
     }
 
     private fun getInitialRotation(): Int {
-        return windowService.defaultDisplay.rotation
+        return preferencesDelegate.getInt(SAVED_ORIENTATION) ?: windowService.defaultDisplay.rotation
     }
 
     private fun buttonIdToOrientation(buttonId: Int): Int {

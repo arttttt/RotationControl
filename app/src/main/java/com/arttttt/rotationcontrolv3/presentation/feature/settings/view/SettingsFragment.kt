@@ -1,24 +1,23 @@
 package com.arttttt.rotationcontrolv3.presentation.feature.settings.view
 
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.presentation.feature.settings.presenter.SettingsContract
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFragment
+import com.arttttt.rotationcontrolv3.presentation.delegate.IMenuIdProvider
+import com.arttttt.rotationcontrolv3.presentation.feature.settings.pm.SettingsPM
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.koin.android.ext.android.inject
+import me.dmdev.rxpm.widget.bindTo
 import org.koin.android.scope.currentScope
 
-class SettingsFragment: BaseFragment<SettingsContract.View, SettingsContract.Presenter>(), SettingsContract.View {
-    override fun getLayoutResource() = R.layout.fragment_settings
-    override fun getMvpView() = this
+class SettingsFragment: BaseFragment<SettingsPM>(), IMenuIdProvider {
+    override val menuId: Int = R.id.settings_fragment_item
+    override val layoutRes: Int = R.layout.fragment_settings
 
-    override val presenter: SettingsContract.Presenter by currentScope.inject()
-
-    override fun initializeUI() {
-        presenter.onInitialization()
-        startOnBootSwitch.setOnCheckedChangeListener { _, isChecked -> presenter.onStartOnBootStateChanged(isChecked) }
+    override fun providePresentationModel(): SettingsPM {
+        return currentScope.get()
     }
 
-    override fun setStartOnBootState(checked: Boolean) {
-        startOnBootSwitch.isChecked = checked
+    override fun bindRestActions(pm: SettingsPM) {
+        pm.startOnBootControl
+            .bindTo(startOnBootSwitch)
     }
 }

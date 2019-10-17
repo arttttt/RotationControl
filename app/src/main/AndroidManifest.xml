@@ -17,7 +17,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.feature.HostActivity">
+
+        <activity android:name=".presentation.feature.app.view.AppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

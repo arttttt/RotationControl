@@ -1,33 +1,34 @@
 package com.arttttt.rotationcontrolv3.presentation.feature.about.view
 
-import android.content.Intent
-import android.net.Uri
-import com.arttttt.rotationcontrolv3.BuildConfig
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFragment
-import com.arttttt.rotationcontrolv3.presentation.feature.about.presenter.AboutContract
+import com.arttttt.rotationcontrolv3.presentation.delegate.IMenuIdProvider
+import com.arttttt.rotationcontrolv3.presentation.feature.about.pm.AboutPM
+import com.jakewharton.rxbinding3.view.clicks
 import kotlinx.android.synthetic.main.fragment_about.*
+import me.dmdev.rxpm.bindTo
 import org.koin.android.scope.currentScope
 
-class AboutFragment: BaseFragment<AboutContract.View, AboutContract.Presenter>(), AboutContract.View {
-    override fun getLayoutResource() = R.layout.fragment_about
-    override fun getMvpView() = this
+class AboutFragment: BaseFragment<AboutPM>(), IMenuIdProvider {
+    override val menuId: Int = R.id.about_fragment_item
+    override val layoutRes: Int = R.layout.fragment_about
 
-    override val presenter: AboutContract.Presenter by currentScope.inject()
-
-    override fun initializeUI() {
-        presenter.onInitialization()
-        donateButton.setOnClickListener { presenter.onDonateClicked() }
-        sourcesButton.setOnClickListener { presenter.onSourcesClicked() }
+    override fun providePresentationModel(): AboutPM {
+        return currentScope.get()
     }
 
-    override fun setVersion() {
-        applicationVersion.text = getString(R.string.rotation_control_version, BuildConfig.VERSION_NAME)
+    override fun bindActions(pm: AboutPM) {
+        btnDonate
+            .clicks()
+            .bindTo(pm.donateClicked)
+
+        btnSources
+            .clicks()
+            .bindTo(pm.sourcesClicked)
     }
 
-    override fun showDonationPage() = startActivity(createViewIntent(R.string.paypal_link))
-
-    override fun showSourceCode() = startActivity(createViewIntent(R.string.github_link))
-
-    private fun createViewIntent(stringRes: Int) = Intent(Intent.ACTION_VIEW, Uri.parse(getString(stringRes)))
+    override fun bindStates(pm: AboutPM) {
+        pm.appVersion
+            .bindTo(tvVersion::setText)
+    }
 }

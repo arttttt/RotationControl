@@ -19,5 +19,8 @@ class SettingsFragment: BaseFragment<SettingsPM>(), IMenuIdProvider {
     override fun bindRestActions(pm: SettingsPM) {
         pm.startOnBootControl
             .bindTo(startOnBootSwitch)
+
+        pm.forceModelControl
+            .bindTo(forceModeSwitch)
     }
 }

@@ -2,10 +2,13 @@
     <string name="start_on_boot_text">Запускать Rotation Сontrol при старте системы</string>
     <string name="notice_text">Предупреждение</string>
     <string name="can_write_settings_permission_text">Для правильной работы, приложению необходимо разрешение на запись системных настроек</string>
+    <string name="draw_overlay_permission_text">Включен принудительный режим. Для правильной работы, приложению необходимо разрешение на отображение плавающих окон</string>
     <string name="can_not_write_settings_toast">Rotation Control: Отсутствует разрешение на запись системных настроек. Работа сервиса завершена.</string>
+    <string name="can_not_draw_overlay_toast">Rotation Control: Включен принудительный режим, но отсутствует разрешение на отображение плавающих окон. Работа сервиса завершена.</string>
     <string name="menu_item_settings">Настройки</string>
     <string name="menu_item_about">О приложении</string>
     <string name="button_sources_text">Исходный код</string>
     <string name="button_donate_text">Поддержать автора</string>
     <string name="rotation_control_version">Версия приложения: %s</string>
+    <string name="force_mode">Принудительное применение ориентации экрана</string>
 </resources>

@@ -8,4 +8,7 @@
     <string name="button_sources_text">Voir les sources</string>
     <string name="button_donate_text">Faire un don</string>
     <string name="rotation_control_version">Version de l\'application: %s</string>
+    <string name="draw_overlay_permission_text">Le mode de forçage est activé. Pour fonctionner correctement, l\'application doit avoir l\'autorisation de dessiner des superpositions.</string>
+    <string name="can_not_draw_overlay_toast">Rotation Control: le mode Forçage est activé, mais l\'autorisation de superposition n\'est pas accordée. Le service est en train de fermer.</string>
+    <string name="force_mode">Orientation forcée s\'appliquant.</string>
 </resources>

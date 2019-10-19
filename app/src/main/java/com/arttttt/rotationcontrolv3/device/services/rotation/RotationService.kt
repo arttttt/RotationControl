@@ -1,6 +1,6 @@
 @file:Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 
-package com.arttttt.rotationcontrolv3.device.services
+package com.arttttt.rotationcontrolv3.device.services.rotation
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -11,22 +11,27 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.view.Surface
+import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.device.services.base.BaseService
-import com.arttttt.rotationcontrolv3.device.services.di.rotationServiceModule
-import com.arttttt.rotationcontrolv3.device.services.helper.IRotationServiceHelper
+import com.arttttt.rotationcontrolv3.device.services.delegate.IWindowDelegate
+import com.arttttt.rotationcontrolv3.device.services.rotation.base.BaseService
+import com.arttttt.rotationcontrolv3.device.services.rotation.di.rotationServiceModule
+import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
+import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.OsUtils
 import com.arttttt.rotationcontrolv3.utils.SAVED_ORIENTATION
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.ICanWriteSettingsChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import org.koin.core.KoinComponent
 import org.koin.core.context.loadKoinModules
@@ -36,30 +41,34 @@ import org.koin.core.inject
 class RotationService: BaseService() {
     companion object ServiceHelper: IRotationServiceHelper, KoinComponent {
         private val context: Context by inject()
-        private val permissionsChecker: ICanWriteSettingsChecker by inject()
+        private val writeSettingsChecker: ICanWriteSettingsChecker by inject()
+        private val drawOverlaysChecker: ICanDrawOverlayChecker by inject()
+        private val preferencesDelegate: IPreferencesDelegate by inject()
         private val schedulers: ISchedulersProvider by inject()
         private val serviceStatus = BehaviorSubject.createDefault(IRotationServiceHelper.Status.STOPPED)
 
         override fun getStatusObservable(): Observable<IRotationServiceHelper.Status> = serviceStatus.serialize().share()
 
         override fun startRotationService() {
-            permissionsChecker
+            writeSettingsChecker
                 .canWriteSettings()
-                .subscribeOn(schedulers.computation)
-                .observeOn(schedulers.ui)
-                .subscribeUntilDestroy { canWriteSettings -> dispatchCanWriteSettings(canWriteSettings) }
+                .filter { canWriteSettings -> canWriteSettings }
+                .doOnComplete { toastOf(context, R.string.can_not_write_settings_toast) }
+                .map { preferencesDelegate.getBool(FORCE_MODE) }
+                .flatMapSingle { isForceModeEnabled ->
+                    if (isForceModeEnabled) {
+                        drawOverlaysChecker.canDrawOverlay()
+                    } else {
+                        Single.just(true)
+                    }
+                }
+                .filter { canDrawOverlay -> canDrawOverlay }
+                .doOnComplete { toastOf(context, R.string.can_not_draw_overlay_toast) }
+                .subscribeUntilDestroy { context.startForegroundServiceCompat(intentOf<RotationService>(context)) }
         }
 
         override fun stopRotationService() {
             stopService<RotationService>(context)
-        }
-
-        private fun dispatchCanWriteSettings(canWriteSettings: Boolean) {
-            if (canWriteSettings) {
-                context.startForegroundServiceCompat(intentOf<RotationService>(context))
-            } else {
-                toastOf(context, R.string.can_not_write_settings_toast)
-            }
         }
 
         private const val INTENT_ACTION = "ACTION"
@@ -69,18 +78,20 @@ class RotationService: BaseService() {
         private const val NOTIFICATION_CHANNEL = "Rotation Control"
         private const val NOTIFICATION_CHANNEL_ID = "rotation_service_notification_channel_id"
         private const val NOTIFICATION_ID = 999
+    }
 
-        private const val ORIENTATION_PORTRAIT = Surface.ROTATION_0
-        private const val ORIENTATION_LANDSCAPE = Surface.ROTATION_90
-        private const val ORIENTATION_PORTRAIT_REVERSE = Surface.ROTATION_180
-        private const val ORIENTATION_LANDSCAPE_REVERSE = Surface.ROTATION_270
-        private const val ORIENTATION_AUTO = 4
+    enum class Orientation(val value: Int) {
+        ORIENTATION_PORTRAIT(Surface.ROTATION_0),
+        ORIENTATION_LANDSCAPE(Surface.ROTATION_90),
+        ORIENTATION_PORTRAIT_REVERSE(Surface.ROTATION_180),
+        ORIENTATION_LANDSCAPE_REVERSE(Surface.ROTATION_270),
+        ORIENTATION_AUTO(4)
     }
 
     private val notificationService: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE).unsafeCastTo<NotificationManager>() }
     private val windowService: WindowManager by lazy { getSystemService(Context.WINDOW_SERVICE).unsafeCastTo<WindowManager>() }
 
-    private var currentOrientation = ORIENTATION_AUTO
+    private var currentOrientation = Orientation.ORIENTATION_AUTO
 
     private val buttonsIds = arrayOf(
         R.id.btn_auto,
@@ -91,7 +102,7 @@ class RotationService: BaseService() {
     )
 
     private val accelerometerObserver: AccelerometerObserver by inject()
-    private val preferencesDelegate: IPreferencesDelegate by inject()
+    private val windowDelegate: IWindowDelegate by inject()
 
     override fun onCreate() {
         loadKoinModules(rotationServiceModule)
@@ -103,6 +114,7 @@ class RotationService: BaseService() {
     override fun onDestroy() {
         super.onDestroy()
         serviceStatus.onNext(IRotationServiceHelper.Status.STOPPED)
+        windowDelegate.removeWindow()
         unloadKoinModules(rotationServiceModule)
     }
 
@@ -126,9 +138,9 @@ class RotationService: BaseService() {
             .getAccelerometerObservable()
             .subscribeOn(schedulers.computation)
             .observeOn(schedulers.computation)
-            .flatMapSingle { permissionsChecker.canWriteSettings() }
+            .flatMapSingle { writeSettingsChecker.canWriteSettings() }
             .filter { canWriteSettings -> canWriteSettings }
-            .filter { currentOrientation != ORIENTATION_AUTO }
+            .filter { currentOrientation != Orientation.ORIENTATION_AUTO }
             .subscribeUntilDestroy { dispatchAccelerometerChanges() }
 
         contentResolver.registerContentObserver(
@@ -163,7 +175,10 @@ class RotationService: BaseService() {
                 context,
                 buttonId,
                 intentOf<RotationService>(context) {
-                    putExtra(INTENT_ACTION, INTENT_ACTION_CLICK)
+                    putExtra(
+                        INTENT_ACTION,
+                        INTENT_ACTION_CLICK
+                    )
                     putExtra(INTENT_CLICKED_BUTTON_ID, buttonId)
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT)
@@ -172,7 +187,9 @@ class RotationService: BaseService() {
             configureNotificationButton(notificationContent, buttonId, activeButtonId)
         }
 
-        return notificationOf(this, NOTIFICATION_CHANNEL_ID) {
+        return notificationOf(this,
+            NOTIFICATION_CHANNEL_ID
+        ) {
             setCustomContentView(notificationContent)
             setSmallIcon(R.drawable.ic_rotate)
             priority = NotificationCompat.PRIORITY_MAX
@@ -211,37 +228,38 @@ class RotationService: BaseService() {
     }
 
     private fun handleNotificationClick(buttonId: Int) {
-        permissionsChecker
-            .canWriteSettings()
-            .subscribeOn(schedulers.computation)
-            .subscribeOn(schedulers.computation)
-            .filter { canWriteSettings -> canWriteSettings }
-            .flatMapSingleElement { setOrientation(buttonIdToOrientation(buttonId)).toSingleDefault(Unit) }
-            .subscribeUntilDestroy(
-                onComplete = {
-                    toastOf(context, R.string.can_not_write_settings_toast)
-
-                    stopSelf()
-                },
-                onNext =  { showNotification(createNotification(orientationToButtonId(currentOrientation))) }
-            )
+        setOrientation(buttonIdToOrientation(buttonId))
+            .subscribeUntilDestroy { showNotification(createNotification(buttonId)) }
     }
 
-    private fun setOrientation(newOrientation: Int): Completable {
-        return permissionsChecker
+    private fun setOrientation(newOrientation: Orientation): Completable {
+        return writeSettingsChecker
             .canWriteSettings()
             .subscribeOn(schedulers.computation)
-            .observeOn(schedulers.computation)
+            .observeOn(schedulers.ui)
             .filter { canWriteSettings -> canWriteSettings }
+            .doOnComplete { stopWithToast(R.string.can_not_write_settings_toast) }
+            .flatMapSingle {
+                if (preferencesDelegate.getBool(FORCE_MODE)) {
+                    drawOverlaysChecker
+                        .canDrawOverlay()
+                        .filter { canDrawOverlay -> canDrawOverlay }
+                        .doOnSuccess { windowDelegate.createOrUpdateWindow(newOrientation) }
+                        .doOnComplete { stopWithToast(R.string.can_not_draw_overlay_toast) }
+                        .toSingle(false)
+                } else {
+                    Single.just(true)
+                }
+            }
             .doOnSuccess {
-                if (newOrientation == ORIENTATION_AUTO) {
+                if (newOrientation == Orientation.ORIENTATION_AUTO) {
                     contentResolver.putInt(Settings.System.ACCELEROMETER_ROTATION, 1)
                 } else {
                     dispatchAccelerometerChanges()
-                    contentResolver.putInt(Settings.System.USER_ROTATION, newOrientation)
+                    contentResolver.putInt(Settings.System.USER_ROTATION, newOrientation.value)
                 }
                 currentOrientation = newOrientation
-                preferencesDelegate.putInt(SAVED_ORIENTATION, currentOrientation)
+                preferencesDelegate.putInt(SAVED_ORIENTATION, currentOrientation.value)
             }
             .ignoreElement()
     }
@@ -262,27 +280,38 @@ class RotationService: BaseService() {
         }
     }
 
-    private fun getInitialRotation(): Int {
-        return preferencesDelegate.getInt(SAVED_ORIENTATION) ?: windowService.defaultDisplay.rotation
-    }
-
-    private fun buttonIdToOrientation(buttonId: Int): Int {
-        return when (buttonId) {
-            R.id.btn_portrait -> ORIENTATION_PORTRAIT
-            R.id.btn_portrait_reverse -> ORIENTATION_PORTRAIT_REVERSE
-            R.id.btn_landscape -> ORIENTATION_LANDSCAPE
-            R.id.btn_landscape_reverse -> ORIENTATION_LANDSCAPE_REVERSE
-            else -> ORIENTATION_AUTO
+    private fun getInitialRotation(): Orientation {
+        return when (preferencesDelegate.getInt(SAVED_ORIENTATION) ?: windowService.defaultDisplay.rotation) {
+            Orientation.ORIENTATION_LANDSCAPE.value -> Orientation.ORIENTATION_LANDSCAPE
+            Orientation.ORIENTATION_LANDSCAPE_REVERSE.value -> Orientation.ORIENTATION_LANDSCAPE_REVERSE
+            Orientation.ORIENTATION_PORTRAIT.value -> Orientation.ORIENTATION_PORTRAIT
+            Orientation.ORIENTATION_PORTRAIT_REVERSE.value -> Orientation.ORIENTATION_PORTRAIT_REVERSE
+            else -> Orientation.ORIENTATION_AUTO
         }
     }
 
-    private fun orientationToButtonId(orientation: Int): Int {
+    private fun buttonIdToOrientation(buttonId: Int): Orientation {
+        return when (buttonId) {
+            R.id.btn_portrait -> Orientation.ORIENTATION_PORTRAIT
+            R.id.btn_portrait_reverse -> Orientation.ORIENTATION_PORTRAIT_REVERSE
+            R.id.btn_landscape -> Orientation.ORIENTATION_LANDSCAPE
+            R.id.btn_landscape_reverse -> Orientation.ORIENTATION_LANDSCAPE_REVERSE
+            else -> Orientation.ORIENTATION_AUTO
+        }
+    }
+
+    private fun orientationToButtonId(orientation: Orientation): Int {
         return when (orientation) {
-            ORIENTATION_PORTRAIT -> R.id.btn_portrait
-            ORIENTATION_PORTRAIT_REVERSE -> R.id.btn_portrait_reverse
-            ORIENTATION_LANDSCAPE -> R.id.btn_landscape
-            ORIENTATION_LANDSCAPE_REVERSE -> R.id.btn_landscape_reverse
+            Orientation.ORIENTATION_PORTRAIT -> R.id.btn_portrait
+            Orientation.ORIENTATION_PORTRAIT_REVERSE -> R.id.btn_portrait_reverse
+            Orientation.ORIENTATION_LANDSCAPE -> R.id.btn_landscape
+            Orientation.ORIENTATION_LANDSCAPE_REVERSE -> R.id.btn_landscape_reverse
             else ->  R.id.btn_auto
         }
+    }
+
+    private fun stopWithToast(messageRes: Int) {
+        toastOf(context, messageRes)
+        stopSelf()
     }
 }

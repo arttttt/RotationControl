@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.device.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.arttttt.rotationcontrolv3.device.services.helper.IRotationServiceHelper
+import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.utils.START_ON_BOOT
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import org.koin.core.KoinComponent

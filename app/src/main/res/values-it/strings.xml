@@ -8,4 +8,7 @@
     <string name="button_sources_text">Visualizza fonti</string>
     <string name="button_donate_text">Donare</string>
     <string name="rotation_control_version">Versione dell\'applicazione: %s</string>
+    <string name="draw_overlay_permission_text">La modalità forzata è abilitata. Per funzionare correttamente, l\'applicazione richiede l\'autorizzazione per disegnare sovrapposizioni</string>
+    <string name="can_not_draw_overlay_toast">Rotation Control: la modalità Force è abilitata, ma l\'autorizzazione di overlay di disegno non è concessa. Il servizio si sta chiudendo.</string>
+    <string name="force_mode">Applicazione dell\'orientamento forzato.</string>
 </resources>

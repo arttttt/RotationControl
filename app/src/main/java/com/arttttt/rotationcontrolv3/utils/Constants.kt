@@ -4,6 +4,7 @@ const val PREFERENCES_NAME = "settings"
 
 const val SAVED_ORIENTATION ="saved_orientation"
 const val START_ON_BOOT = "start_on_boot"
+const val FORCE_MODE = "force_mode"
 
 const val APP_CICERONE = "APP_CICERONE"
 const val APP_HOLDER = "APP_HOLDER"

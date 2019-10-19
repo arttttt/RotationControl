@@ -1,17 +1,21 @@
 package com.arttttt.rotationcontrolv3.di
 
 import android.content.Context
-import com.arttttt.rotationcontrolv3.device.services.RotationService
-import com.arttttt.rotationcontrolv3.device.services.helper.IRotationServiceHelper
+import com.arttttt.rotationcontrolv3.device.services.rotation.RotationService
+import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.AppLauncher
 import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.IAppLauncher
 import com.arttttt.rotationcontrolv3.utils.*
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.ErrorDispatcher
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.IErrorDispatcher
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.CanWriteSettingsChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.CanWriteSettingsRequester
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.ICanWriteSettingsChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.ICanWriteSettingsRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.CanWriteSettingsChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.CanWriteSettingsRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsRequester
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.PreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.resources.IResourcesDelegate
@@ -68,4 +72,18 @@ val commonModule = module {
     }
 
     factory { CompositeDisposable() }
+
+    single<ICanDrawOverlayChecker> {
+        CanDrawOverlayChecker(
+            context = get()
+        )
+    }
+
+    single<ICanDrawOverlayRequester> {
+        CanDrawOverlayRequester(
+            context = get(),
+            canWriteSettingsChecker = get(),
+            helper = get()
+        )
+    }
 }

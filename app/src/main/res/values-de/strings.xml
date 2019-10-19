@@ -8,4 +8,7 @@
     <string name="button_sources_text">Quellen anzeigen</string>
     <string name="button_donate_text">Spenden</string>
     <string name="rotation_control_version">Anwendungsversion: %s</string>
+    <string name="draw_overlay_permission_text">Der Force-Modus ist aktiviert. Um ordnungsgemäß zu funktionieren, benötigt die Anwendung die Berechtigung zum Zeichnen von Overlays</string>
+    <string name="can_not_draw_overlay_toast">Rotat: Der Force-Modus ist aktiviert, die Berechtigung zum Zeichnen von Overlays wird jedoch nicht erteilt. Der Dienst wird heruntergefahren.</string>
+    <string name="force_mode">Zwangsorientierung anwenden.</string>
 </resources>

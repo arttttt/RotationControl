@@ -3,6 +3,7 @@ package com.arttttt.rotationcontrolv3.presentation.feature.mainflow.view
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.presentation.base.FlowFragment
 import com.arttttt.rotationcontrolv3.presentation.delegate.IMenuIdProvider
+import com.arttttt.rotationcontrolv3.presentation.delegate.screenswitcher.IScreenSwitcherFragmentManagerHolder
 import com.arttttt.rotationcontrolv3.presentation.feature.mainflow.pm.MainFlowPM
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
@@ -16,9 +17,9 @@ import kotlinx.android.synthetic.main.fragment_flow.*
 import me.dmdev.rxpm.bindTo
 import me.dmdev.rxpm.widget.bindTo
 import org.koin.android.scope.currentScope
+import org.koin.core.parameter.parametersOf
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class MainFlowFragment: FlowFragment<MainFlowPM>() {
 
@@ -28,24 +29,18 @@ class MainFlowFragment: FlowFragment<MainFlowPM>() {
         }
     }
 
-    private var currentFragmentTag: String? = null
-
+    private val screenSwitcherFragmentManagerHolder: IScreenSwitcherFragmentManagerHolder by currentScope.inject()
     override val navigator: Navigator by lazy { SupportAppNavigator(activity, childFragmentManager, R.id.container) }
     override val layoutRes: Int = R.layout.fragment_flow
 
     override fun providePresentationModel(): MainFlowPM {
-        return currentScope.get()
+        return currentScope.get { parametersOf(R.id.container) }
     }
 
     override fun bindActions(pm: MainFlowPM) {
         bottomToolbar.setNavigationOnClickListener { pm.hamburgerClicked.accept() }
 
         fab.clicks().bindTo(pm.fabClicked)
-    }
-
-    override fun bindCommands(pm: MainFlowPM) {
-        pm.showScreen
-            .bindTo { screen -> showScreen(screen) }
     }
 
     override fun bindStates(pm: MainFlowPM) {
@@ -114,23 +109,13 @@ class MainFlowFragment: FlowFragment<MainFlowPM>() {
             }
     }
 
-    private fun showScreen(screen: SupportAppScreen) {
-        val currentFragment = childFragmentManager.findFragmentByTag(currentFragmentTag)
-        val savedFragment = childFragmentManager.findFragmentByTag(screen.screenKey)
+    override fun onPause() {
+        super.onPause()
+        screenSwitcherFragmentManagerHolder.detachFragmentManager()
+    }
 
-        val newFragment = savedFragment ?: screen.fragment
-
-        if (currentFragment === newFragment) {
-            return
-        }
-
-        childFragmentManager.beginTransaction {
-            currentFragment?.let { fragment -> hide(fragment) }
-            savedFragment?.let { fragment -> show(fragment) } ?: add(R.id.container, newFragment, screen.screenKey)
-
-            commit()
-        }
-
-        currentFragmentTag = screen.screenKey
+    override fun onResume() {
+        screenSwitcherFragmentManagerHolder.attachFragmentManager(childFragmentManager)
+        super.onResume()
     }
 }

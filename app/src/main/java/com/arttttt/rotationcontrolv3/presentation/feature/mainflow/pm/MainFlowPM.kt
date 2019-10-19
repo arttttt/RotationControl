@@ -5,6 +5,7 @@ import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.Screens
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFlowPresentationModel
+import com.arttttt.rotationcontrolv3.presentation.delegate.screenswitcher.IScreenSwitcherDelegate
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
@@ -25,14 +26,13 @@ class MainFlowPM(
     private val canWriteSettingsChecker: ICanWriteSettingsChecker,
     private val canWriteSettingsRequester: ICanWriteSettingsRequester,
     private val canDrawOverlayChecker: ICanDrawOverlayChecker,
-    private val canDrawOverlayRequester: ICanDrawOverlayRequester
+    private val canDrawOverlayRequester: ICanDrawOverlayRequester,
+    private val screenSwitcher: IScreenSwitcherDelegate
 ): BaseFlowPresentationModel() {
 
     val hamburgerClicked = action<Unit>()
     val navigationMenuClicked = action<MenuItem>()
     val fabClicked = action<Unit>()
-
-    val showScreen = command<SupportAppScreen>()
 
     val fabIconRes = state(0)
     val fabVisibility = state(true)
@@ -50,7 +50,7 @@ class MainFlowPM(
     override fun onCreate() {
         super.onCreate()
 
-        showScreen(Screens.SettingsScreen)
+        screenSwitcher.switchScreen(Screens.SettingsScreen)
 
         fabClicked
             .observable
@@ -130,7 +130,7 @@ class MainFlowPM(
     private fun dispatchNavigationMenuClicked(item: MenuItem) {
         fabVisibility.accept(item.itemId == R.id.settings_fragment_item)
 
-        showScreen(
+        screenSwitcher.switchScreen(
             when (item.itemId) {
                 R.id.settings_fragment_item -> Screens.SettingsScreen
                 R.id.about_fragment_item -> Screens.AboutScreen
@@ -138,6 +138,4 @@ class MainFlowPM(
             }
         )
     }
-
-    private fun showScreen(screen: SupportAppScreen) = showScreen.accept(screen)
 }

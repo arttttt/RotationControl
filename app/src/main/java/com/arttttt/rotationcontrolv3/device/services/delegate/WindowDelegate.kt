@@ -5,10 +5,10 @@ package com.arttttt.rotationcontrolv3.device.services.delegate
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.PixelFormat
-import android.view.Surface
 import android.view.View
 import android.view.WindowManager
 import com.arttttt.rotationcontrolv3.device.services.rotation.RotationService
+import com.arttttt.rotationcontrolv3.utils.WINDOW_TYPE
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 
 class WindowDelegate(
@@ -22,7 +22,7 @@ class WindowDelegate(
     override fun createOrUpdateWindow(orientation: RotationService.Orientation) {
         val params = WindowManager.LayoutParams(
             1, 1,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WINDOW_TYPE,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {

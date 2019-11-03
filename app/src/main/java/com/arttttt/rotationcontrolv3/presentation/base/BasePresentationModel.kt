@@ -105,4 +105,12 @@ abstract class BasePresentationModel: PresentationModel(), KoinComponent {
     protected inline fun<R>DialogControl<Unit, R>.showForResult(): Maybe<R> {
         return showForResult(Unit)
     }
+
+    protected infix fun <T> T.passTo(command: Command<T>) {
+        command.consumer.accept(this)
+    }
+
+    protected infix fun <T> T.passTo(state: State<T>) {
+        state.consumer.accept(this)
+    }
 }

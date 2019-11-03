@@ -1,1 +1,1 @@
-include("app", "screenswitcher")
+include("app")

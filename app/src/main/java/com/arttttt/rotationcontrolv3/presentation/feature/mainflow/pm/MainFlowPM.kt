@@ -5,7 +5,6 @@ import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.Screens
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFlowPresentationModel
-import com.arttttt.rotationcontrolv3.presentation.delegate.screenswitcher.IScreenSwitcherDelegate
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
@@ -15,7 +14,6 @@ import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsett
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import io.reactivex.Single
 import me.dmdev.rxpm.action
-import me.dmdev.rxpm.command
 import me.dmdev.rxpm.state
 import me.dmdev.rxpm.widget.dialogControl
 import ru.terrakok.cicerone.android.support.SupportAppScreen
@@ -26,8 +24,7 @@ class MainFlowPM(
     private val canWriteSettingsChecker: ICanWriteSettingsChecker,
     private val canWriteSettingsRequester: ICanWriteSettingsRequester,
     private val canDrawOverlayChecker: ICanDrawOverlayChecker,
-    private val canDrawOverlayRequester: ICanDrawOverlayRequester,
-    private val screenSwitcher: IScreenSwitcherDelegate
+    private val canDrawOverlayRequester: ICanDrawOverlayRequester
 ): BaseFlowPresentationModel() {
 
     val hamburgerClicked = action<Unit>()
@@ -36,6 +33,7 @@ class MainFlowPM(
 
     val fabIconRes = state(0)
     val fabVisibility = state(true)
+    val currentScreen = state<SupportAppScreen>(Screens.SettingsScreen)
 
     val drawOverlayDialog = dialogControl<Unit, DialogResult>()
     val writeSettingsDialog = dialogControl<Unit, DialogResult>()
@@ -49,8 +47,6 @@ class MainFlowPM(
 
     override fun onCreate() {
         super.onCreate()
-
-        screenSwitcher.switchScreen(Screens.SettingsScreen)
 
         fabClicked
             .observable
@@ -130,12 +126,10 @@ class MainFlowPM(
     private fun dispatchNavigationMenuClicked(item: MenuItem) {
         fabVisibility.accept(item.itemId == R.id.settings_fragment_item)
 
-        screenSwitcher.switchScreen(
-            when (item.itemId) {
-                R.id.settings_fragment_item -> Screens.SettingsScreen
-                R.id.about_fragment_item -> Screens.AboutScreen
-                else -> object: SupportAppScreen() {}
-            }
-        )
+        when (item.itemId) {
+            R.id.settings_fragment_item -> Screens.SettingsScreen
+            R.id.about_fragment_item -> Screens.AboutScreen
+            else -> object : SupportAppScreen() {}
+        } passTo currentScreen
     }
 }

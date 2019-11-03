@@ -52,8 +52,10 @@ class MainFlowFragment: FlowFragment<MainFlowPM>() {
                 fab.setImageResource(imageRes)
 
                 // A hack that fixes the disappearance of an icon
-                fab.hide()
-                fab.show()
+                if (fab.isVisible) {
+                    fab.hide()
+                    fab.show()
+                }
             }
     }
 

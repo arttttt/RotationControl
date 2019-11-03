@@ -9,7 +9,10 @@ val settingsModule = module {
     scope(named<SettingsFragment>()) {
         scoped {
             SettingsPM(
-                preferencesDelegate = get()
+                preferencesDelegate = get(),
+                canDrawOverlayRequester = get(),
+                canDrawOverlayChecker = get(),
+                rotationServiceHelper = get()
             )
         }
     }

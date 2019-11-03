@@ -1,20 +1,37 @@
 package com.arttttt.rotationcontrolv3.presentation.feature.settings.pm
 
+import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFlowPresentationModel
+import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.START_ON_BOOT
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayRequester
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
+import io.reactivex.Single
 import me.dmdev.rxpm.widget.checkControl
+import me.dmdev.rxpm.widget.dialogControl
 
 class SettingsPM(
-    private val preferencesDelegate: IPreferencesDelegate
+    private val preferencesDelegate: IPreferencesDelegate,
+    private val rotationServiceHelper: IRotationServiceHelper,
+    private val canDrawOverlayChecker: ICanDrawOverlayChecker,
+    private val canDrawOverlayRequester: ICanDrawOverlayRequester
 ): BaseFlowPresentationModel() {
 
     val startOnBootControl = checkControl(preferencesDelegate.getBool(START_ON_BOOT))
     val forceModelControl = checkControl(preferencesDelegate.getBool(FORCE_MODE))
 
+    val drawOverlayDialog = dialogControl<Unit, DialogResult>()
+
+    private lateinit var lastServiceStatus: IRotationServiceHelper.Status
+
     override fun onCreate() {
         super.onCreate()
+
+        rotationServiceHelper
+            .getStatusObservable()
+            .subscribeUntilDestroy { status -> lastServiceStatus = status }
 
         startOnBootControl
             .checkedChanges
@@ -24,6 +41,35 @@ class SettingsPM(
         forceModelControl
             .checkedChanges
             .observable
+            .flatMapSingle { isChecked ->
+                if (isChecked && lastServiceStatus == IRotationServiceHelper.Status.STARTED) {
+                    canDrawOverlayChecker
+                        .canDrawOverlay()
+                        .flatMap { canDrawOverlay ->
+                            if (!canDrawOverlay) {
+                                drawOverlayDialog
+                                    .showForResult()
+                                    .filter { result -> result == DialogResult.OK }
+                                    .flatMapSingleElement { canDrawOverlayRequester.requestDrawOverlayPermission() }
+                                    .filter { canDrawOverlay -> canDrawOverlay }
+                                    .toSingle(false)
+                                    .doOnSuccess { canDrawOverlay ->
+                                        if (!canDrawOverlay) {
+                                            forceModelControl.checked.accept(false)
+                                        } else {
+                                            rotationServiceHelper.restartRotationService()
+                                        }
+                                    }
+                            } else {
+                                Single
+                                    .just(isChecked)
+                                    .doOnSuccess { rotationServiceHelper.restartRotationService() }
+                            }
+                        }
+                } else {
+                    Single.just(isChecked)
+                }
+            }
             .subscribeUntilDestroy { isChecked -> preferencesDelegate.putBool(FORCE_MODE, isChecked) }
     }
 

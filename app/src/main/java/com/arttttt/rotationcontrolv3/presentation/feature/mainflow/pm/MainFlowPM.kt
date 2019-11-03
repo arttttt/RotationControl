@@ -91,7 +91,7 @@ class MainFlowPM(
                             .showForResult()
                             .filter { result -> result == DialogResult.OK }
                             .flatMapSingleElement { canDrawOverlayRequester.requestDrawOverlayPermission() }
-                            .filter { canWriteSystemSettings -> canWriteSystemSettings }
+                            .filter { canDrawOverlay -> canDrawOverlay }
                             .toSingle(false)
                     } else {
                         Single.just(true)

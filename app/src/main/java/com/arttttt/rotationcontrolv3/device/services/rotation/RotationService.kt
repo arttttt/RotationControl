@@ -2,6 +2,7 @@
 
 package com.arttttt.rotationcontrolv3.device.services.rotation
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -38,6 +39,7 @@ import org.koin.core.context.unloadKoinModules
 import org.koin.core.inject
 
 class RotationService: BaseService() {
+    @SuppressLint("CheckResult")
     companion object ServiceHelper: IRotationServiceHelper, KoinComponent {
         private val context: Context by inject()
         private val writeSettingsChecker: ICanWriteSettingsChecker by inject()
@@ -63,11 +65,22 @@ class RotationService: BaseService() {
                 }
                 .filter { canDrawOverlay -> canDrawOverlay }
                 .doOnComplete { toastOf(context, R.string.can_not_draw_overlay_toast) }
-                .subscribeUntilDestroy { context.startForegroundServiceCompat(intentOf<RotationService>(context)) }
+                .subscribe { context.startForegroundServiceCompat(intentOf<RotationService>(context)) }
         }
 
         override fun stopRotationService() {
             stopService<RotationService>(context)
+        }
+
+        override fun restartRotationService() {
+            if (serviceStatus.value != IRotationServiceHelper.Status.STARTED) return
+
+            serviceStatus
+                .filter { status -> status == IRotationServiceHelper.Status.STOPPED }
+                .firstElement()
+                .subscribe { startRotationService() }
+
+            stopRotationService()
         }
 
         private const val INTENT_ACTION = "ACTION"

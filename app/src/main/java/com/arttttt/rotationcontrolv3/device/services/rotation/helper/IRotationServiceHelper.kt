@@ -11,4 +11,5 @@ interface IRotationServiceHelper {
     fun getStatusObservable(): Observable<Status>
     fun startRotationService()
     fun stopRotationService()
+    fun restartRotationService()
 }

@@ -27,7 +27,6 @@ import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.Router
 
 val commonModule = module {
     single<IPreferencesDelegate> {
@@ -38,13 +37,13 @@ val commonModule = module {
 
     single<IRotationServiceHelper> { RotationService.ServiceHelper }
 
-    single<Cicerone<Router>>(named(APP_CICERONE)) { Cicerone.create() }
-    single(named(APP_ROUTER)) { get<Cicerone<Router>>(named(APP_CICERONE)).router }
-    single(named(APP_HOLDER)) { get<Cicerone<Router>>(named(APP_CICERONE)).navigatorHolder }
+    val appCicerone = Cicerone.create()
+    single(named(APP_ROUTER)) { appCicerone.router }
+    single(named(APP_HOLDER)) { appCicerone.navigatorHolder }
 
-    single<Cicerone<FlowRouter>>(named(FLOW_CICERONE)) { Cicerone.create(FlowRouter(get(named(APP_ROUTER)))) }
-    single(named(FLOW_ROUTER)) { get<Cicerone<FlowRouter>>(named(FLOW_CICERONE)).router }
-    single(named(FLOW_HOLDER)) { get<Cicerone<FlowRouter>>(named(FLOW_CICERONE)).navigatorHolder }
+    val flowCicerone = Cicerone.create(FlowRouter(appCicerone.router))
+    single(named(FLOW_ROUTER)) { flowCicerone.router }
+    single(named(FLOW_HOLDER)) { flowCicerone.navigatorHolder }
 
     single<IAppLauncher> { AppLauncher() }
 

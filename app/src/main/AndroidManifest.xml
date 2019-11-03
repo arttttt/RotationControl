@@ -19,7 +19,7 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".presentation.feature.app.view.AppActivity">
+        <activity android:name=".presentation.AppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

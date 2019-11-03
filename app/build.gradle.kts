@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.arttttt.rotationcontrolv3"
-        versionCode = 7
+        versionCode = 8
         versionName = "1.2.0"
 
         minSdkVersion(16)

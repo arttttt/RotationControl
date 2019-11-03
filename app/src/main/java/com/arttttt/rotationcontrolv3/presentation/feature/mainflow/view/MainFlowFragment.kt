@@ -55,7 +55,7 @@ class MainFlowFragment: FlowFragment<MainFlowPM>() {
             .bindTo { imageRes ->
                 fab.setImageResource(imageRes)
 
-                // A hack that fixes the disappearance of an icon
+                // This hack fixes the disappearance of an icon
                 if (fab.isVisible) {
                     fab.hide()
                     fab.show()

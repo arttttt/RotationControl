@@ -1,6 +1,8 @@
 package com.arttttt.rotationcontrolv3.di
 
+import android.app.NotificationManager
 import android.content.Context
+import android.view.WindowManager
 import com.arttttt.rotationcontrolv3.device.services.rotation.RotationService
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.AppLauncher
@@ -20,6 +22,7 @@ import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDel
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.PreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.resources.IResourcesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.resources.ResourcesDelegate
+import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.navigation.FlowRouter
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
 import com.arttttt.rotationcontrolv3.utils.rxjava.SchedulersProvider
@@ -28,6 +31,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.terrakok.cicerone.Cicerone
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 val commonModule = module {
     single<IPreferencesDelegate> {
         PreferencesDelegate(
@@ -83,6 +87,20 @@ val commonModule = module {
             context = get(),
             canWriteSettingsChecker = get(),
             helper = get()
+        )
+    }
+
+    single<NotificationManager> {
+        get<Context>().getSystemService(Context.NOTIFICATION_SERVICE).unsafeCastTo()
+    }
+
+    single<WindowManager> {
+        get<Context>().getSystemService(Context.WINDOW_SERVICE).unsafeCastTo()
+    }
+
+    single<IViewProvider> {
+        ViewProvider(
+            context = get()
         )
     }
 }

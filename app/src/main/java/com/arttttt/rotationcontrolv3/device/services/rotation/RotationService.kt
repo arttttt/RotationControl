@@ -1,5 +1,3 @@
-@file:Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-
 package com.arttttt.rotationcontrolv3.device.services.rotation
 
 import android.annotation.SuppressLint
@@ -27,6 +25,7 @@ import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.IC
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
+import com.arttttt.rotationcontrolv3.utils.extensions.koilin.toInt
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
 import io.reactivex.Completable
@@ -100,8 +99,8 @@ class RotationService: BaseService() {
         ORIENTATION_AUTO(4)
     }
 
-    private val notificationService: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE).unsafeCastTo<NotificationManager>() }
-    private val windowService: WindowManager by lazy { getSystemService(Context.WINDOW_SERVICE).unsafeCastTo<WindowManager>() }
+    private val notificationService: NotificationManager by inject()
+    private val windowService: WindowManager by inject()
 
     private var currentOrientation = Orientation.ORIENTATION_AUTO
 
@@ -113,7 +112,6 @@ class RotationService: BaseService() {
         R.id.btn_landscape_reverse
     )
 
-    private val accelerometerObserver: AccelerometerObserver by inject()
     private val windowDelegate: IWindowDelegate by inject()
 
     override fun onCreate() {
@@ -146,20 +144,15 @@ class RotationService: BaseService() {
     }
 
     private fun initForegroundService() {
-        accelerometerObserver
-            .getAccelerometerObservable()
-            .subscribeOn(schedulers.computation)
-            .observeOn(schedulers.computation)
+        AccelerometerObserver
+            .accelerometerChanges(contentResolver)
+            .distinctUntilChanged()
             .flatMapSingle { writeSettingsChecker.canWriteSettings() }
             .filter { canWriteSettings -> canWriteSettings }
-            .filter { currentOrientation != Orientation.ORIENTATION_AUTO }
-            .subscribeUntilDestroy { dispatchAccelerometerChanges() }
-
-        contentResolver.registerContentObserver(
-            Settings.System.ACCELEROMETER_ROTATION,
-            false,
-            accelerometerObserver
-        )
+            .map { (currentOrientation == Orientation.ORIENTATION_AUTO).toInt() }
+            .subscribeUntilDestroy(
+                onNext = ::dispatchAccelerometerChanges
+            )
 
         setOrientation(getInitialRotation())
             .subscribeOn(schedulers.computation)
@@ -175,8 +168,8 @@ class RotationService: BaseService() {
             }
     }
 
-    private fun dispatchAccelerometerChanges() {
-        contentResolver.putInt(Settings.System.ACCELEROMETER_ROTATION, 0)
+    private fun dispatchAccelerometerChanges(isEnabled: Int) {
+        contentResolver.putInt(Settings.System.ACCELEROMETER_ROTATION, isEnabled)
     }
 
     private fun createNotification(activeButtonId: Int): Notification {
@@ -264,13 +257,11 @@ class RotationService: BaseService() {
                 }
             }
             .doOnSuccess {
-                if (newOrientation == Orientation.ORIENTATION_AUTO) {
-                    contentResolver.putInt(Settings.System.ACCELEROMETER_ROTATION, 1)
-                } else {
-                    dispatchAccelerometerChanges()
+                currentOrientation = newOrientation
+                dispatchAccelerometerChanges((currentOrientation == Orientation.ORIENTATION_AUTO).toInt())
+                if (currentOrientation != Orientation.ORIENTATION_AUTO) {
                     contentResolver.putInt(Settings.System.USER_ROTATION, newOrientation.value)
                 }
-                currentOrientation = newOrientation
                 preferencesDelegate.putInt(SAVED_ORIENTATION, currentOrientation.value)
             }
             .ignoreElement()

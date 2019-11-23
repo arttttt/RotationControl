@@ -21,3 +21,11 @@ inline fun<T>T.isNull(): Boolean {
 inline fun<T>T.isNotNull(): Boolean {
     return this != null
 }
+
+inline fun Boolean.toInt(): Int {
+    return if (this) {
+        1
+    } else {
+        0
+    }
+}

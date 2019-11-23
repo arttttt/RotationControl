@@ -17,3 +17,7 @@ inline fun ContentResolver.registerContentObserver(parameter: String, notifyForD
 inline fun ContentResolver.putInt(name: String, value: Int) {
     Settings.System.putInt(this, name, value)
 }
+
+inline fun ContentResolver.getInt(name: String): Int {
+    return Settings.System.getInt(this, name)
+}

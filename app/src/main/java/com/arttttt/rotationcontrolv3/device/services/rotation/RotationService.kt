@@ -36,6 +36,7 @@ import org.koin.core.KoinComponent
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.inject
+import org.koin.core.module.Module
 
 class RotationService: BaseService() {
     @SuppressLint("CheckResult")
@@ -114,22 +115,26 @@ class RotationService: BaseService() {
 
     private val windowDelegate: IWindowDelegate by inject()
 
+    override fun provideKoinModules(): List<Module> {
+        return listOf(
+            rotationServiceModule
+        )
+    }
+
     override fun onCreate() {
-        loadKoinModules(rotationServiceModule)
         super.onCreate()
         initForegroundService()
         serviceStatus.onNext(IRotationServiceHelper.Status.STARTED)
     }
 
     override fun onDestroy() {
+        windowDelegate.removeWindow()
         super.onDestroy()
         serviceStatus.onNext(IRotationServiceHelper.Status.STOPPED)
-        windowDelegate.removeWindow()
-        unloadKoinModules(rotationServiceModule)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent == null) return START_STICKY
+        intent ?: return START_STICKY
 
         val action by intent.extra(INTENT_ACTION, 0)
 

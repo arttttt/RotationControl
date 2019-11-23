@@ -8,10 +8,10 @@ import androidx.annotation.LayoutRes
 import androidx.transition.Fade
 import me.dmdev.rxpm.base.PmFragment
 
-abstract class BaseFragment<PM: BasePresentationModel>: PmFragment<PM>() {
-
-    @get:LayoutRes
-    abstract val layoutRes: Int
+abstract class BaseFragment<PM: BasePresentationModel>(
+    @LayoutRes
+    protected val layoutRes: Int
+): PmFragment<PM>() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

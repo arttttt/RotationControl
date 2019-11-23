@@ -12,9 +12,8 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import me.dmdev.rxpm.widget.bindTo
 import org.koin.android.scope.currentScope
 
-class SettingsFragment: BaseFragment<SettingsPM>(), IMenuIdProvider {
+class SettingsFragment: BaseFragment<SettingsPM>(R.layout.fragment_settings), IMenuIdProvider {
     override val menuId: Int = R.id.settings_fragment_item
-    override val layoutRes: Int = R.layout.fragment_settings
 
     override fun providePresentationModel(): SettingsPM {
         return currentScope.get()

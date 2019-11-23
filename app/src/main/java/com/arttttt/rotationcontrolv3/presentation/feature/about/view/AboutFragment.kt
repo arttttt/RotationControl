@@ -9,9 +9,8 @@ import kotlinx.android.synthetic.main.fragment_about.*
 import me.dmdev.rxpm.bindTo
 import org.koin.android.scope.currentScope
 
-class AboutFragment: BaseFragment<AboutPM>(), IMenuIdProvider {
+class AboutFragment: BaseFragment<AboutPM>(R.layout.fragment_about), IMenuIdProvider {
     override val menuId: Int = R.id.about_fragment_item
-    override val layoutRes: Int = R.layout.fragment_about
 
     override fun providePresentationModel(): AboutPM {
         return currentScope.get()

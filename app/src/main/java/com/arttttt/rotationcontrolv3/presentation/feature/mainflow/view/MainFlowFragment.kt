@@ -20,7 +20,7 @@ import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class MainFlowFragment: FlowFragment<MainFlowPM>() {
+class MainFlowFragment: FlowFragment<MainFlowPM>(R.layout.fragment_flow) {
 
     companion object {
         fun newInstance(): MainFlowFragment {
@@ -29,7 +29,6 @@ class MainFlowFragment: FlowFragment<MainFlowPM>() {
     }
 
     override val navigator: Navigator by lazy { SupportAppNavigator(activity, childFragmentManager, R.id.container) }
-    override val layoutRes: Int = R.layout.fragment_flow
 
     private var currentFragmentTag: String? = null
 

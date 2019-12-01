@@ -3,6 +3,7 @@ package com.arttttt.rotationcontrolv3.di
 import android.app.NotificationManager
 import android.content.Context
 import android.view.WindowManager
+import com.arttttt.rotationcontrolv3.utils.AccelerometerObserver
 import com.arttttt.rotationcontrolv3.device.services.rotation.RotationService
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.AppLauncher
@@ -10,6 +11,8 @@ import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.IAppLaunc
 import com.arttttt.rotationcontrolv3.utils.*
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.ErrorDispatcher
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.IErrorDispatcher
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.IPermissionResultHelper
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.PermissionResultHelper
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayChecker
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayRequester
 import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
@@ -27,7 +30,9 @@ import com.arttttt.rotationcontrolv3.utils.navigation.FlowRouter
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
 import com.arttttt.rotationcontrolv3.utils.rxjava.SchedulersProvider
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import ru.terrakok.cicerone.Cicerone
 
@@ -103,4 +108,12 @@ val commonModule = module {
             context = get()
         )
     }
+
+    single {
+        AccelerometerObserver(
+            contentResolver = get<Context>().contentResolver
+        )
+    }
+
+    single<IPermissionResultHelper> { PermissionResultHelper() } bind Consumer::class
 }

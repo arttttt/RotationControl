@@ -18,6 +18,7 @@ import com.arttttt.rotationcontrolv3.device.services.delegate.IWindowDelegate
 import com.arttttt.rotationcontrolv3.device.services.rotation.base.BaseService
 import com.arttttt.rotationcontrolv3.device.services.rotation.di.rotationServiceModule
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
+import com.arttttt.rotationcontrolv3.utils.AccelerometerObserver
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.OsUtils
 import com.arttttt.rotationcontrolv3.utils.SAVED_ORIENTATION
@@ -26,15 +27,12 @@ import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsett
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.toInt
-import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import org.koin.core.KoinComponent
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 import org.koin.core.inject
 import org.koin.core.module.Module
 
@@ -115,6 +113,8 @@ class RotationService: BaseService() {
 
     private val windowDelegate: IWindowDelegate by inject()
 
+    private val accelerometerObserver: AccelerometerObserver by inject()
+
     override fun provideKoinModules(): List<Module> {
         return listOf(
             rotationServiceModule
@@ -149,8 +149,8 @@ class RotationService: BaseService() {
     }
 
     private fun initForegroundService() {
-        AccelerometerObserver
-            .accelerometerChanges(contentResolver)
+        accelerometerObserver
+            .accelerometerChanges()
             .distinctUntilChanged()
             .flatMapSingle { writeSettingsChecker.canWriteSettings() }
             .filter { canWriteSettings -> canWriteSettings }

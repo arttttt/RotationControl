@@ -18,7 +18,7 @@ import me.dmdev.rxpm.state
 import me.dmdev.rxpm.widget.dialogControl
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class MainFlowPM(
+class MainPM(
     private val preferencesDelegate: IPreferencesDelegate,
     private val rotationServiceHelper: IRotationServiceHelper,
     private val canWriteSettingsChecker: ICanWriteSettingsChecker,

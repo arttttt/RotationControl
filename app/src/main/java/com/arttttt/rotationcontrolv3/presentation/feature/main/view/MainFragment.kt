@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.presentation.feature.main.view
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.presentation.base.FlowFragment
 import com.arttttt.rotationcontrolv3.presentation.delegate.IMenuIdProvider
-import com.arttttt.rotationcontrolv3.presentation.feature.main.pm.MainFlowPM
+import com.arttttt.rotationcontrolv3.presentation.feature.main.pm.MainPM
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.castTo
@@ -20,7 +20,7 @@ import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
-class MainFragment: FlowFragment<MainFlowPM>(R.layout.fragment_main) {
+class MainFragment: FlowFragment<MainPM>(R.layout.fragment_main) {
 
     companion object {
         fun newInstance(): MainFragment {
@@ -32,21 +32,21 @@ class MainFragment: FlowFragment<MainFlowPM>(R.layout.fragment_main) {
 
     private var currentFragmentTag: String? = null
 
-    override fun providePresentationModel(): MainFlowPM {
+    override fun providePresentationModel(): MainPM {
         return currentScope.get()
     }
 
-    override fun bindActions(pm: MainFlowPM) {
+    override fun bindActions(pm: MainPM) {
         bottomToolbar.setNavigationOnClickListener { pm.hamburgerClicked.accept() }
 
         fab.clicks().bindTo(pm.fabClicked)
     }
 
-    override fun bindCommands(pm: MainFlowPM) {
+    override fun bindCommands(pm: MainPM) {
         pm.currentScreen.bindTo(::showScreen)
     }
 
-    override fun bindStates(pm: MainFlowPM) {
+    override fun bindStates(pm: MainPM) {
         pm.fabVisibility
             .bindTo(fab.visibility())
 
@@ -62,7 +62,7 @@ class MainFragment: FlowFragment<MainFlowPM>(R.layout.fragment_main) {
             }
     }
 
-    override fun bindRestActions(pm: MainFlowPM) {
+    override fun bindRestActions(pm: MainPM) {
         pm.navigationDialog
             .bindTo { _, dc ->
                 bottomSheetDialogOf(requireContext()) {

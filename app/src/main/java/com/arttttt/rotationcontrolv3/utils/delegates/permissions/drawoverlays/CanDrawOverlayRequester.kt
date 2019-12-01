@@ -4,13 +4,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.IResultHelper
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.IPermissionResultHelper
 import com.arttttt.rotationcontrolv3.utils.extensions.android.intentOf
 import io.reactivex.Single
 
 class CanDrawOverlayRequester(
     private val context: Context,
-    private val helper: IResultHelper,
+    private val helper: IPermissionResultHelper,
     private val canWriteSettingsChecker: ICanDrawOverlayChecker
 ): ICanDrawOverlayRequester {
 
@@ -28,7 +28,7 @@ class CanDrawOverlayRequester(
             )
 
             return helper
-                .onResultReceived()
+                .resultObservable()
                 .filter { result -> result.requestCode == REQUEST_CODE }
                 .firstOrError()
                 .flatMap { canWriteSettingsChecker.canDrawOverlay() }

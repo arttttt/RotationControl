@@ -22,8 +22,8 @@ import com.arttttt.rotationcontrolv3.utils.AccelerometerObserver
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.OsUtils
 import com.arttttt.rotationcontrolv3.utils.SAVED_ORIENTATION
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.PermissionsManager
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.Permissions
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.android.*
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.toInt
@@ -40,8 +40,7 @@ class RotationService: BaseService() {
     @SuppressLint("CheckResult")
     companion object ServiceHelper: IRotationServiceHelper, KoinComponent {
         private val context: Context by inject()
-        private val writeSettingsChecker: ICanWriteSettingsChecker by inject()
-        private val drawOverlaysChecker: ICanDrawOverlayChecker by inject()
+        private val permissionsManager: PermissionsManager by inject()
         private val preferencesDelegate: IPreferencesDelegate by inject()
         private val schedulers: ISchedulersProvider by inject()
         private val serviceStatus = BehaviorSubject.createDefault(IRotationServiceHelper.Status.STOPPED)
@@ -49,14 +48,14 @@ class RotationService: BaseService() {
         override fun getStatusObservable(): Observable<IRotationServiceHelper.Status> = serviceStatus.serialize().share()
 
         override fun startRotationService() {
-            writeSettingsChecker
-                .canWriteSettings()
+            permissionsManager
+                .checkPermission(Permissions.WriteSystemSettings())
                 .filter { canWriteSettings -> canWriteSettings }
                 .doOnComplete { toastOf(context, R.string.can_not_write_settings_toast) }
                 .map { preferencesDelegate.getBool(FORCE_MODE) }
                 .flatMapSingle { isForceModeEnabled ->
                     if (isForceModeEnabled) {
-                        drawOverlaysChecker.canDrawOverlay()
+                        permissionsManager.checkPermission(Permissions.DrawOverlays())
                     } else {
                         Single.just(true)
                     }
@@ -152,7 +151,7 @@ class RotationService: BaseService() {
         accelerometerObserver
             .accelerometerChanges()
             .distinctUntilChanged()
-            .flatMapSingle { writeSettingsChecker.canWriteSettings() }
+            .flatMapSingle { permissionsManager.checkPermission(Permissions.WriteSystemSettings()) }
             .filter { canWriteSettings -> canWriteSettings }
             .map { (currentOrientation == Orientation.ORIENTATION_AUTO).toInt() }
             .subscribeUntilDestroy(
@@ -243,16 +242,16 @@ class RotationService: BaseService() {
     }
 
     private fun setOrientation(newOrientation: Orientation): Completable {
-        return writeSettingsChecker
-            .canWriteSettings()
+        return permissionsManager
+            .checkPermission(Permissions.WriteSystemSettings())
             .subscribeOn(schedulers.computation)
             .observeOn(schedulers.ui)
             .filter { canWriteSettings -> canWriteSettings }
             .doOnComplete { stopWithToast(R.string.can_not_write_settings_toast) }
             .flatMapSingle {
                 if (preferencesDelegate.getBool(FORCE_MODE)) {
-                    drawOverlaysChecker
-                        .canDrawOverlay()
+                    permissionsManager
+                        .checkPermission(Permissions.DrawOverlays())
                         .filter { canDrawOverlay -> canDrawOverlay }
                         .doOnSuccess { windowDelegate.createOrUpdateWindow(newOrientation) }
                         .doOnComplete { stopWithToast(R.string.can_not_draw_overlay_toast) }

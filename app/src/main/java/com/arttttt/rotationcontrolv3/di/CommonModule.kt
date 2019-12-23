@@ -3,7 +3,6 @@ package com.arttttt.rotationcontrolv3.di
 import android.app.NotificationManager
 import android.content.Context
 import android.view.WindowManager
-import com.arttttt.rotationcontrolv3.utils.AccelerometerObserver
 import com.arttttt.rotationcontrolv3.device.services.rotation.RotationService
 import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationServiceHelper
 import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.AppLauncher
@@ -11,20 +10,19 @@ import com.arttttt.rotationcontrolv3.presentation.delegate.applauncher.IAppLaunc
 import com.arttttt.rotationcontrolv3.utils.*
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.ErrorDispatcher
 import com.arttttt.rotationcontrolv3.utils.delegates.errordispatcher.IErrorDispatcher
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.IPermissionResultHelper
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.base.PermissionResultHelper
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.CanDrawOverlayRequester
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayRequester
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.CanWriteSettingsChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.CanWriteSettingsRequester
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.PermissionsManager
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.DrawOverlayAction
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.PermissionAction
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.WriteSystemSettings
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.helper.ActivityHolder
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.helper.StartForResult
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.helper.PermissionHelper
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.PreferencesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.resources.IResourcesDelegate
 import com.arttttt.rotationcontrolv3.utils.delegates.resources.ResourcesDelegate
+import com.arttttt.rotationcontrolv3.utils.delegates.toast.IToastDelegate
+import com.arttttt.rotationcontrolv3.utils.delegates.toast.ToastDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.koilin.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.navigation.FlowRouter
 import com.arttttt.rotationcontrolv3.utils.rxjava.ISchedulersProvider
@@ -33,6 +31,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
+import org.koin.dsl.binds
 import org.koin.dsl.module
 import ru.terrakok.cicerone.Cicerone
 
@@ -65,36 +64,6 @@ val commonModule = module {
         )
     }
 
-    single<ICanWriteSettingsChecker> {
-        CanWriteSettingsChecker(
-            context = get()
-        )
-    }
-
-    single<ICanWriteSettingsRequester> {
-        CanWriteSettingsRequester(
-            context = get(),
-            helper = get(),
-            canWriteSettingsChecker = get()
-        )
-    }
-
-    factory { CompositeDisposable() }
-
-    single<ICanDrawOverlayChecker> {
-        CanDrawOverlayChecker(
-            context = get()
-        )
-    }
-
-    single<ICanDrawOverlayRequester> {
-        CanDrawOverlayRequester(
-            context = get(),
-            canWriteSettingsChecker = get(),
-            helper = get()
-        )
-    }
-
     single<NotificationManager> {
         get<Context>().getSystemService(Context.NOTIFICATION_SERVICE).unsafeCastTo()
     }
@@ -115,5 +84,32 @@ val commonModule = module {
         )
     }
 
-    single<IPermissionResultHelper> { PermissionResultHelper() } bind Consumer::class
+    single<IToastDelegate> {
+        ToastDelegate(
+            context = get()
+        )
+    }
+
+    factory { CompositeDisposable() }
+
+    single<Consumer<Int>> { PermissionHelper() } binds arrayOf(ActivityHolder::class, StartForResult::class)
+
+    single<PermissionAction>(named("drawOverlays")) {
+        DrawOverlayAction(
+            context = get()
+        )
+    }
+
+    single<PermissionAction>(named("writeSystemSettings")) {
+        WriteSystemSettings(
+            context = get()
+        )
+    }
+
+    single {
+        PermissionsManager(
+            startForResult = get(),
+            actions = getKoin().getAll<PermissionAction>().toSet()
+        )
+    }
 }

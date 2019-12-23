@@ -10,9 +10,8 @@ val settingsModule = module {
         scoped {
             SettingsPM(
                 preferencesDelegate = get(),
-                canDrawOverlayRequester = get(),
-                canDrawOverlayChecker = get(),
-                rotationServiceHelper = get()
+                rotationServiceHelper = get(),
+                permissionsManager = get()
             )
         }
     }

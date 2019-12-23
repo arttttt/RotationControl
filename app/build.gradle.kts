@@ -52,4 +52,7 @@ dependencies {
 
     // Timber
     implementation ("com.jakewharton.timber", "timber", "4.7.1")
+
+    // Leaking detection
+    debugImplementation("com.squareup.leakcanary", "leakcanary-android", "2.0")
 }

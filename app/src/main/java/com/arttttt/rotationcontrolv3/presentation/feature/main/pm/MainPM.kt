@@ -7,10 +7,8 @@ import com.arttttt.rotationcontrolv3.device.services.rotation.helper.IRotationSe
 import com.arttttt.rotationcontrolv3.presentation.base.BaseFlowPresentationModel
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayRequester
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.writesystemsettings.ICanWriteSettingsRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.PermissionsManager
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.Permissions
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import io.reactivex.Single
 import me.dmdev.rxpm.action
@@ -21,10 +19,7 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen
 class MainPM(
     private val preferencesDelegate: IPreferencesDelegate,
     private val rotationServiceHelper: IRotationServiceHelper,
-    private val canWriteSettingsChecker: ICanWriteSettingsChecker,
-    private val canWriteSettingsRequester: ICanWriteSettingsRequester,
-    private val canDrawOverlayChecker: ICanDrawOverlayChecker,
-    private val canDrawOverlayRequester: ICanDrawOverlayRequester
+    private val permissionsManager: PermissionsManager
 ): BaseFlowPresentationModel() {
 
     val hamburgerClicked = action<Unit>()
@@ -66,8 +61,8 @@ class MainPM(
     }
 
     private fun dispatchFabClick() {
-        canWriteSettingsChecker
-            .canWriteSettings()
+        permissionsManager
+            .checkPermission(Permissions.WriteSystemSettings())
             .flatMap { canWriteSystemSettings -> dispatchCanWriteSettings(canWriteSystemSettings) }
             .filter { canWriteSystemSettings -> canWriteSystemSettings }
             .map { preferencesDelegate.getBool(FORCE_MODE) }
@@ -83,14 +78,14 @@ class MainPM(
 
     private fun dispatchForceMode(isForceModeEnabled: Boolean): Single<Boolean> {
         return if (isForceModeEnabled) {
-            canDrawOverlayChecker
-                .canDrawOverlay()
+            permissionsManager
+                .checkPermission(Permissions.DrawOverlays())
                 .flatMap { canDrawOverlay ->
                     if(!canDrawOverlay) {
                         drawOverlayDialog
                             .showForResult()
                             .filter { result -> result == DialogResult.OK }
-                            .flatMapSingleElement { canDrawOverlayRequester.requestDrawOverlayPermission() }
+                            .flatMapSingleElement { permissionsManager.requestPermission(Permissions.DrawOverlays()) }
                             .filter { canDrawOverlay -> canDrawOverlay }
                             .toSingle(false)
                     } else {
@@ -107,7 +102,7 @@ class MainPM(
             writeSettingsDialog
                 .showForResult()
                 .filter { result -> result == DialogResult.OK }
-                .flatMapSingleElement { canWriteSettingsRequester.requestWriteSettingsPermission() }
+                .flatMapSingleElement { permissionsManager.requestPermission(Permissions.WriteSystemSettings()) }
                 .toSingle(false)
         } else {
             Single.just(canWriteSystemSettings)

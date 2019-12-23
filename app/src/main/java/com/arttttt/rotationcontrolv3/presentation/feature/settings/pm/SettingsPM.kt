@@ -5,8 +5,8 @@ import com.arttttt.rotationcontrolv3.presentation.base.BaseFlowPresentationModel
 import com.arttttt.rotationcontrolv3.presentation.model.DialogResult
 import com.arttttt.rotationcontrolv3.utils.FORCE_MODE
 import com.arttttt.rotationcontrolv3.utils.START_ON_BOOT
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayChecker
-import com.arttttt.rotationcontrolv3.utils.delegates.permissions.drawoverlays.ICanDrawOverlayRequester
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.PermissionsManager
+import com.arttttt.rotationcontrolv3.utils.delegates.permissions.actions.Permissions
 import com.arttttt.rotationcontrolv3.utils.delegates.preferences.IPreferencesDelegate
 import io.reactivex.Single
 import me.dmdev.rxpm.widget.checkControl
@@ -15,8 +15,7 @@ import me.dmdev.rxpm.widget.dialogControl
 class SettingsPM(
     private val preferencesDelegate: IPreferencesDelegate,
     private val rotationServiceHelper: IRotationServiceHelper,
-    private val canDrawOverlayChecker: ICanDrawOverlayChecker,
-    private val canDrawOverlayRequester: ICanDrawOverlayRequester
+    private val permissionsManager: PermissionsManager
 ): BaseFlowPresentationModel() {
 
     val startOnBootControl = checkControl(preferencesDelegate.getBool(START_ON_BOOT))
@@ -43,14 +42,14 @@ class SettingsPM(
             .observable
             .flatMapSingle { isChecked ->
                 if (isChecked && lastServiceStatus == IRotationServiceHelper.Status.STARTED) {
-                    canDrawOverlayChecker
-                        .canDrawOverlay()
+                    permissionsManager
+                        .checkPermission(Permissions.DrawOverlays())
                         .flatMap { canDrawOverlay ->
                             if (!canDrawOverlay) {
                                 drawOverlayDialog
                                     .showForResult()
                                     .filter { result -> result == DialogResult.OK }
-                                    .flatMapSingleElement { canDrawOverlayRequester.requestDrawOverlayPermission() }
+                                    .flatMapSingleElement { permissionsManager.checkPermission(Permissions.DrawOverlays()) }
                                     .filter { canDrawOverlay -> canDrawOverlay }
                                     .toSingle(false)
                                     .doOnSuccess { canDrawOverlay ->

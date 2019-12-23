@@ -10,11 +10,8 @@ val mainFlowModule = module {
         scoped {
             MainPM(
                 rotationServiceHelper = get(),
-                canWriteSettingsChecker = get(),
-                canWriteSettingsRequester = get(),
                 preferencesDelegate = get(),
-                canDrawOverlayChecker = get(),
-                canDrawOverlayRequester = get()
+                permissionsManager = get()
             )
         }
     }

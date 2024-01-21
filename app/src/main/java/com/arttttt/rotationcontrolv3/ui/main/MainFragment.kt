@@ -1,16 +1,18 @@
-package com.arttttt.rotationcontrolv3.ui.container
+package com.arttttt.rotationcontrolv3.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
-import com.arttttt.rotationcontrolv3.ui.main.MainFragment
+import com.arttttt.rotationcontrolv3.R
+import com.arttttt.rotationcontrolv3.utils.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
+import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
 
-class ContainerFragment : Fragment() {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val containerDelegate by lazy {
         NavigationContainerDelegate(
@@ -22,24 +24,23 @@ class ContainerFragment : Fragment() {
         containerDelegate.initialize(savedInstanceState)
 
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) return
-
-        childFragmentManager.commit {
-            replace<MainFragment>(
-                containerDelegate.containerId,
-                null,
-                null,
-            )
-        }
     }
 
+    @Suppress("NAME_SHADOWING")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return containerDelegate.createContainerView()
+    ): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState) ?: return null
+
+        val container = containerDelegate.createContainerView()
+        view.unsafeCastTo<ViewGroup>().addView(container)
+        container.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+            behavior = BottomAppBarBehavior()
+        }
+
+        return view
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

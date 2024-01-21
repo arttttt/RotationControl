@@ -11,6 +11,8 @@ import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.utils.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
+import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
+import com.google.android.material.bottomappbar.BottomAppBar
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
@@ -41,6 +43,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
+        bottomAppBar.setNavigationOnClickListener {
+            NavigationDialog.show(
+                context = requireContext(),
+                contentRes = R.layout.dialog_navigation_menu,
+                itemClickListener = {},
+            )
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

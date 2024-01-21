@@ -1,5 +1,6 @@
 package com.arttttt.rotationcontrolv3.ui.container.di
 
+import com.arttttt.rotationcontrolv3.di.qualifiers.RootCiceroneQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
 import com.github.terrakok.cicerone.Router
@@ -14,7 +15,7 @@ interface ContainerComponent {
     interface Factory {
 
         fun create(
-            @BindsInstance router: Router
+            @BindsInstance @RootCiceroneQualifier router: Router
         ): ContainerComponent
     }
 

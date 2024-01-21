@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils.navigation
+package com.arttttt.navigation
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

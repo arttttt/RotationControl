@@ -14,8 +14,8 @@ import com.arttttt.rotationcontrolv3.ui.main.di.DaggerMainComponent
 import com.arttttt.rotationcontrolv3.ui.settings.SettingsFragment
 import com.arttttt.rotationcontrolv3.utils.behavior.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
-import com.arttttt.rotationcontrolv3.utils.navigation.MenuAppNavigator
-import com.arttttt.rotationcontrolv3.utils.navigation.MenuRouter
+import com.arttttt.navigation.MenuAppNavigator
+import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
 import com.github.terrakok.cicerone.Cicerone
@@ -30,8 +30,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         )
     }
 
+    /**
+     * todo: provide parent router
+     */
     private val cicerone by lazy {
-        Cicerone.create(MenuRouter())
+        Cicerone.create(
+            FlowMenuRouter(
+                parentRouter = null,
+            )
+        )
     }
 
     private val navigator by lazy {

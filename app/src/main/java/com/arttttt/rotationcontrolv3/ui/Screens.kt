@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.ui
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
 import com.arttttt.rotationcontrolv3.ui.main.MainFragment
 import com.arttttt.rotationcontrolv3.ui.settings.SettingsFragment
-import com.arttttt.rotationcontrolv3.utils.extensions.FragmentFactoryScreen
+import com.arttttt.navigation.FragmentFactoryScreen
 
 object Screens {
 

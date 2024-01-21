@@ -1,11 +1,11 @@
 package com.arttttt.rotationcontrolv3.ui.main
 
 import com.arttttt.rotationcontrolv3.ui.Screens
-import com.arttttt.rotationcontrolv3.utils.navigation.MenuRouter
+import com.arttttt.navigation.FlowMenuRouter
 import javax.inject.Inject
 
 class MainCoordinator @Inject constructor(
-    private val router: MenuRouter,
+    private val router: FlowMenuRouter,
 ) {
 
     fun start() {

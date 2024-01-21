@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils.navigation
+package com.arttttt.navigation
 
 import com.github.terrakok.cicerone.Command
 import com.github.terrakok.cicerone.androidx.FragmentScreen

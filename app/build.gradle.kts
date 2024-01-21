@@ -27,16 +27,20 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
 }
 
 dependencies {
+    implementation(project(":core:navigation"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation("androidx.activity:activity-ktx:1.8.2")
@@ -54,8 +58,6 @@ dependencies {
     implementation("com.arkivanov.mvikotlin:mvikotlin-main:4.0.0-alpha02")
     implementation("com.arkivanov.mvikotlin:mvikotlin-logging:4.0.0-alpha02")
     implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:4.0.0-alpha02")
-
-    implementation("com.github.terrakok:cicerone:7.1")
 
     implementation("com.jakewharton.timber:timber:5.0.1")
 }

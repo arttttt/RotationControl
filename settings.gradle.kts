@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rotation Control"
 include(":app")
+include(":core:navigation")

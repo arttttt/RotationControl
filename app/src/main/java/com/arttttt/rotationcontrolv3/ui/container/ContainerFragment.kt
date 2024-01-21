@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
-import com.arttttt.rotationcontrolv3.ui.main.MainFragment
+import com.arttttt.rotationcontrolv3.ui.container.di.DaggerContainerComponent
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
+import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import javax.inject.Inject
 
 class ContainerFragment : Fragment() {
 
@@ -18,20 +19,36 @@ class ContainerFragment : Fragment() {
         )
     }
 
+    private val cicerone by lazy {
+        Cicerone.create()
+    }
+
+    private val navigator by lazy {
+        AppNavigator(
+            activity = requireActivity(),
+            containerId = containerDelegate.containerId,
+            fragmentManager = childFragmentManager,
+        )
+    }
+
+    @Inject
+    lateinit var coordinator: ContainerCoordinator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         containerDelegate.initialize(savedInstanceState)
+
+        DaggerContainerComponent
+            .factory()
+            .create(
+                router = cicerone.router
+            )
+            .inject(this)
 
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState != null) return
 
-        childFragmentManager.commit {
-            replace<MainFragment>(
-                containerDelegate.containerId,
-                null,
-                null,
-            )
-        }
+        coordinator.start()
     }
 
     override fun onCreateView(
@@ -46,5 +63,17 @@ class ContainerFragment : Fragment() {
         super.onSaveInstanceState(outState)
 
         containerDelegate.saveState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        cicerone.getNavigatorHolder().setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        cicerone.getNavigatorHolder().removeNavigator()
     }
 }

@@ -1,5 +1,5 @@
 package com.arttttt.rotationcontrolv3
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 
-class App : Application()
+class App : MultiDexApplication()

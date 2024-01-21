@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
-import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
+import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 
 class MainActivity : AppCompatActivity() {
 

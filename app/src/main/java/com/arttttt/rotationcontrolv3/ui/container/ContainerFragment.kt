@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.ui.main.MainFragment
-import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
+import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 
 class ContainerFragment : Fragment() {
 

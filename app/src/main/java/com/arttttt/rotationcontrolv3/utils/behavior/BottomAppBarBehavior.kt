@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils
+package com.arttttt.rotationcontrolv3.utils.behavior
 
 import android.content.Context
 import android.util.AttributeSet

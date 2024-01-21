@@ -12,8 +12,8 @@ import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.about.FragmentAbout
 import com.arttttt.rotationcontrolv3.ui.settings.FragmentSettings
-import com.arttttt.rotationcontrolv3.utils.BottomAppBarBehavior
-import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
+import com.arttttt.rotationcontrolv3.utils.behavior.BottomAppBarBehavior
+import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
 import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
 import com.google.android.material.bottomappbar.BottomAppBar

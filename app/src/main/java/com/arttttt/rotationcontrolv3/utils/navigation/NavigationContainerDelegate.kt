@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils
+package com.arttttt.rotationcontrolv3.utils.navigation
 
 import android.content.Context
 import android.os.Bundle

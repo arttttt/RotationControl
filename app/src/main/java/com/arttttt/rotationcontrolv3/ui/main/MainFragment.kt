@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.R
+import com.arttttt.rotationcontrolv3.ui.about.FragmentAbout
+import com.arttttt.rotationcontrolv3.ui.settings.FragmentSettings
 import com.arttttt.rotationcontrolv3.utils.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
@@ -48,12 +52,40 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        childFragmentManager.commit {
+            replace<FragmentSettings>(
+                containerDelegate.containerId,
+                null,
+                null,
+            )
+        }
+
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
         bottomAppBar.setNavigationOnClickListener {
             NavigationDialog.show(
                 context = requireContext(),
-                contentRes = R.layout.dialog_navigation_menu,
-                itemClickListener = {},
+                itemClickListener = { itemId ->
+                    when (itemId) {
+                        R.id.item_about -> {
+                            childFragmentManager.commit {
+                                replace<FragmentAbout>(
+                                    containerDelegate.containerId,
+                                    null,
+                                    null,
+                                )
+                            }
+                        }
+                        R.id.item_settings -> {
+                            childFragmentManager.commit {
+                                replace<FragmentSettings>(
+                                    containerDelegate.containerId,
+                                    null,
+                                    null,
+                                )
+                            }
+                        }
+                    }
+                },
             )
         }
     }

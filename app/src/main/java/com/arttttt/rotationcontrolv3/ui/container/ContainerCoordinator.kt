@@ -1,14 +1,14 @@
 package com.arttttt.rotationcontrolv3.ui.container
 
-import com.arttttt.rotationcontrolv3.di.qualifiers.RootCiceroneQualifier
+import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.Screens
-import com.github.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @PerScreen
 class ContainerCoordinator @Inject constructor(
-    @RootCiceroneQualifier private val router: Router
+    @RootRouterQualifier private val router: FlowMenuRouter
 ) {
 
     fun start() {

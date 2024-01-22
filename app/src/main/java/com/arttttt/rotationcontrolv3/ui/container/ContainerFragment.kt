@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.rotationcontrolv3.ui.container.di.DaggerContainerComponent
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject
 
@@ -17,14 +19,6 @@ class ContainerFragment : Fragment() {
     private val containerDelegate by lazy {
         NavigationContainerDelegate(
             context = requireContext(),
-        )
-    }
-
-    private val cicerone by lazy {
-        Cicerone.create(
-            FlowMenuRouter(
-                parentRouter = null,
-            )
         )
     }
 
@@ -37,17 +31,23 @@ class ContainerFragment : Fragment() {
     }
 
     @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
+    @Inject
     lateinit var coordinator: ContainerCoordinator
+
+    @Inject
+    lateinit var fragmentFactory: CustomFragmentFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         containerDelegate.initialize(savedInstanceState)
 
         DaggerContainerComponent
             .factory()
-            .create(
-                router = cicerone.router
-            )
+            .create()
             .inject(this)
+
+        childFragmentManager.fragmentFactory = fragmentFactory
 
         super.onCreate(savedInstanceState)
 
@@ -73,12 +73,12 @@ class ContainerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        cicerone.getNavigatorHolder().setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
 
-        cicerone.getNavigatorHolder().removeNavigator()
+        navigatorHolder.removeNavigator()
     }
 }

@@ -16,28 +16,29 @@ import com.arttttt.rotationcontrolv3.utils.behavior.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
 import com.arttttt.navigation.MenuAppNavigator
 import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.navigation.factory.FragmentProvider
+import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
 import com.github.terrakok.cicerone.Cicerone
+import com.github.terrakok.cicerone.NavigatorHolder
 import com.google.android.material.bottomappbar.BottomAppBar
 import javax.inject.Inject
 
-class MainFragment : Fragment(R.layout.fragment_main) {
+class MainFragment(
+    private val dependencies: MainComponentDependencies,
+) : Fragment(R.layout.fragment_main) {
+
+    companion object {
+
+        fun provider(dependencies: MainComponentDependencies): FragmentProvider = FragmentProvider {
+            MainFragment(dependencies)
+        }
+    }
 
     private val containerDelegate by lazy {
         NavigationContainerDelegate(
             context = requireContext(),
-        )
-    }
-
-    /**
-     * todo: provide parent router
-     */
-    private val cicerone by lazy {
-        Cicerone.create(
-            FlowMenuRouter(
-                parentRouter = null,
-            )
         )
     }
 
@@ -50,6 +51,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
+    @Inject
     lateinit var coordinator: MainCoordinator
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +62,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         DaggerMainComponent
             .factory()
             .create(
-                router = cicerone.router
+                dependencies = dependencies,
             )
             .inject(this)
 
@@ -109,13 +113,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onResume() {
         super.onResume()
 
-        cicerone.getNavigatorHolder().setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
 
-        cicerone.getNavigatorHolder().removeNavigator()
+        navigatorHolder.removeNavigator()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -1,22 +1,26 @@
 package com.arttttt.rotationcontrolv3.ui.container.di
 
-import com.arttttt.rotationcontrolv3.di.qualifiers.RootCiceroneQualifier
+import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
-import com.github.terrakok.cicerone.Router
+import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies
 import dagger.BindsInstance
 import dagger.Component
 
 @PerScreen
-@Component
-interface ContainerComponent {
+@Component(
+    modules = [
+        ContainerModule::class,
+        ContainerModuleJava::class,
+    ]
+)
+interface ContainerComponent : MainComponentDependencies {
 
     @Component.Factory
     interface Factory {
 
-        fun create(
-            @BindsInstance @RootCiceroneQualifier router: Router
-        ): ContainerComponent
+        fun create(): ContainerComponent
     }
 
     fun inject(fragment: ContainerFragment)

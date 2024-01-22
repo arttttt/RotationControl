@@ -16,6 +16,7 @@ import com.arttttt.rotationcontrolv3.utils.behavior.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
 import com.arttttt.navigation.MenuAppNavigator
 import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.navigation.factory.FragmentProvider
 import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
@@ -72,6 +73,9 @@ class MainFragment(
     @Inject
     lateinit var coordinator: MainCoordinator
 
+    @Inject
+    lateinit var fragmentFactory: CustomFragmentFactory
+
     /**
      * todo: do it in a proper way
      */
@@ -86,6 +90,8 @@ class MainFragment(
                 dependencies = dependencies,
             )
             .inject(this)
+
+        childFragmentManager.fragmentFactory = fragmentFactory
 
         super.onCreate(savedInstanceState)
 

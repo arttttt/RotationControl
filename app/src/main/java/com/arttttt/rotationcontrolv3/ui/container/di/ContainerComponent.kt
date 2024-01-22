@@ -1,6 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.container.di
 
 import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.rotationcontrolv3.di.FragmentFactoryModuleJava
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
@@ -12,7 +13,7 @@ import dagger.Component
 @Component(
     modules = [
         ContainerModule::class,
-        ContainerModuleJava::class,
+        FragmentFactoryModuleJava::class,
     ]
 )
 interface ContainerComponent : MainComponentDependencies {

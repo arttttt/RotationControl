@@ -1,12 +1,16 @@
 package com.arttttt.rotationcontrolv3.ui.main.di
 
 import com.arttttt.navigation.FlowMenuRouter
+import com.arttttt.navigation.factory.FragmentProvider
+import com.arttttt.rotationcontrolv3.di.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
+import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 
 @Module
 object MainModule {
@@ -29,5 +33,12 @@ object MainModule {
     @PerScreen
     fun providerNavigatorHolder(cicerone: Cicerone<FlowMenuRouter>): NavigatorHolder {
         return cicerone.getNavigatorHolder()
+    }
+
+    @Provides
+    @IntoMap
+    @FragmentClassKey(AboutFragment::class)
+    fun provideAboutFragmentProvider(component: MainComponent): FragmentProvider {
+        return AboutFragment.provider(component)
     }
 }

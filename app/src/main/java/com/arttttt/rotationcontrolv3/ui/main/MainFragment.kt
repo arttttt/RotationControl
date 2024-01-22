@@ -23,6 +23,7 @@ import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
 
 class MainFragment(
@@ -113,6 +114,8 @@ class MainFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
+
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
         bottomAppBar.setNavigationOnClickListener {
             NavigationDialog.show(
@@ -124,6 +127,11 @@ class MainFragment(
                 itemClickListener = { item ->
                     coordinator.handleMenuClick(item)
                     selectedMenuItem = item
+
+                    when (item) {
+                        is MenuItem.Settings -> fab.show()
+                        is MenuItem.About -> fab.hide()
+                    }
                 },
                 selectedItem = selectedMenuItem,
             )

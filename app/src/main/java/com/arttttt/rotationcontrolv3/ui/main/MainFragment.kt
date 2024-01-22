@@ -111,11 +111,23 @@ class MainFragment(
         return view
     }
 
+    private var started = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setImageResource(R.drawable.ic_start)
+
+        fab.setOnClickListener {
+            started = !started
+
+            if (started) {
+                fab.setImageResource(R.drawable.ic_stop)
+            } else {
+                fab.setImageResource(R.drawable.ic_start)
+            }
+        }
 
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
         bottomAppBar.setNavigationOnClickListener {

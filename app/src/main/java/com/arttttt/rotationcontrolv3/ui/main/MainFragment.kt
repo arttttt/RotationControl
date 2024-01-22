@@ -113,14 +113,6 @@ class MainFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        childFragmentManager.commit {
-            replace<SettingsFragment>(
-                containerDelegate.containerId,
-                null,
-                null,
-            )
-        }
-
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
         bottomAppBar.setNavigationOnClickListener {
             NavigationDialog.show(

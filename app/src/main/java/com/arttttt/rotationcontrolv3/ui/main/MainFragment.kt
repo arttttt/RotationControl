@@ -29,6 +29,21 @@ class MainFragment(
     private val dependencies: MainComponentDependencies,
 ) : Fragment(R.layout.fragment_main) {
 
+    sealed class MenuItem : NavigationDialog.Item {
+
+        data object Settings : MenuItem() {
+
+            override val id: Int = R.id.item_settings
+            override val title: CharSequence = "Settings"
+        }
+
+        data object About : MenuItem() {
+
+            override val id: Int = R.id.item_about
+            override val title: CharSequence = "About"
+        }
+    }
+
     companion object {
 
         fun provider(dependencies: MainComponentDependencies): FragmentProvider = FragmentProvider {
@@ -105,7 +120,11 @@ class MainFragment(
         bottomAppBar.setNavigationOnClickListener {
             NavigationDialog.show(
                 context = requireContext(),
-                itemClickListener = { itemId -> coordinator.handleMenuClick(itemId) },
+                items = setOf(
+                    MenuItem.Settings,
+                    MenuItem.About,
+                ),
+                itemClickListener = { item -> coordinator.handleMenuClick(item) },
             )
         }
     }
@@ -128,10 +147,10 @@ class MainFragment(
         containerDelegate.saveState(outState)
     }
 
-    private fun MainCoordinator.handleMenuClick(itemId: Int) {
-        when (itemId) {
-            R.id.item_about -> showAbout()
-            R.id.item_settings -> showSettings()
+    private fun MainCoordinator.handleMenuClick(item: NavigationDialog.Item) {
+        when (item) {
+            is MenuItem.About -> showAbout()
+            is MenuItem.Settings -> showSettings()
         }
     }
 }

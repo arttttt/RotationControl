@@ -115,6 +115,7 @@ class MainFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
+        fab.setImageResource(R.drawable.ic_start)
 
         val bottomAppBar = view.findViewById<BottomAppBar>(R.id.bottomAppBar)
         bottomAppBar.setNavigationOnClickListener {

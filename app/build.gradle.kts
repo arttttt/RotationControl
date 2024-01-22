@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -43,22 +43,22 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation(libs.material)
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.google.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.recyclerview)
 
-    implementation("androidx.multidex:multidex:2.0.1")
+    implementation(libs.androidx.multidex)
 
-    implementation("com.google.dagger:dagger:2.50")
-    ksp("com.google.dagger:dagger-compiler:2.50")
+    implementation(libs.dagger.main)
+    ksp(libs.dagger.compiler)
 
-    implementation("com.arkivanov.mvikotlin:mvikotlin:4.0.0-alpha02")
-    implementation("com.arkivanov.mvikotlin:mvikotlin-main:4.0.0-alpha02")
-    implementation("com.arkivanov.mvikotlin:mvikotlin-logging:4.0.0-alpha02")
-    implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:4.0.0-alpha02")
+    implementation(libs.mvikotlin.core)
+    implementation(libs.mvikotlin.main)
+    implementation(libs.mvikotlin.logging)
+    implementation(libs.mvikotlin.extensions.coroutines)
 
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 }

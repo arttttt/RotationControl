@@ -71,6 +71,11 @@ class MainFragment(
     @Inject
     lateinit var coordinator: MainCoordinator
 
+    /**
+     * todo: do it in a proper way
+     */
+    private var selectedMenuItem: NavigationDialog.Item = MenuItem.Settings
+
     override fun onCreate(savedInstanceState: Bundle?) {
         containerDelegate.initialize(savedInstanceState)
 
@@ -124,7 +129,11 @@ class MainFragment(
                     MenuItem.Settings,
                     MenuItem.About,
                 ),
-                itemClickListener = { item -> coordinator.handleMenuClick(item) },
+                itemClickListener = { item ->
+                    coordinator.handleMenuClick(item)
+                    selectedMenuItem = item
+                },
+                selectedItem = selectedMenuItem,
             )
         }
     }

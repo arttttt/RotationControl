@@ -10,6 +10,7 @@ class NavigationDialog private constructor(
     context: Context,
     items: Set<Item>,
     itemClickListener: NavigationDialogItemClickListener?,
+    selectedItem: Item?,
 ) : BottomSheetDialog(context) {
 
     interface Item {
@@ -24,11 +25,13 @@ class NavigationDialog private constructor(
             context: Context,
             items: Set<Item>,
             itemClickListener: NavigationDialogItemClickListener?,
+            selectedItem: Item?,
         ) {
             val dialog = NavigationDialog(
                 context = context,
                 items = items,
                 itemClickListener = itemClickListener,
+                selectedItem = selectedItem,
             )
 
             dialog.show()
@@ -53,6 +56,9 @@ class NavigationDialog private constructor(
                     index,
                     item.title,
                 )
+                .apply {
+                    isChecked = item == selectedItem
+                }
         }
 
         if (itemClickListener != null) {

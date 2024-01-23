@@ -8,6 +8,8 @@ fragmentKtx = "1.6.2"
 kotlin = "1.9.22"
 coreKtx = "1.12.0"
 appcompat = "1.6.1"
+kotlinCoroutines = "1.8.0-RC2"
+lifecycleRuntime = "2.7.0"
 material = "1.11.0"
 multidex = "2.0.1"
 mvikotlin = "4.0.0-alpha02"
@@ -15,6 +17,9 @@ recyclerview = "1.3.2"
 timber = "5.0.1"
 ksp = "1.9.22-1.0.17"
 cicerone = "7.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
 
 [libraries]
 androidx-activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -23,17 +28,23 @@ androidx-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-lifecycle-runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntime" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 dagger-main = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
 mvikotlin-extensions-coroutines = { module = "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
 mvikotlin-logging = { module = "com.arkivanov.mvikotlin:mvikotlin-logging", version.ref = "mvikotlin" }
 mvikotlin-main = { module = "com.arkivanov.mvikotlin:mvikotlin-main", version.ref = "mvikotlin" }
 mvikotlin-core = { module = "com.arkivanov.mvikotlin:mvikotlin", version.ref = "mvikotlin" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 cicerone = { module = "com.github.terrakok:cicerone", version.ref = "cicerone" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

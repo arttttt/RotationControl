@@ -33,12 +33,12 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)
-    implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.androidx.activityKtx)
+    implementation(libs.androidx.fragmentKtx)
 
-    api("com.github.terrakok:cicerone:7.1")
+    api(libs.cicerone)
 
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 }

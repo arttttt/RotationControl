@@ -45,10 +45,10 @@ android {
 dependencies {
     implementation(project(":core:navigation"))
 
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.activityKtx)
+    implementation(libs.androidx.fragmentKtx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.google.material)
     implementation(libs.androidx.constraintlayout)

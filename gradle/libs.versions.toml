@@ -14,14 +14,15 @@ mvikotlin = "4.0.0-alpha02"
 recyclerview = "1.3.2"
 timber = "5.0.1"
 ksp = "1.9.22-1.0.17"
+cicerone = "7.1"
 
 [libraries]
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+androidx-activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 dagger-main = { module = "com.google.dagger:dagger", version.ref = "dagger" }
@@ -32,6 +33,7 @@ mvikotlin-logging = { module = "com.arkivanov.mvikotlin:mvikotlin-logging", vers
 mvikotlin-main = { module = "com.arkivanov.mvikotlin:mvikotlin-main", version.ref = "mvikotlin" }
 mvikotlin-core = { module = "com.arkivanov.mvikotlin:mvikotlin", version.ref = "mvikotlin" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+cicerone = { module = "com.github.terrakok:cicerone", version.ref = "cicerone" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

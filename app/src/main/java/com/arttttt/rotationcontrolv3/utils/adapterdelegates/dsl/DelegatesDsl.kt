@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 
+@Suppress("NAME_SHADOWING")
 inline fun <reified T : ListItem> adapterDelegate(
 	@LayoutRes layout: Int,
 	noinline on: (item: ListItem, position: Int) -> Boolean = { item, _ -> item is T },

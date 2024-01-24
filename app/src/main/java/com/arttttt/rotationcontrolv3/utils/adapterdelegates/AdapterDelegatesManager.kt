@@ -99,29 +99,29 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 	
 	fun onViewRecycled(holder: RecyclerView.ViewHolder) {
 		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.absoluteAdapterPosition + " for viewType = " + holder.itemViewType)
 		delegate.onViewRecycled(holder)
 	}
 	
 	fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
 		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.absoluteAdapterPosition + " for viewType = " + holder.itemViewType)
 		return delegate.onFailedToRecycleView(holder)
 	}
 	
 	fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
 		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.absoluteAdapterPosition + " for viewType = " + holder.itemViewType)
 		delegate.onViewAttachedToWindow(holder)
 	}
 	
 	fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
 		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.absoluteAdapterPosition + " for viewType = " + holder.itemViewType)
 		delegate.onViewDetachedFromWindow(holder)
 	}
 	
-	fun setFallbackDelegate(fallbackDelegate: AdapterDelegate<T>?): AdapterDelegatesManager<T>? {
+	fun setFallbackDelegate(fallbackDelegate: AdapterDelegate<T>?): AdapterDelegatesManager<T> {
 		this.fallbackDelegate = fallbackDelegate
 		return this
 	}

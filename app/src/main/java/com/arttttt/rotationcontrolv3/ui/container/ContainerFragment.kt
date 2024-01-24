@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.rotationcontrolv3.ui.container.di.DaggerContainerComponent
+import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -44,7 +45,9 @@ class ContainerFragment : Fragment() {
 
         DaggerContainerComponent
             .factory()
-            .create()
+            .create(
+                dependencies = requireContext().appComponent
+            )
             .inject(this)
 
         childFragmentManager.fragmentFactory = fragmentFactory

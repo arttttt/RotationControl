@@ -6,6 +6,7 @@ import com.arttttt.rotationcontrolv3.di.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
+import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.Module
@@ -40,5 +41,12 @@ object MainModule {
     @FragmentClassKey(AboutFragment::class)
     fun provideAboutFragmentProvider(component: MainComponent): FragmentProvider {
         return AboutFragment.provider(component)
+    }
+
+    @Provides
+    @IntoMap
+    @FragmentClassKey(SettingsFragment::class)
+    fun provideSettingsFragmentProvider(component: MainComponent): FragmentProvider {
+        return SettingsFragment.provider(component)
     }
 }

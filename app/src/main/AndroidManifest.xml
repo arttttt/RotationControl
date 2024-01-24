@@ -36,6 +36,16 @@
             android:name=".device.services.RotationService"
             android:exported="false"/>
 
+        <receiver
+            android:name="com.arttttt.rotationcontrolv3.device.receivers.BootReceiver"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+
+        </receiver>
+
     </application>
 
 </manifest>

@@ -32,6 +32,10 @@
 
         </activity>
 
+        <service
+            android:name=".device.services.RotationService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

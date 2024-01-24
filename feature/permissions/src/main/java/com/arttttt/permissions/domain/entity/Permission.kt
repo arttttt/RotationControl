@@ -2,7 +2,7 @@ package com.arttttt.permissions.domain.entity
 
 import android.content.Context
 
-interface Permission2 {
+interface Permission {
 
     sealed class Status {
 

@@ -1,28 +1,28 @@
 package com.arttttt.permissions.domain.store
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.permissions.domain.entity.Permission2
+import com.arttttt.permissions.domain.entity.Permission
 import kotlin.reflect.KClass
 
 interface PermissionsStore : Store<PermissionsStore.Intent, PermissionsStore.State, PermissionsStore.Label> {
 
     data class State(
         val isInProgress: Boolean,
-        val permissions: Map<Permission2.Status, Map<KClass<out Permission2>, Permission2>>,
+        val permissions: Map<Permission.Status, Map<KClass<out Permission>, Permission>>,
     ) {
 
-        val grantedPermissions: List<Permission2>
+        val grantedPermissions: List<Permission>
             get() {
                 return permissions
-                    .getOrElse(Permission2.Status.Granted) { emptyMap() }
+                    .getOrElse(Permission.Status.Granted) { emptyMap() }
                     .values
                     .toList()
             }
 
-        val deniedPermissions: List<Permission2>
+        val deniedPermissions: List<Permission>
             get() {
                 return permissions
-                    .getOrElse(Permission2.Status.Denied) { emptyMap() }
+                    .getOrElse(Permission.Status.Denied) { emptyMap() }
                     .values
                     .toList()
             }
@@ -36,7 +36,7 @@ interface PermissionsStore : Store<PermissionsStore.Intent, PermissionsStore.Sta
     sealed class Intent {
 
         data class RequestPermission(
-            val permission: KClass<out Permission2>,
+            val permission: KClass<out Permission>,
         ) : Intent()
 
         data object CheckPermissions : Intent()
@@ -47,7 +47,7 @@ interface PermissionsStore : Store<PermissionsStore.Intent, PermissionsStore.Sta
         data object ProgressStarted : Message()
         data object ProgressFinished : Message()
         data class PermissionsReceived(
-            val permissions: Map<Permission2.Status, Map<KClass<out Permission2>, Permission2>>,
+            val permissions: Map<Permission.Status, Map<KClass<out Permission>, Permission>>,
         ) : Message()
     }
 

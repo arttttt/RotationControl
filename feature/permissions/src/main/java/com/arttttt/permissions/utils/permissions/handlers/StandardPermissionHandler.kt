@@ -4,9 +4,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.arttttt.permissions.utils.permissions.PermissionHandler
-import com.arttttt.permissions.domain.entity.Permission2
+import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.permissions.utils.extensions.of
+import com.arttttt.permissions.utils.extensions.toBoolean
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
@@ -17,7 +18,11 @@ class StandardPermissionHandler : PermissionHandler<StandardPermission> {
     override suspend fun requestPermission(
         activity: ComponentActivity,
         permission: StandardPermission
-    ): Permission2.Status {
+    ): Permission.Status {
+        if (permission.checkStatus(activity.applicationContext).toBoolean()) {
+            return Permission.Status.Granted
+        }
+
         val key = "permission_request_${permission.permission}"
 
         val callback = ActivityResultCallback<Boolean> { result ->
@@ -28,7 +33,7 @@ class StandardPermissionHandler : PermissionHandler<StandardPermission> {
 
         return try {
             launcher.launch(permission.permission)
-            Permission2.Status.of(resultFlow.first())
+            Permission.Status.of(resultFlow.first())
         } finally {
             launcher.unregister()
         }

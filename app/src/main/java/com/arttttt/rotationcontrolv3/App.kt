@@ -4,6 +4,7 @@ import androidx.multidex.MultiDexApplication
 import com.arttttt.rotationcontrolv3.di.AppComponent
 import com.arttttt.rotationcontrolv3.di.DaggerAppComponent
 import com.arttttt.rotationcontrolv3.utils.di.AppComponentOwner
+import timber.log.Timber
 
 class App : MultiDexApplication(), AppComponentOwner {
 
@@ -13,5 +14,11 @@ class App : MultiDexApplication(), AppComponentOwner {
             .create(
                 context = this
             )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
     }
 }

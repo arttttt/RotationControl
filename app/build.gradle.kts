@@ -35,6 +35,8 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
+
+        freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 
     buildFeatures {
@@ -51,9 +53,10 @@ dependencies {
     implementation(libs.androidx.activityKtx)
     implementation(libs.androidx.fragmentKtx)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.google.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.lifecycle.runtimeKtx)
+    implementation(libs.google.material)
 
     implementation(libs.androidx.multidex)
 

@@ -1,6 +1,6 @@
 package com.arttttt.permissions.domain.entity
 
-interface StandardPermission : Permission2 {
+interface StandardPermission : Permission {
 
     val permission: String
 }

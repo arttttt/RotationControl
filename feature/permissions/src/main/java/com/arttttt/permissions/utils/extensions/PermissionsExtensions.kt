@@ -2,26 +2,34 @@ package com.arttttt.permissions.utils.extensions
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.arttttt.permissions.domain.entity.Permission2
+import androidx.core.content.ContextCompat
+import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 
-fun Permission2.Status.Companion.of(value: Int): Permission2.Status {
+fun Permission.Status.Companion.of(value: Int): Permission.Status {
     return if (value == PackageManager.PERMISSION_GRANTED) {
-        Permission2.Status.Granted
+        Permission.Status.Granted
     } else {
-        Permission2.Status.Denied
+        Permission.Status.Denied
     }
 }
 
-fun Permission2.Status.Companion.of(value: Boolean): Permission2.Status {
+fun Permission.Status.Companion.of(value: Boolean): Permission.Status {
     return if (value) {
-        Permission2.Status.Granted
+        Permission.Status.Granted
     } else {
-        Permission2.Status.Denied
+        Permission.Status.Denied
     }
 }
 
 context(StandardPermission)
-fun checkStatusImpl(context: Context): Permission2.Status {
-    return Permission2.Status.of(context.checkSelfPermission(permission))
+fun checkStatusImpl(context: Context): Permission.Status {
+    return Permission.Status.of(ContextCompat.checkSelfPermission(context, permission))
+}
+
+fun Permission.Status.toBoolean(): Boolean {
+    return when (this) {
+        Permission.Status.Granted -> true
+        Permission.Status.Denied -> false
+    }
 }

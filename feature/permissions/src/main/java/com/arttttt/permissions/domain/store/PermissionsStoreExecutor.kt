@@ -2,7 +2,7 @@ package com.arttttt.permissions.domain.store
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.permissions.utils.permissions.PermissionsRequester
-import com.arttttt.permissions.domain.entity.Permission2
+import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.repository.PermissionsRepository
 import com.arttttt.utils.exceptCancellationException
 import kotlinx.coroutines.launch
@@ -31,24 +31,24 @@ class PermissionsStoreExecutor(
     }
 
     private fun requestPermission(
-        permission: KClass<out Permission2>,
+        permission: KClass<out Permission>,
     ) {
         scope.launch {
             kotlin
                 .runCatching {
                     val permission = state()
                         .permissions
-                        .getValue(Permission2.Status.Denied)
+                        .getValue(Permission.Status.Denied)
                         .getValue(permission)
 
                     permissionsRequester
                         .requestPermission(permission)
-                        .takeIf { status -> status != Permission2.Status.Denied }!!
+                        .takeIf { status -> status != Permission.Status.Denied }!!
                 }
                 .onSuccess {
                     getAndCheckPermissions()
 
-                    val permissions = state().permissions.get(Permission2.Status.Denied)
+                    val permissions = state().permissions.get(Permission.Status.Denied)
                     if (permissions.isNullOrEmpty()) {
                         publish(PermissionsStore.Label.AllPermissionsGranted)
                     }

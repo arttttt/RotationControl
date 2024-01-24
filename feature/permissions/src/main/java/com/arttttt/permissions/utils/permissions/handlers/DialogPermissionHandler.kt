@@ -6,7 +6,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.arttttt.permissions.domain.entity.IntentPermission
-import com.arttttt.permissions.domain.entity.Permission2
+import com.arttttt.permissions.domain.entity.Permission
+import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.permissions.utils.permissions.PermissionHandler
 import kotlinx.coroutines.channels.Channel
 
@@ -45,12 +46,14 @@ abstract class DialogPermissionHandler<T : IntentPermission> : PermissionHandler
         }
     }
 
-    protected abstract fun Context.checkPermissionStatus(): Permission2.Status
-
     override suspend fun requestPermission(
         activity: ComponentActivity,
         permission: T
-    ): Permission2.Status {
+    ): Permission.Status {
+        if (permission.checkStatus(activity.applicationContext).toBoolean()) {
+            return Permission.Status.Granted
+        }
+
         lifecycleObserver.init(activity.lifecycle)
         activity.lifecycle.addObserver(lifecycleObserver)
 
@@ -62,7 +65,7 @@ abstract class DialogPermissionHandler<T : IntentPermission> : PermissionHandler
                 lifecycleObserver.awaitResume()
             }
 
-            activity.applicationContext.checkPermissionStatus()
+            permission.checkStatus(activity.applicationContext)
         } finally {
             lifecycleObserver.clear()
             activity.lifecycle.removeObserver(lifecycleObserver)

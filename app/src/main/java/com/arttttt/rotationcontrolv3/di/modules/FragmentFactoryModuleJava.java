@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.di;
+package com.arttttt.rotationcontrolv3.di.modules;
 
 import androidx.fragment.app.Fragment;
 

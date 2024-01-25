@@ -2,7 +2,7 @@ package com.arttttt.rotationcontrolv3.ui.container.di
 
 import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.navigation.factory.FragmentProvider
-import com.arttttt.rotationcontrolv3.di.FragmentClassKey
+import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.main.MainFragment

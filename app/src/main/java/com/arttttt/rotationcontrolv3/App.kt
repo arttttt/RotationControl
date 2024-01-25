@@ -1,8 +1,8 @@
 package com.arttttt.rotationcontrolv3
 
 import androidx.multidex.MultiDexApplication
-import com.arttttt.rotationcontrolv3.di.AppComponent
-import com.arttttt.rotationcontrolv3.di.DaggerAppComponent
+import com.arttttt.rotationcontrolv3.di.components.AppComponent
+import com.arttttt.rotationcontrolv3.di.components.DaggerAppComponent
 import com.arttttt.rotationcontrolv3.utils.di.AppComponentOwner
 import timber.log.Timber
 

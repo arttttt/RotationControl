@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.di
+package com.arttttt.rotationcontrolv3.di.keys
 
 import androidx.fragment.app.Fragment
 import dagger.MapKey

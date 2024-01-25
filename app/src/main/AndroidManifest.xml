@@ -33,11 +33,11 @@
         </activity>
 
         <service
-            android:name=".device.services.RotationService"
+            android:name=".ui.rotation.RotationService"
             android:exported="false"/>
 
         <receiver
-            android:name="com.arttttt.rotationcontrolv3.device.receivers.BootReceiver"
+            android:name=".data.framework.BootReceiver"
             android:enabled="false"
             android:exported="true">
 

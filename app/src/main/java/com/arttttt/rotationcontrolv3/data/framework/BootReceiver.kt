@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.device.receivers
+package com.arttttt.rotationcontrolv3.data.framework
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.device.services
+package com.arttttt.rotationcontrolv3.ui.rotation
 
 import android.app.Service
 import android.content.Intent

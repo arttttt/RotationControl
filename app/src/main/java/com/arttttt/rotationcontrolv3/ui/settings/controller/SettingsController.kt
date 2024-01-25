@@ -19,25 +19,39 @@ class SettingsController @Inject constructor(
     private val settingsRepository: SettingsRepository,
 ) : Controller<SettingsView> {
 
+    private var settings = settingsRepository.getSettings()
+
     override fun onViewCreated(view: SettingsView, lifecycle: Lifecycle) {
         bind(
             lifecycle = lifecycle,
             mode = BinderLifecycleMode.CREATE_DESTROY,
         ) {
-            view.render(
-                transformer.invoke(settingsRepository.getSettings())
-            )
+            view.render()
 
             view
                 .events
                 .filterIsInstance<SettingsView.UiEvent.SettingsChanged>()
                 .bindTo { event ->
-                    settingsRepository.saveSettings(
-                        AppSettings.StartOnBoot(
-                            value = event.isChecked,
+                    val value = settings.find { it::class == event.type }
+
+                    if (value is AppSettings.StartOnBoot) {
+                        settingsRepository.saveSettings(
+                            value.copy(
+                                value = event.isChecked,
+                            )
                         )
-                    )
+
+                        settings = settingsRepository.getSettings()
+
+                        view.render()
+                    }
                 }
         }
+    }
+
+    private fun SettingsView.render() {
+        render(
+            transformer.invoke(settings)
+        )
     }
 }

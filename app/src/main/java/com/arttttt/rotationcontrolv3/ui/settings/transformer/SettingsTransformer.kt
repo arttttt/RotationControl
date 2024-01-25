@@ -17,6 +17,7 @@ class SettingsTransformer @Inject constructor(
             items = settings.map { appSettings ->
                 when (appSettings) {
                     is AppSettings.StartOnBoot -> SettingsAdapterItem(
+                        type = appSettings::class,
                         title = resourcesProvider.getString(R.string.start_on_boot),
                         isChecked = appSettings.value,
                     )

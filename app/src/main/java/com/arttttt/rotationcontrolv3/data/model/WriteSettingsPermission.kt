@@ -14,8 +14,6 @@ data object WriteSettingsPermission : IntentPermission by if (Build.VERSION.SDK_
 
     private data object Impl : IntentPermission {
 
-        override val title: String = "Write Settings"
-
         override fun createIntent(context: Context): Intent {
             return Intent()
         }
@@ -27,8 +25,6 @@ data object WriteSettingsPermission : IntentPermission by if (Build.VERSION.SDK_
 
     @RequiresApi(Build.VERSION_CODES.M)
     private data object Impl23 : IntentPermission {
-
-        override val title: String = "Write Settings"
 
         override fun createIntent(context: Context): Intent {
             val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)

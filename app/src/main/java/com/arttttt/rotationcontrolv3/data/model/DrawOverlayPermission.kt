@@ -14,8 +14,6 @@ data object DrawOverlayPermission : IntentPermission by if (Build.VERSION.SDK_IN
 
     private data object Impl : IntentPermission {
 
-        override val title: String = "Draw overlay"
-
         override fun createIntent(context: Context): Intent {
             return Intent()
         }
@@ -27,8 +25,6 @@ data object DrawOverlayPermission : IntentPermission by if (Build.VERSION.SDK_IN
 
     @RequiresApi(Build.VERSION_CODES.M)
     private data object Impl23 : IntentPermission {
-
-        override val title: String = "Draw overlay"
 
         override fun createIntent(context: Context): Intent {
             return Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {

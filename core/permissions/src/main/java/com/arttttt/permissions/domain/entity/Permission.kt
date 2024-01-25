@@ -12,7 +12,5 @@ interface Permission {
         data object Denied : Status()
     }
 
-    val title: String
-
     fun checkStatus(context: Context): Status
 }

@@ -18,10 +18,9 @@ class SettingsViewImpl(
     private val adapter = AsyncListDifferDelegationAdapter(
         delegates = setOf(
             SettingsAdapterDelegate(
-                onCheckedChanged = { settings, isChecked ->
+                onCheckedChanged = { isChecked ->
                     dispatch(
                         SettingsView.UiEvent.SettingsChanged(
-                            settings = settings,
                             isChecked = isChecked,
                         )
                     )

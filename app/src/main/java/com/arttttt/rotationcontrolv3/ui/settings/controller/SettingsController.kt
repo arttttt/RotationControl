@@ -33,7 +33,6 @@ class SettingsController @Inject constructor(
                                 SettingsAdapterItem(
                                     title = "start on boot",
                                     isChecked = settings.value,
-                                    settings = settings.settings,
                                 )
                                 }
                             }
@@ -47,8 +46,7 @@ class SettingsController @Inject constructor(
                 .bindTo { event ->
                     settingsRepository.saveSettings(
                         AppSettings.StartOnBoot(
-                            event.settings,
-                            event.isChecked,
+                            value = event.isChecked,
                         )
                     )
                 }

@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
+
     implementation(libs.kotlin.coroutines.core)
 
     implementation(libs.timber)

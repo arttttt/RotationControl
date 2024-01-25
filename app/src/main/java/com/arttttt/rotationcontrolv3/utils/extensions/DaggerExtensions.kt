@@ -2,7 +2,7 @@ package com.arttttt.rotationcontrolv3.utils.extensions
 
 import android.content.Context
 import android.content.ContextWrapper
-import com.arttttt.rotationcontrolv3.di.AppComponent
+import com.arttttt.rotationcontrolv3.di.components.AppComponent
 import com.arttttt.rotationcontrolv3.utils.di.AppComponentOwner
 
 val Context.appComponent: AppComponent

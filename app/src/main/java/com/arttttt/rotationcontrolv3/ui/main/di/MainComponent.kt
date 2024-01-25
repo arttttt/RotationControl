@@ -1,9 +1,10 @@
 package com.arttttt.rotationcontrolv3.ui.main.di
 
-import com.arttttt.rotationcontrolv3.di.FragmentFactoryModuleJava
+import com.arttttt.rotationcontrolv3.di.modules.FragmentFactoryModuleJava
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.di.AboutComponentDependencies
 import com.arttttt.rotationcontrolv3.ui.main.MainFragment
+import com.arttttt.rotationcontrolv3.ui.settings.di.SettingsDependencies
 import dagger.Component
 
 @PerScreen
@@ -16,7 +17,7 @@ import dagger.Component
         FragmentFactoryModuleJava::class,
     ]
 )
-interface MainComponent : AboutComponentDependencies {
+interface MainComponent : AboutComponentDependencies, SettingsDependencies {
 
     @Component.Factory
     interface Factory {

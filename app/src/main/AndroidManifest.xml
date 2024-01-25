@@ -38,6 +38,7 @@
 
         <receiver
             android:name="com.arttttt.rotationcontrolv3.device.receivers.BootReceiver"
+            android:enabled="false"
             android:exported="true">
 
             <intent-filter>

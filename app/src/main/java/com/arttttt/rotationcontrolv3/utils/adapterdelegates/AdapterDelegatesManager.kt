@@ -8,7 +8,15 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 	
 	companion object {
 		protected const val FALLBACK_DELEGATE_VIEW_TYPE = Int.MAX_VALUE - 1
-		
+
+		private const val NO_DELEGATE_ERROR = "No delegate found for %s for item at position = %s for viewType = %s"
+		private const val VIEW_TYPE_RESERVED_ERROR  = "The view type = $FALLBACK_DELEGATE_VIEW_TYPE is reserved for fallback adapter delegate (see setFallbackDelegate()). Please use another view type."
+		private const val DELEGATE_IS_ALREADY_REGISTERED_ERROR = "An AdapterDelegate is already registered for the viewType = %s. Already registered AdapterDelegate is %s"
+		private const val NO_MORE_VIEW_TYPES_LEFT_ERROR = "Oops, we are very close to Integer.MAX_VALUE. It seems that there are no more free and unused view type integers left to add another AdapterDelegate."
+		private const val NO_ADAPTER_DELEGATE_ERROR = "No AdapterDelegate added for ViewType %s"
+		private const val NO_ADAPTER_DELEGATE_THAT_MATCHES_ITEM_ERROR = "No AdapterDelegate added that matches item=%s at position=%s in data source"
+		private const val NO_ADAPTER_DELEGATE_FOR_POSITION = "No AdapterDelegate added for item at position=%s. items=%s"
+
 		private val PAYLOADS_EMPTY_LIST: List<Any> = emptyList()
 	}
 	
@@ -31,10 +39,10 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 	): AdapterDelegatesManager<T> {
 		
 		require(viewType != FALLBACK_DELEGATE_VIEW_TYPE) {
-			("The view type = " + FALLBACK_DELEGATE_VIEW_TYPE + " is reserved for fallback adapter delegate (see setFallbackDelegate() ). Please use another view type.")
+			VIEW_TYPE_RESERVED_ERROR
 		}
 		require(!(!allowReplacingDelegate && delegates[viewType] != null)) {
-			("An AdapterDelegate is already registered for the viewType = " + viewType + ". Already registered AdapterDelegate is " + delegates[viewType])
+			DELEGATE_IS_ALREADY_REGISTERED_ERROR.format(viewType, delegates[viewType])
 		}
 		delegates.put(viewType, delegate)
 		return this
@@ -48,7 +56,7 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 		return this
 	}
 	
-	fun removeDelegate(viewType: Int): AdapterDelegatesManager<T>? {
+	fun removeDelegate(viewType: Int): AdapterDelegatesManager<T> {
 		delegates.remove(viewType)
 		return this
 	}
@@ -69,9 +77,9 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 		}
 		val errorMessage: String = if (item is List<*>) {
 			val itemString = item[position].toString()
-			"No AdapterDelegate added that matches item=$itemString at position=$position in data source"
+			NO_ADAPTER_DELEGATE_THAT_MATCHES_ITEM_ERROR.format(itemString, position)
 		} else {
-			"No AdapterDelegate added for item at position=$position. items=$item"
+			NO_ADAPTER_DELEGATE_FOR_POSITION.format(position, item)
 		}
 		throw NullPointerException(errorMessage)
 	}
@@ -80,8 +88,9 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 		parent: ViewGroup,
 		viewType: Int,
 	): RecyclerView.ViewHolder {
-		val delegate = getDelegateForViewType(viewType)
-			?: throw NullPointerException("No AdapterDelegate added for ViewType $viewType")
+		val delegate = requireNotNull(getDelegateForViewType(viewType)) {
+			NO_ADAPTER_DELEGATE_ERROR.format(viewType)
+		}
 		return delegate.onCreateViewHolder(parent)
 	}
 	
@@ -92,36 +101,41 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 		holder: RecyclerView.ViewHolder,
 		payloads: List<Any> = PAYLOADS_EMPTY_LIST,
 	) {
-		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for item at position = " + position + " for viewType = " + holder.itemViewType)
+		val delegate = requireNotNull(getDelegateForViewType(holder.itemViewType)) {
+			noDelegateMessage(holder)
+		}
 		delegate.onBindViewHolder(item, position, holder, payloads)
 	}
 	
 	fun onViewRecycled(holder: RecyclerView.ViewHolder) {
-		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+		val delegate = requireNotNull(getDelegateForViewType(holder.itemViewType)) {
+			noDelegateMessage(holder)
+		}
 		delegate.onViewRecycled(holder)
 	}
 	
 	fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
-		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+		val delegate = requireNotNull(getDelegateForViewType(holder.itemViewType)) {
+			noDelegateMessage(holder)
+		}
 		return delegate.onFailedToRecycleView(holder)
 	}
 	
 	fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+		val delegate = requireNotNull(getDelegateForViewType(holder.itemViewType)) {
+			noDelegateMessage(holder)
+		}
 		delegate.onViewAttachedToWindow(holder)
 	}
 	
 	fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
-		val delegate = getDelegateForViewType(holder.itemViewType)
-			?: throw NullPointerException("No delegate found for " + holder + " for item at position = " + holder.adapterPosition + " for viewType = " + holder.itemViewType)
+		val delegate = requireNotNull(getDelegateForViewType(holder.itemViewType)) {
+			noDelegateMessage(holder)
+		}
 		delegate.onViewDetachedFromWindow(holder)
 	}
 	
-	fun setFallbackDelegate(fallbackDelegate: AdapterDelegate<T>?): AdapterDelegatesManager<T>? {
+	fun setFallbackDelegate(fallbackDelegate: AdapterDelegate<T>?): AdapterDelegatesManager<T> {
 		this.fallbackDelegate = fallbackDelegate
 		return this
 	}
@@ -142,12 +156,22 @@ open class AdapterDelegatesManager<T : ListItem>(delegates: Set<AdapterDelegate<
 	fun getFallbackDelegate(): AdapterDelegate<T>? {
 		return fallbackDelegate
 	}
+
+	private fun noDelegateMessage(holder: RecyclerView.ViewHolder): String {
+		return NO_DELEGATE_ERROR.format(
+			holder,
+			holder.absoluteAdapterPosition,
+			holder.itemViewType,
+		)
+	}
 	
 	private fun getViewType(): Int {
 		var viewType = delegates.size()
 		while (delegates[viewType] != null) {
 			viewType++
-			require(viewType != FALLBACK_DELEGATE_VIEW_TYPE) { "Oops, we are very close to Integer.MAX_VALUE. It seems that there are no more free and unused view type integers left to add another AdapterDelegate." }
+			require(viewType != FALLBACK_DELEGATE_VIEW_TYPE) {
+				NO_MORE_VIEW_TYPES_LEFT_ERROR
+			}
 		}
 		
 		return viewType

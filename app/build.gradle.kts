@@ -46,7 +46,8 @@ android {
 
 dependencies {
     implementation(project(":core:navigation"))
-    implementation(project(":feature:permissions"))
+    implementation(project(":core:permissions"))
+    implementation(project(":utils"))
 
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)

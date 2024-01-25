@@ -1,13 +1,13 @@
 package com.arttttt.permissions.utils.permissions.handlers
 
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import com.arttttt.permissions.utils.permissions.PermissionHandler
+import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.permissions.utils.extensions.of
 import com.arttttt.permissions.utils.extensions.toBoolean
+import com.arttttt.permissions.utils.permissions.PermissionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
@@ -16,7 +16,7 @@ class StandardPermissionHandler : PermissionHandler<StandardPermission> {
     private val resultFlow = MutableSharedFlow<Boolean>(extraBufferCapacity = 1)
 
     override suspend fun requestPermission(
-        activity: ComponentActivity,
+        activity: AppCompatActivity,
         permission: StandardPermission
     ): Permission.Status {
         if (permission.checkStatus(activity.applicationContext).toBoolean()) {

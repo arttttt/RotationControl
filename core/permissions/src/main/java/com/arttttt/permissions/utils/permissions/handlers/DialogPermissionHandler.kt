@@ -1,7 +1,6 @@
 package com.arttttt.permissions.utils.permissions.handlers
 
-import android.content.Context
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -11,7 +10,7 @@ import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.permissions.utils.permissions.PermissionHandler
 import kotlinx.coroutines.channels.Channel
 
-abstract class DialogPermissionHandler<T : IntentPermission> : PermissionHandler<T> {
+class DialogPermissionHandler<T : IntentPermission> : PermissionHandler<T> {
 
     /**
      * todo: move to a separated class
@@ -47,7 +46,7 @@ abstract class DialogPermissionHandler<T : IntentPermission> : PermissionHandler
     }
 
     override suspend fun requestPermission(
-        activity: ComponentActivity,
+        activity: AppCompatActivity,
         permission: T
     ): Permission.Status {
         if (permission.checkStatus(activity.applicationContext).toBoolean()) {

@@ -1,13 +1,13 @@
 package com.arttttt.permissions.utils.permissions
 
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.utils.castTo
 import kotlin.reflect.KClass
 
 class PermissionsRequesterImpl(
-    private val activity: ComponentActivity,
+    private val activity: AppCompatActivity,
     private val handlers: Map<KClass<out Permission>, PermissionHandler<*>>,
 ) : PermissionsRequester {
 

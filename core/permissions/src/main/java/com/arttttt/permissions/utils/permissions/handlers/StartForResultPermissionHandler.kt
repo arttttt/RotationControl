@@ -2,9 +2,9 @@ package com.arttttt.permissions.utils.permissions.handlers
 
 import android.content.Context
 import android.content.Intent
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.of
@@ -18,7 +18,7 @@ class StartForResultPermissionHandler<T : IntentPermission> : PermissionHandler<
     private val resultFlow = MutableSharedFlow<Boolean>(extraBufferCapacity = 1)
 
     override suspend fun requestPermission(
-        activity: ComponentActivity,
+        activity: AppCompatActivity,
         permission: T
     ): Permission.Status {
         if (permission.checkStatus(activity.applicationContext).toBoolean()) {

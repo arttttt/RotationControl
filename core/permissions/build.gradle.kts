@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(project(":utils"))
 
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activityKtx)
     implementation(libs.androidx.lifecycle.runtimeKtx)
 

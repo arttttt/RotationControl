@@ -1,4 +1,4 @@
-package com.arttttt.permissions.utils.permissions
+package com.arttttt.permissions.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.permissions.domain.entity.Permission

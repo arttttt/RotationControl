@@ -1,4 +1,4 @@
-package com.arttttt.permissions.utils.permissions.handlers
+package com.arttttt.permissions.presentation.handlers
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.permissions.utils.permissions.PermissionHandler
+import com.arttttt.permissions.presentation.PermissionHandler
 import kotlinx.coroutines.channels.Channel
 
 class DialogPermissionHandler<T : IntentPermission> : PermissionHandler<T> {

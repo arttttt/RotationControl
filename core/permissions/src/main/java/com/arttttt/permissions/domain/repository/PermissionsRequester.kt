@@ -1,4 +1,4 @@
-package com.arttttt.permissions.utils.permissions
+package com.arttttt.permissions.domain.repository
 
 import com.arttttt.permissions.domain.entity.Permission
 

@@ -1,4 +1,4 @@
-package com.arttttt.permissions.utils.permissions.handlers
+package com.arttttt.permissions.presentation.handlers
 
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -7,7 +7,7 @@ import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.permissions.utils.extensions.of
 import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.permissions.utils.permissions.PermissionHandler
+import com.arttttt.permissions.presentation.PermissionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 

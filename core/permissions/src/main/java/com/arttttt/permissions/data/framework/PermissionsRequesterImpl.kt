@@ -1,8 +1,10 @@
-package com.arttttt.permissions.utils.permissions
+package com.arttttt.permissions.data.framework
 
 import androidx.appcompat.app.AppCompatActivity
+import com.arttttt.permissions.domain.repository.PermissionsRequester
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
+import com.arttttt.permissions.presentation.PermissionHandler
 import com.arttttt.utils.castTo
 import kotlin.reflect.KClass
 

@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.store.permissions
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arttttt.permissions.utils.permissions.PermissionsRequester
+import com.arttttt.permissions.domain.repository.PermissionsRequester
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.repository.PermissionsRepository
 import com.arttttt.utils.exceptCancellationException

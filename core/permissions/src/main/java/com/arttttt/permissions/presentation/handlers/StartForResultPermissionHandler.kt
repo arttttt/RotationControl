@@ -1,4 +1,4 @@
-package com.arttttt.permissions.utils.permissions.handlers
+package com.arttttt.permissions.presentation.handlers
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.of
 import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.permissions.utils.permissions.PermissionHandler
+import com.arttttt.permissions.presentation.PermissionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 

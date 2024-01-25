@@ -1,4 +1,4 @@
-package com.arttttt.permissions.domain.store
+package com.arttttt.rotationcontrolv3.domain.store.permissions
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.permissions.utils.permissions.PermissionsRequester
@@ -8,6 +8,7 @@ import com.arttttt.utils.exceptCancellationException
 import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
+@Suppress("NAME_SHADOWING")
 class PermissionsStoreExecutor(
     private val repository: PermissionsRepository,
     private val permissionsRequester: PermissionsRequester,

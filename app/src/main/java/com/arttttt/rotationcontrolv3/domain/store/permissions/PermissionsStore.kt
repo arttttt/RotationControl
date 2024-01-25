@@ -1,4 +1,4 @@
-package com.arttttt.permissions.domain.store
+package com.arttttt.rotationcontrolv3.domain.store.permissions
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arttttt.permissions.domain.entity.Permission

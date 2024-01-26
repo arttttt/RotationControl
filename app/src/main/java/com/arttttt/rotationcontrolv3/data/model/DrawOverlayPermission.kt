@@ -10,18 +10,7 @@ import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.of
 
-data object DrawOverlayPermission : IntentPermission by if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) Impl else Impl23 {
-
-    private data object Impl : IntentPermission {
-
-        override fun createIntent(context: Context): Intent {
-            return Intent()
-        }
-
-        override fun checkStatus(context: Context): Permission.Status {
-            return Permission.Status.Granted
-        }
-    }
+data object DrawOverlayPermission : IntentPermission by if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) IntentNoOpPermission else Impl23 {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private data object Impl23 : IntentPermission {

@@ -36,6 +36,9 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activityKtx)
+    implementation(libs.androidx.fragmentKtx)
+    implementation(libs.androidx.recyclerview)
 
     implementation(libs.kotlin.coroutines.core)
 

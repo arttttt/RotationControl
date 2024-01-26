@@ -9,7 +9,7 @@ import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.SettingsDiffCallback
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.delegates.SettingsAdapterDelegate
 import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AsyncListDifferDelegationAdapter
-import com.arttttt.rotationcontrolv3.utils.extensions.clearAdapterOnDestroyView
+import com.arttttt.utils.clearAdapterOnDestroyView
 
 class SettingsViewImpl(
     root: View

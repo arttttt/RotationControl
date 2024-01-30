@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:ignore="ContentDescription">
+
+    <ImageView
+        android:id="@+id/btn_auto"
+        style="@style/RotationControl.Widget.Button.Notification"
+        android:src="@drawable/ic_portrait_auto" />
+
+    <ImageView
+        android:id="@+id/btn_portrait"
+        style="@style/RotationControl.Widget.Button.Notification"
+        android:src="@drawable/ic_portrait" />
+
+    <ImageView
+        android:id="@+id/btn_portrait_reverse"
+        style="@style/RotationControl.Widget.Button.Notification"
+        android:src="@drawable/ic_portrait_reverse" />
+
+    <ImageView
+        android:id="@+id/btn_landscape"
+        style="@style/RotationControl.Widget.Button.Notification"
+        android:src="@drawable/ic_landscape" />
+
+    <ImageView
+        android:id="@+id/btn_landscape_reverse"
+        style="@style/RotationControl.Widget.Button.Notification"
+        android:src="@drawable/ic_landscape_reverse" />
+
+</LinearLayout>

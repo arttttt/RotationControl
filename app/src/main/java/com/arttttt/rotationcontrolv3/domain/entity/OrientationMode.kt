@@ -7,6 +7,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 sealed class OrientationMode : Parcelable {
 
+    companion object;
+
     abstract val value: Int
 
     data object Portrait : OrientationMode() {

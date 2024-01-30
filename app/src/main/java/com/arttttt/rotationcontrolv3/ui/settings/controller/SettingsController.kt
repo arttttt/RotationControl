@@ -10,7 +10,11 @@ import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.settings.transformer.SettingsTransformer
 import com.arttttt.rotationcontrolv3.ui.settings.view.SettingsView
 import com.arttttt.rotationcontrolv3.utils.mvi.Controller
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @PerScreen
@@ -19,7 +23,7 @@ class SettingsController @Inject constructor(
     private val settingsRepository: SettingsRepository,
 ) : Controller<SettingsView> {
 
-    private var settings = settingsRepository.getSettings()
+    private var settings: List<AppSettings> = emptyList()
 
     override fun onViewCreated(view: SettingsView, lifecycle: Lifecycle) {
         bind(
@@ -32,26 +36,47 @@ class SettingsController @Inject constructor(
                 .events
                 .filterIsInstance<SettingsView.UiEvent.SettingsChanged>()
                 .bindTo { event ->
-                    val value = settings.find { it::class == event.type }
+                    val value = settings.find { it::class == event.type } ?: return@bindTo
 
-                    if (value is AppSettings.StartOnBoot) {
-                        settingsRepository.saveSettings(
-                            value.copy(
-                                value = event.isChecked,
+                    when (value) {
+                        is AppSettings.StartOnBoot -> {
+                            settingsRepository.saveSettings(
+                                value.copy(
+                                    value = event.isChecked,
+                                )
                             )
-                        )
 
-                        settings = settingsRepository.getSettings()
+                            settings = settingsRepository.getSettings()
 
-                        view.render()
+                            view.render()
+                        }
+                        is AppSettings.ForceApplyOrientation -> {
+                            settingsRepository.saveSettings(
+                                value.copy(
+                                    value = event.isChecked,
+                                )
+                            )
+
+                            settings = settingsRepository.getSettings()
+
+                            view.render()
+                        }
                     }
                 }
         }
     }
 
     private fun SettingsView.render() {
-        render(
-            transformer.invoke(settings)
-        )
+        GlobalScope.launch {
+            settings = withContext(Dispatchers.IO) {
+                settingsRepository.getSettings()
+            }
+
+            withContext(Dispatchers.Main.immediate) {
+                render(
+                    transformer.invoke(settings)
+                )
+            }
+        }
     }
 }

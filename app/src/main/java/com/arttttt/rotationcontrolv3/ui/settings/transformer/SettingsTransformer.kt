@@ -21,6 +21,11 @@ class SettingsTransformer @Inject constructor(
                         title = resourcesProvider.getString(R.string.start_on_boot),
                         isChecked = appSettings.value,
                     )
+                    is AppSettings.ForceApplyOrientation -> SettingsAdapterItem(
+                        type = appSettings::class,
+                        title = resourcesProvider.getString(R.string.forced_mode),
+                        isChecked = appSettings.value,
+                    )
                 }
             }
         )

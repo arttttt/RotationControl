@@ -5,4 +5,8 @@ sealed class AppSettings {
     data class StartOnBoot(
         val value: Boolean,
     ) : AppSettings()
+
+    data class ForceApplyOrientation(
+        val value: Boolean
+    ) : AppSettings()
 }

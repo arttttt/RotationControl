@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import com.arttttt.permissions.data.model.IntentNoOpPermission
 import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.of

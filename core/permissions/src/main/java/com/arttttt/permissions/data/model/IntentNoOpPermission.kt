@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.data.model
+package com.arttttt.permissions.data.model
 
 import android.content.Context
 import android.content.Intent

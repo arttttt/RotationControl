@@ -1,5 +1,6 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
@@ -9,18 +10,12 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arkivanov.essenty.lifecycle.destroy
+import com.arkivanov.essenty.lifecycle.resume
 import com.arttttt.rotationcontrolv3.ui.rotation.di.DaggerRotationServiceComponent
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class RotationService : Service() {
@@ -45,23 +40,15 @@ class RotationService : Service() {
             }
         }
 
-    private var currentOrientationMode: OrientationMode = OrientationMode.Auto
-        set(value) {
-            field = value
-
-            showServiceNotification()
-        }
+    private val lifecycle = LifecycleRegistry()
 
     private val view: RotationServiceView by lazy {
         RotationServiceViewImpl(
-            isButtonActive = { buttonId ->
-                OrientationMode.of(buttonId) == currentOrientationMode
-            },
             context = applicationContext,
+            channelId = NOTIFICATION_CHANNEL_ID,
+            onNotificationUpdated = this::showServiceNotification,
         )
     }
-
-    private val coroutineScope = CoroutineScope(Job())
 
     @Inject
     lateinit var controller: RotationServiceController
@@ -78,26 +65,18 @@ class RotationService : Service() {
 
         createNotificationChannel()
 
-        ServiceCompat.startForeground(
-            this,
-            NOTIFICATION_ID,
-            view.createNotification(NOTIFICATION_CHANNEL_ID),
-            foregroundServiceTypeCompat,
+        controller.onViewCreated(
+            view = view,
+            lifecycle = lifecycle,
         )
 
-        view
-            .events
-            .filterIsInstance<RotationServiceView.UiEvent.ButtonEvent>()
-            .onEach { event ->
-                currentOrientationMode = OrientationMode.of(event)
-            }
-            .launchIn(coroutineScope)
+        lifecycle.resume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        coroutineScope.coroutineContext.cancelChildren()
+        lifecycle.destroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -126,33 +105,12 @@ class RotationService : Service() {
             .createNotificationChannel(channel)
     }
 
-    private fun showServiceNotification() {
+    private fun showServiceNotification(notification: Notification) {
         ServiceCompat.startForeground(
             this,
             NOTIFICATION_ID,
-            view.createNotification(NOTIFICATION_CHANNEL_ID),
+            notification,
             foregroundServiceTypeCompat,
         )
-    }
-
-    private fun OrientationMode.Companion.of(event: RotationServiceView.UiEvent.ButtonEvent): OrientationMode {
-        return when (event) {
-            RotationServiceView.UiEvent.ButtonEvent.AutoClicked -> OrientationMode.Auto
-            RotationServiceView.UiEvent.ButtonEvent.PortraitClicked -> OrientationMode.Portrait
-            RotationServiceView.UiEvent.ButtonEvent.PortraitReverseClicked -> OrientationMode.PortraitReverse
-            RotationServiceView.UiEvent.ButtonEvent.LandscapeClicked -> OrientationMode.Landscape
-            RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked -> OrientationMode.LandscapeReverse
-        }
-    }
-
-    private fun OrientationMode.Companion.of(buttonId: Int): OrientationMode? {
-        return when (buttonId) {
-            R.id.btn_auto -> OrientationMode.Auto
-            R.id.btn_portrait -> OrientationMode.Portrait
-            R.id.btn_portrait_reverse -> OrientationMode.PortraitReverse
-            R.id.btn_landscape -> OrientationMode.Landscape
-            R.id.btn_landscape_reverse -> OrientationMode.LandscapeReverse
-            else -> null
-        }
     }
 }

@@ -7,14 +7,18 @@ import android.content.Intent
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.arkivanov.mvikotlin.core.utils.diff
+import com.arkivanov.mvikotlin.core.view.ViewRenderer
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
+import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.utils.extensions.setColorFilter
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class RotationServiceViewImpl(
-    private val isButtonActive: (Int) -> Boolean,
     private val context: Context,
+    private val channelId: String,
+    private val onNotificationUpdated: (Notification) -> Unit
 ) : RotationServiceView {
 
     companion object {
@@ -22,6 +26,13 @@ class RotationServiceViewImpl(
         private const val NOTIFICATION_BUTTON_CLICKED_ACTION = "notification_button_clicked_action"
 
         private const val NO_ID = -1
+    }
+
+    override val renderer: ViewRenderer<RotationServiceView.State> = diff {
+        diff(
+            get = RotationServiceView.State::selectedButton,
+            set = this@RotationServiceViewImpl::handleActiveButtonChanged,
+        )
     }
 
     override val events = MutableSharedFlow<RotationServiceView.UiEvent>(extraBufferCapacity = 1)
@@ -34,26 +45,6 @@ class RotationServiceViewImpl(
         R.id.btn_landscape_reverse,
     )
 
-    override fun createNotification(channelId: String): Notification {
-        val remoteViews = createRemoteViews()
-
-        remoteViews.configureButtons(
-            context = context,
-            isButtonActive = isButtonActive,
-        )
-
-        return NotificationCompat
-            .Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_rotate)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(remoteViews)
-            .build()
-            .apply {
-                flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
-            }
-    }
-
     override fun handleClick(intent: Intent) {
         val clickedButtonId = intent
             .getIntExtra(
@@ -64,6 +55,28 @@ class RotationServiceViewImpl(
             ?: return
 
         getUiEventFromButtonId(clickedButtonId)?.let(events::tryEmit)
+    }
+
+    private fun handleActiveButtonChanged(activeButton: NotificationButton) {
+        val remoteViews = createRemoteViews()
+
+        remoteViews.configureButtons(
+            context = context,
+            isButtonActive = { id -> NotificationButton.of(id) == activeButton },
+        )
+
+        onNotificationUpdated.invoke(
+            NotificationCompat
+                .Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_rotate)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(remoteViews)
+                .build()
+                .apply {
+                    flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
+                }
+        )
     }
 
     private fun createRemoteViews(): RemoteViews {
@@ -131,5 +144,16 @@ class RotationServiceViewImpl(
                 }
             )
         )
+    }
+
+    private fun NotificationButton.Companion.of(value: Int): NotificationButton? {
+        return when (value) {
+            R.id.btn_auto -> NotificationButton.Auto
+            R.id.btn_portrait -> NotificationButton.Portrait
+            R.id.btn_portrait_reverse -> NotificationButton.PortraitReverse
+            R.id.btn_landscape -> NotificationButton.Landscape
+            R.id.btn_landscape_reverse -> NotificationButton.LandscapeReverse
+            else -> null
+        }
     }
 }

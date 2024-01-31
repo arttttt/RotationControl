@@ -2,9 +2,15 @@ package com.arttttt.rotationcontrolv3.ui.rotation.view
 
 import android.app.Notification
 import android.content.Intent
+import com.arkivanov.mvikotlin.core.view.ViewRenderer
+import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import kotlinx.coroutines.flow.Flow
 
 interface RotationServiceView {
+
+    data class State(
+        val selectedButton: NotificationButton
+    )
 
     sealed class UiEvent {
 
@@ -17,9 +23,9 @@ interface RotationServiceView {
         }
     }
 
-    val events: Flow<UiEvent>
+    val renderer: ViewRenderer<State>
 
-    fun createNotification(channelId: String): Notification
+    val events: Flow<UiEvent>
 
     fun handleClick(intent: Intent)
 }

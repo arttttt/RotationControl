@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
@@ -53,6 +54,18 @@ class RotationServiceController(
                     )
                 }
                 .bindTo(view.renderer)
+
+            sensorsRepository
+                .getRotationStatuses()
+                .filterIsInstance<RotationStatus.Enabled>()
+                .bindTo {
+
+                    states.update { state ->
+                        state.copy(
+                            orientationMode = OrientationMode.Auto
+                        )
+                    }
+                }
         }
     }
 

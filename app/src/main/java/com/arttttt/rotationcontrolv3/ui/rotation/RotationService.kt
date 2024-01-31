@@ -11,8 +11,10 @@ import androidx.core.app.ServiceCompat
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.ui.rotation.di.DaggerRotationServiceComponent
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
+import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
@@ -65,6 +67,13 @@ class RotationService : Service() {
     lateinit var controller: RotationServiceController
 
     override fun onCreate() {
+        DaggerRotationServiceComponent
+            .factory()
+            .create(
+                dependencies = applicationContext.appComponent,
+            )
+            .inject(this)
+
         super.onCreate()
 
         createNotificationChannel()

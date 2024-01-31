@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
+import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.update
 
 class RotationServiceController(
     private val sensorsRepository: SensorsRepository,
+    private val orientationRepository: OrientationRepository,
 ) {
 
     data class State(
@@ -54,6 +56,15 @@ class RotationServiceController(
                     )
                 }
                 .bindTo(view.renderer)
+
+            states
+                .map(State::orientationMode::get)
+                .bindTo { mode ->
+                    when (mode) {
+                        OrientationMode.Auto -> sensorsRepository.enableRotation()
+                        else -> orientationRepository.setOrientation(mode)
+                    }
+                }
 
             sensorsRepository
                 .getRotationStatuses()

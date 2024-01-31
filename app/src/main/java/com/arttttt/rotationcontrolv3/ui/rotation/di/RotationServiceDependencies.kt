@@ -1,8 +1,8 @@
 package com.arttttt.rotationcontrolv3.ui.rotation.di
 
-import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
+import android.content.Context
 
 interface RotationServiceDependencies {
 
-    val sensorsRepository: SensorsRepository
+    val context: Context
 }

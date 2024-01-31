@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.utils.adapterdelegates
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
+import com.arttttt.utils.unsafeCastTo
 
 @SuppressLint("NotifyDataSetChanged")
 open class DelegationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {

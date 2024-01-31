@@ -3,4 +3,13 @@
     <style name="Theme.RotationControl" parent="Theme.MaterialComponents.Light.NoActionBar">
     </style>
 
+    <style name="RotationControl.Widget.Button.Notification" parent="Theme.RotationControl">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
 </resources>

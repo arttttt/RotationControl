@@ -3,8 +3,6 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorActiveButtonTint">@android:color/black</color>
-    <color name="colorInactiveButtonTint">@android:color/white</color>
-    <color name="colorActiveButtonTintMiui">@android:color/white</color>
-    <color name="colorInactiveButtonTintMiui">@android:color/black</color>
+    <color name="colorActiveButtonTint">@color/colorAccent</color>
+    <color name="colorInactiveButtonTint">@android:color/black</color>
 </resources>

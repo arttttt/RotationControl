@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.arttttt.rotationcontrolv3.utils.extensions.unsafeCastTo
+import com.arttttt.utils.unsafeCastTo
 import java.util.concurrent.Executor
 
 open class AsyncListDifferDelegationAdapter(

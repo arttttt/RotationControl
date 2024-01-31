@@ -7,7 +7,7 @@ import dagger.Module
 import javax.inject.Singleton
 
 @Module
-abstract class SingletonComponent {
+abstract class AppModule {
 
     @Binds
     @Singleton

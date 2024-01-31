@@ -4,6 +4,6 @@ import com.arttttt.rotationcontrolv3.domain.entity.AppSettings
 
 interface SettingsRepository {
 
-    fun saveSettings(settings: AppSettings)
-    fun getSettings(): List<AppSettings>
+    suspend fun saveSettings(settings: AppSettings)
+    suspend fun getSettings(): List<AppSettings>
 }

@@ -62,7 +62,10 @@ class RotationServiceController(
                 .bindTo { mode ->
                     when (mode) {
                         OrientationMode.Auto -> sensorsRepository.enableRotation()
-                        else -> orientationRepository.setOrientation(mode)
+                        else -> {
+                            sensorsRepository.disableRotation()
+                            orientationRepository.setOrientation(mode)
+                        }
                     }
                 }
 

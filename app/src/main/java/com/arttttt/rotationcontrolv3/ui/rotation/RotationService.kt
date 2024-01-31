@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
@@ -17,8 +18,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 class RotationService : Service() {
 
@@ -59,6 +60,9 @@ class RotationService : Service() {
     }
 
     private val coroutineScope = CoroutineScope(Job())
+
+    @Inject
+    lateinit var controller: RotationServiceController
 
     override fun onCreate() {
         super.onCreate()

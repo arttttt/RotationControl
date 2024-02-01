@@ -51,6 +51,9 @@ class AboutFragment(
             )
         }
 
-        view.findViewById<TextView>(R.id.versionTextView).text = BuildConfig.VERSION_NAME
+        view.findViewById<TextView>(R.id.versionTextView).text = getString(
+            R.string.rotation_control_version,
+            BuildConfig.VERSION_NAME,
+        )
     }
 }

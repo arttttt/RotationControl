@@ -40,9 +40,9 @@ class SettingsFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*controller.onViewCreated(
+        controller.onViewCreated(
             view = SettingsViewImpl(view),
             lifecycle = viewLifecycleOwner.essentyLifecycle(),
-        )*/
+        )
     }
 }

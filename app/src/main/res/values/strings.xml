@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Rotation Control</string>
 
     <string name="menu_item_settings">Settings</string>
@@ -8,4 +8,11 @@
 
     <string name="start_on_boot">Start Rotation Control at system boot</string>
     <string name="forced_mode">Forced orientation applying</string>
+
+    <string name="notice_text">Notice</string>
+    <string name="can_write_settings_permission_text">For proper functionality, Rotation Control requires permission to modify system settings</string>
+    <string name="draw_overlay_permission_text">When the Force mode is enabled, Rotation Control requires permission to draw overlays for proper functioning</string>
+    <string name="can_not_write_settings_toast">Rotation Control: The Write settings permission is not granted. The service is shutting down</string>
+    <string name="can_not_draw_overlay_toast">Rotation Control: The Force mode is enabled, but the draw overlay permission is not granted. The service is shutting down</string>
+    <string name="rotation_control_version">App version: %s</string>
 </resources>

@@ -7,6 +7,7 @@ sealed class Setting<T> {
     data class StartOnBoot(
         override val value: Boolean,
     ) : Setting<Boolean>()
+
     data class ForcedMode(
         override val value: Boolean,
     ) : Setting<Boolean>()

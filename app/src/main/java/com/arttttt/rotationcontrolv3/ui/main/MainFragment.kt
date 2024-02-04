@@ -17,18 +17,16 @@ import androidx.lifecycle.lifecycleScope
 import com.arttttt.navigation.MenuAppNavigator
 import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.navigation.factory.FragmentProvider
-import com.arttttt.permissions.data.framework.PermissionsRequesterImpl
 import com.arttttt.permissions.domain.entity.Permission
-import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.permissions.domain.repository.PermissionsRequester
-import com.arttttt.permissions.presentation.handlers.StandardPermissionHandler
-import com.arttttt.permissions.presentation.handlers.StartForResultPermissionHandler
 import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.data.model.DrawOverlayPermission
 import com.arttttt.rotationcontrolv3.data.model.NotificationsPermission
 import com.arttttt.rotationcontrolv3.data.model.WriteSettingsPermission
+import com.arttttt.rotationcontrolv3.domain.entity.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
+import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.main.di.DaggerMainComponent
 import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
@@ -100,6 +98,9 @@ class MainFragment(
 
     @Inject
     lateinit var permissionsRequester: PermissionsRequester
+
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
 
     private val rotationServiceIntent by lazy {
         Intent(
@@ -236,6 +237,18 @@ class MainFragment(
 
         if (!isPermissionGranted) return false
 
+        val isForcedModeEnabled = settingsRepository
+            .getSetting(Setting.ForcedMode::class)
+            .value
+
+        isPermissionGranted = if (isForcedModeEnabled) {
+            checkAndRequestPermissions(DrawOverlayPermission)
+        } else {
+            true
+        }
+
+        if (!isPermissionGranted) return false
+
         return true
     }
 
@@ -292,7 +305,7 @@ class MainFragment(
             return when (this) {
                 is NotificationsPermission -> R.string.show_notifications_permission_text
                 is WriteSettingsPermission -> R.string.can_write_settings_permission_text
-                is DrawOverlayPermission -> 0
+                is DrawOverlayPermission -> R.string.draw_overlay_permission_text
                 else -> throw IllegalStateException("unsupported permission: $this")
             }
         }

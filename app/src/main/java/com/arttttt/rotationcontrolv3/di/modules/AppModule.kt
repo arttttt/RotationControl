@@ -3,7 +3,9 @@ package com.arttttt.rotationcontrolv3.di.modules
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.arttttt.rotationcontrolv3.data.repository.PermissionsRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.SettingsRepositoryImpl
+import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.SettingsStore
 import com.arttttt.rotationcontrolv3.domain.stores.SettingsStoreFactory
@@ -45,5 +47,9 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindsSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPermissionsRepository(impl: PermissionsRepositoryImpl): PermissionsRepository
 }

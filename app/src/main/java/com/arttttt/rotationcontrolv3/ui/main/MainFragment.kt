@@ -98,16 +98,8 @@ class MainFragment(
     @Inject
     lateinit var permissionsRepository: PermissionsRepository
 
-    private val permissionsRequester: PermissionsRequester by lazy {
-        PermissionsRequesterImpl(
-            activity = requireActivity().unsafeCastTo(),
-            handlers = mapOf(
-                StandardPermission::class to StandardPermissionHandler(),
-                DrawOverlayPermission::class to StartForResultPermissionHandler<DrawOverlayPermission>(),
-                WriteSettingsPermission::class to StartForResultPermissionHandler<WriteSettingsPermission>(),
-            ),
-        )
-    }
+    @Inject
+    lateinit var permissionsRequester: PermissionsRequester
 
     private val rotationServiceIntent by lazy {
         Intent(
@@ -128,6 +120,7 @@ class MainFragment(
             .factory()
             .create(
                 dependencies = dependencies,
+                activity = requireActivity().unsafeCastTo()
             )
             .inject(this)
 

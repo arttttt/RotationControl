@@ -1,7 +1,15 @@
 package com.arttttt.rotationcontrolv3.ui.main.di
 
+import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.navigation.factory.FragmentProvider
+import com.arttttt.permissions.data.framework.PermissionsRequesterImpl
+import com.arttttt.permissions.domain.entity.StandardPermission
+import com.arttttt.permissions.domain.repository.PermissionsRequester
+import com.arttttt.permissions.presentation.handlers.StandardPermissionHandler
+import com.arttttt.permissions.presentation.handlers.StartForResultPermissionHandler
+import com.arttttt.rotationcontrolv3.data.model.DrawOverlayPermission
+import com.arttttt.rotationcontrolv3.data.model.WriteSettingsPermission
 import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
@@ -34,6 +42,21 @@ object MainModule {
     @PerScreen
     fun providerNavigatorHolder(cicerone: Cicerone<FlowMenuRouter>): NavigatorHolder {
         return cicerone.getNavigatorHolder()
+    }
+
+    @Provides
+    @PerScreen
+    fun providePermissionsRequester(
+        activity: AppCompatActivity,
+    ): PermissionsRequester {
+        return PermissionsRequesterImpl(
+            activity = activity,
+            handlers = mapOf(
+                StandardPermission::class to StandardPermissionHandler(),
+                DrawOverlayPermission::class to StartForResultPermissionHandler<DrawOverlayPermission>(),
+                WriteSettingsPermission::class to StartForResultPermissionHandler<WriteSettingsPermission>(),
+            ),
+        )
     }
 
     @Provides

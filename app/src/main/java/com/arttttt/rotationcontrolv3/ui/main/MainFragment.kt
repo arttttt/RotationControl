@@ -1,6 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.main
 
 import android.app.ActivityManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -43,7 +44,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.reflect.KClass
 
 
 class MainFragment(
@@ -173,7 +173,7 @@ class MainFragment(
 
                 if (!isAllPermissionsGranted) return@launch
 
-                val isServiceRunning = requireContext().isMyServiceRunning(RotationService::class)
+                val isServiceRunning = requireContext().isServiceRunning<RotationService>()
 
                 if (isServiceRunning) {
                     fab.setImageResource(R.drawable.ic_start)
@@ -304,13 +304,16 @@ class MainFragment(
             }
         }
 
-    private fun Context.isMyServiceRunning(service: KClass<*>): Boolean {
+    @Suppress("DEPRECATION")
+    private inline fun<reified T : Service> Context.isServiceRunning(): Boolean {
         val manager = ContextCompat.getSystemService(this, ActivityManager::class.java) ?: return false
+
+        val serviceName = T::class.qualifiedName
 
         return manager
             .getRunningServices(Int.MAX_VALUE)
             .any { info ->
-                info.service.className == service.qualifiedName
+                info.service.className == serviceName
             }
     }
 

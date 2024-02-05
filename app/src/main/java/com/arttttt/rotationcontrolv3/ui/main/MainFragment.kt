@@ -1,18 +1,35 @@
 package com.arttttt.rotationcontrolv3.ui.main
 
+import android.app.ActivityManager
+import android.app.Service
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.arttttt.navigation.MenuAppNavigator
 import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.navigation.factory.FragmentProvider
+import com.arttttt.permissions.domain.entity.Permission
+import com.arttttt.permissions.domain.repository.PermissionsRequester
+import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.rotationcontrolv3.R
+import com.arttttt.rotationcontrolv3.data.model.DrawOverlayPermission
+import com.arttttt.rotationcontrolv3.data.model.NotificationsPermission
+import com.arttttt.rotationcontrolv3.data.model.WriteSettingsPermission
+import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
+import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.main.di.DaggerMainComponent
 import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies
+import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.utils.behavior.BottomAppBarBehavior
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 import com.arttttt.rotationcontrolv3.utils.navigationdialog.NavigationDialog
@@ -20,7 +37,12 @@ import com.arttttt.utils.unsafeCastTo
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import kotlin.coroutines.resume
+
 
 class MainFragment(
     private val dependencies: MainComponentDependencies,
@@ -71,6 +93,22 @@ class MainFragment(
     @Inject
     lateinit var fragmentFactory: CustomFragmentFactory
 
+    @Inject
+    lateinit var permissionsRepository: PermissionsRepository
+
+    @Inject
+    lateinit var permissionsRequester: PermissionsRequester
+
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+
+    private val rotationServiceIntent by lazy {
+        Intent(
+            requireContext(),
+            RotationService::class.java,
+        )
+    }
+
     /**
      * todo: do it in a proper way
      */
@@ -83,6 +121,7 @@ class MainFragment(
             .factory()
             .create(
                 dependencies = dependencies,
+                activity = requireActivity().unsafeCastTo()
             )
             .inject(this)
 
@@ -99,7 +138,7 @@ class MainFragment(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState) ?: return null
 
@@ -112,7 +151,7 @@ class MainFragment(
         return view
     }
 
-    private var started = false
+    private var job: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -121,12 +160,24 @@ class MainFragment(
         fab.setImageResource(R.drawable.ic_start)
 
         fab.setOnClickListener {
-            started = !started
+            job?.cancel()
 
-            if (started) {
-                fab.setImageResource(R.drawable.ic_stop)
-            } else {
-                fab.setImageResource(R.drawable.ic_start)
+            job = lifecycleScope.launch {
+                val isAllPermissionsGranted = checkAndGetPermissions()
+
+                if (!isAllPermissionsGranted) return@launch
+
+                val isServiceRunning = requireContext().isServiceRunning<RotationService>()
+
+                if (isServiceRunning) {
+                    fab.setImageResource(R.drawable.ic_start)
+
+                    stopRotationService()
+                } else {
+                    fab.setImageResource(R.drawable.ic_stop)
+
+                    startRotationService()
+                }
             }
         }
 
@@ -176,4 +227,100 @@ class MainFragment(
             is MenuItem.Settings -> showSettings()
         }
     }
+
+    private suspend fun checkAndGetPermissions(): Boolean {
+        var isPermissionGranted = checkAndRequestPermissions(NotificationsPermission)
+
+        if (!isPermissionGranted) return false
+
+        isPermissionGranted = checkAndRequestPermissions(WriteSettingsPermission)
+
+        if (!isPermissionGranted) return false
+
+        val isForcedModeEnabled = settingsRepository
+            .getSetting(Setting.ForcedMode::class)
+            .value
+
+        isPermissionGranted = if (isForcedModeEnabled) {
+            checkAndRequestPermissions(DrawOverlayPermission)
+        } else {
+            true
+        }
+
+        if (!isPermissionGranted) return false
+
+        return true
+    }
+
+    private suspend fun checkAndRequestPermissions(
+        permission: Permission,
+    ): Boolean {
+        val isPermissionGranted = permissionsRepository.checkPermission(permission).toBoolean()
+
+        if (isPermissionGranted) return true
+
+        showDialog(
+            message = permission.messageRes
+        )
+
+        permissionsRequester.requestPermission(permission)
+
+        return permissionsRepository.checkPermission(permission).toBoolean()
+    }
+
+    private suspend fun showDialog(
+        message: Int,
+    ) {
+        return suspendCancellableCoroutine { continuation ->
+            val dialog = AlertDialog.Builder(requireContext())
+                .setTitle(R.string.notice_text)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    continuation.resume(Unit)
+                }
+                .setOnCancelListener {
+                    continuation.resume(Unit)
+                }
+                .create()
+
+            continuation.invokeOnCancellation { dialog.dismiss() }
+
+            dialog.show()
+        }
+    }
+
+    private fun startRotationService() {
+        ContextCompat.startForegroundService(
+            requireContext(),
+            rotationServiceIntent,
+        )
+    }
+
+    private fun stopRotationService() {
+        requireContext().stopService(rotationServiceIntent)
+    }
+
+    private val Permission.messageRes: Int
+        get() {
+            return when (this) {
+                is NotificationsPermission -> R.string.show_notifications_permission_text
+                is WriteSettingsPermission -> R.string.can_write_settings_permission_text
+                is DrawOverlayPermission -> R.string.draw_overlay_permission_text
+                else -> throw IllegalStateException("unsupported permission: $this")
+            }
+        }
+
+    @Suppress("DEPRECATION")
+    private inline fun<reified T : Service> Context.isServiceRunning(): Boolean {
+        val manager = ContextCompat.getSystemService(this, ActivityManager::class.java) ?: return false
+
+        val serviceName = T::class.qualifiedName
+
+        return manager
+            .getRunningServices(Int.MAX_VALUE)
+            .any { info ->
+                info.service.className == serviceName
+            }
+    }
+
 }

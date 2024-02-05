@@ -1,9 +1,9 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
+import android.app.Notification
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
-import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
@@ -20,9 +20,16 @@ class RotationServiceController(
     private val orientationRepository: OrientationRepository,
 ) {
 
+    fun interface PlatformCallback {
+
+        fun onNotificationUpdated(notification: Notification)
+    }
+
     data class State(
         val orientationMode: OrientationMode
     )
+
+    var platformCallback: PlatformCallback? = null
 
     private val states = MutableStateFlow(
         State(
@@ -47,6 +54,13 @@ class RotationServiceController(
                             orientationMode = OrientationMode.of(event)
                         )
                     }
+                }
+
+            view
+                .events
+                .filterIsInstance<RotationServiceView.UiEvent.NotificationUpdated>()
+                .bindTo { event ->
+                    platformCallback?.onNotificationUpdated(event.notification)
                 }
 
             states

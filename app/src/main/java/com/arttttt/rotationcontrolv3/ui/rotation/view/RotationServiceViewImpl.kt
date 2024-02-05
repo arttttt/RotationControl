@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 class RotationServiceViewImpl(
     private val context: Context,
     private val channelId: String,
-    private val onNotificationUpdated: (Notification) -> Unit
 ) : RotationServiceView {
 
     companion object {
@@ -65,17 +64,19 @@ class RotationServiceViewImpl(
             isButtonActive = { id -> NotificationButton.of(id) == activeButton },
         )
 
-        onNotificationUpdated.invoke(
-            NotificationCompat
-                .Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_rotate)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(remoteViews)
-                .build()
-                .apply {
-                    flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
-                }
+        events.tryEmit(
+            RotationServiceView.UiEvent.NotificationUpdated(
+                notification = NotificationCompat
+                    .Builder(context, channelId)
+                    .setSmallIcon(R.drawable.ic_rotate)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                    .setCustomContentView(remoteViews)
+                    .build()
+                    .apply {
+                        flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
+                    }
+            )
         )
     }
 

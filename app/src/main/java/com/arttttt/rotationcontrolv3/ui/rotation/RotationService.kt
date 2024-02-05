@@ -6,25 +6,16 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import android.widget.Toast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
-import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.rotationcontrolv3.data.model.DrawOverlayPermission
-import com.arttttt.rotationcontrolv3.data.model.NotificationsPermission
-import com.arttttt.rotationcontrolv3.data.model.WriteSettingsPermission
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
-import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
-import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.di.DaggerRotationServiceComponent
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class RotationService : Service() {
@@ -55,18 +46,11 @@ class RotationService : Service() {
         RotationServiceViewImpl(
             context = applicationContext,
             channelId = NOTIFICATION_CHANNEL_ID,
-            onNotificationUpdated = this::showServiceNotification,
         )
     }
 
     @Inject
     lateinit var controller: RotationServiceController
-
-    @Inject
-    lateinit var permissionsRepository: PermissionsRepository
-
-    @Inject
-    lateinit var settingsRepository: SettingsRepository
 
     override fun onCreate() {
         DaggerRotationServiceComponent
@@ -78,32 +62,18 @@ class RotationService : Service() {
 
         super.onCreate()
 
-        val canLaunchService = runBlocking {
-            val canShowNotifications = permissionsRepository.checkPermission(NotificationsPermission).toBoolean()
-            val canWriteSystemSettings = permissionsRepository.checkPermission(WriteSettingsPermission).toBoolean()
-            val canDrawOverlay = if (settingsRepository.getSetting(Setting.ForcedMode::class).value) {
-                permissionsRepository.checkPermission(DrawOverlayPermission).toBoolean()
-            } else {
-                true
-            }
+        createNotificationChannel()
 
-            canShowNotifications && canWriteSystemSettings && canDrawOverlay
+        controller.platformCallback = RotationServiceController.PlatformCallback { notification ->
+            showServiceNotification(notification)
         }
 
-        if (!canLaunchService) {
-            createNotificationChannel()
+        controller.onViewCreated(
+            view = view,
+            lifecycle = lifecycle,
+        )
 
-            controller.onViewCreated(
-                view = view,
-                lifecycle = lifecycle,
-            )
-
-            lifecycle.resume()
-        } else {
-            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
-
-            Toast.makeText(applicationContext, "permissions are not granted", Toast.LENGTH_SHORT).show()
-        }
+        lifecycle.resume()
     }
 
     override fun onDestroy() {

@@ -21,6 +21,10 @@ interface RotationServiceView {
             data object LandscapeClicked : ButtonEvent()
             data object LandscapeReverseClicked : ButtonEvent()
         }
+
+        data class NotificationUpdated(
+            val notification: Notification,
+        ) : UiEvent()
     }
 
     val renderer: ViewRenderer<State>

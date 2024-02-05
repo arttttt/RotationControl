@@ -49,6 +49,10 @@ class RotationService : Service() {
         )
     }
 
+    private val notificationManagerCompat by lazy {
+        NotificationManagerCompat.from(applicationContext)
+    }
+
     @Inject
     lateinit var controller: RotationServiceController
 
@@ -62,9 +66,8 @@ class RotationService : Service() {
 
         super.onCreate()
 
-        createNotificationChannel()
-
         controller.platformCallback = RotationServiceController.PlatformCallback { notification ->
+            createNotificationChannel()
             showServiceNotification(notification)
         }
 
@@ -95,6 +98,8 @@ class RotationService : Service() {
     }
 
     private fun createNotificationChannel() {
+        if (notificationManagerCompat.getNotificationChannel(NOTIFICATION_CHANNEL_ID) != null) return
+
         val channel = NotificationChannelCompat
             .Builder(
                 NOTIFICATION_CHANNEL_ID,
@@ -103,9 +108,7 @@ class RotationService : Service() {
             .setName(NOTIFICATION_CHANNEL_NAME)
             .build()
 
-        NotificationManagerCompat
-            .from(applicationContext)
-            .createNotificationChannel(channel)
+        notificationManagerCompat.createNotificationChannel(channel)
     }
 
     private fun showServiceNotification(notification: Notification) {

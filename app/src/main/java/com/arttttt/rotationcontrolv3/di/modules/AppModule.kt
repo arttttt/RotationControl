@@ -7,8 +7,8 @@ import com.arttttt.rotationcontrolv3.data.repository.PermissionsRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.SettingsRepositoryImpl
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
-import com.arttttt.rotationcontrolv3.domain.stores.SettingsStore
-import com.arttttt.rotationcontrolv3.domain.stores.SettingsStoreFactory
+import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
+import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStoreFactory
 import com.arttttt.rotationcontrolv3.utils.resources.ResourceProviderImpl
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
 import dagger.Binds

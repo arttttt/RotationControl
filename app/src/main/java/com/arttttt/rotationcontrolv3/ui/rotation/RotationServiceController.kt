@@ -4,20 +4,18 @@ import android.app.Notification
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
+import com.arkivanov.mvikotlin.extensions.coroutines.states
+import com.arttttt.rotationcontrolv3.domain.entity.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
-import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
-import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
-import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
+import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.mapNotNull
 
 class RotationServiceController(
-    private val sensorsRepository: SensorsRepository,
-    private val orientationRepository: OrientationRepository,
+    private val rotationStore: RotationStore,
 ) {
 
     fun interface PlatformCallback {
@@ -25,17 +23,7 @@ class RotationServiceController(
         fun onNotificationUpdated(notification: Notification)
     }
 
-    data class State(
-        val orientationMode: OrientationMode
-    )
-
     var platformCallback: PlatformCallback? = null
-
-    private val states = MutableStateFlow(
-        State(
-            orientationMode = OrientationMode.Auto,
-        )
-    )
 
     fun onViewCreated(
         view: RotationServiceView,
@@ -48,13 +36,12 @@ class RotationServiceController(
             view
                 .events
                 .filterIsInstance<RotationServiceView.UiEvent.ButtonEvent>()
-                .bindTo { event ->
-                    states.update {
-                        it.copy(
-                            orientationMode = OrientationMode.of(event)
-                        )
-                    }
+                .map { event ->
+                    RotationStore.Intent.SetOrientationMode(
+                        orientationMode = OrientationMode.of(event)
+                    )
                 }
+                .bindTo(rotationStore)
 
             view
                 .events
@@ -63,26 +50,20 @@ class RotationServiceController(
                     platformCallback?.onNotificationUpdated(event.notification)
                 }
 
-            states
-                .map { state ->
-                    RotationServiceView.State.Active(
-                        selectedButton = state.orientationMode.toNotificationButton()
-                    )
+            rotationStore
+                .states
+                .mapNotNull { state ->
+                    when {
+                        state.error is NoPermissionsException -> RotationServiceView.State.Error
+                        state.orientationMode != null -> RotationServiceView.State.Active(
+                            selectedButton = state.orientationMode.toNotificationButton()
+                        )
+                        else -> null
+                    }
                 }
                 .bindTo(view::render)
 
-            states
-                .map(State::orientationMode::get)
-                .bindTo { mode ->
-                    when (mode) {
-                        OrientationMode.Auto -> sensorsRepository.enableRotation()
-                        else -> {
-                            sensorsRepository.disableRotation()
-                            orientationRepository.setOrientation(mode)
-                        }
-                    }
-                }
-
+            /*
             sensorsRepository
                 .getRotationStatuses()
                 .filterIsInstance<RotationStatus.Enabled>()
@@ -93,7 +74,7 @@ class RotationServiceController(
                             orientationMode = OrientationMode.Auto
                         )
                     }
-                }
+                }*/
         }
     }
 

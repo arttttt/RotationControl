@@ -23,3 +23,11 @@ fun <T> Result<T>.exceptCancellationException(): Result<T> {
         if (e is CancellationException) throw e
     }
 }
+
+fun Int.toBoolean(): Boolean {
+    return when (this) {
+        0 -> false
+        1 -> true
+        else -> throw IllegalStateException("can't convert to Boolean: $this")
+    }
+}

@@ -5,4 +5,6 @@ import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 interface OrientationRepository {
 
     fun setOrientation(mode: OrientationMode)
+
+    fun getSystemOrientation(): OrientationMode
 }

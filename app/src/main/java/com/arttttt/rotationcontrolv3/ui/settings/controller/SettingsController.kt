@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.events
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
-import com.arttttt.rotationcontrolv3.domain.stores.SettingsStore
+import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.ui.settings.transformer.SettingsTransformer
 import com.arttttt.rotationcontrolv3.ui.settings.view.SettingsView
 import com.arttttt.rotationcontrolv3.utils.mvi.Controller

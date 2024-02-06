@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.domain.stores
+package com.arttttt.rotationcontrolv3.domain.stores.settings
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.entity.Setting

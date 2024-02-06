@@ -7,6 +7,8 @@ import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
+import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
+import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStoreFactory
 import com.arttttt.rotationcontrolv3.ui.rotation.PermissionsVerifier
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationServiceController
 import dagger.Binds
@@ -21,12 +23,10 @@ abstract class RotationServiceModule {
         @Provides
         @PerService
         fun provideRotationServiceController(
-            sensorsRepository: SensorsRepository,
-            orientationRepository: OrientationRepository,
+            rotationStore: RotationStore,
         ): RotationServiceController {
             return RotationServiceController(
-                sensorsRepository = sensorsRepository,
-                orientationRepository = orientationRepository,
+                rotationStore = rotationStore,
             )
         }
 
@@ -40,6 +40,12 @@ abstract class RotationServiceModule {
                 permissionsRepository = permissionsRepository,
                 settingsRepository = settingsRepository,
             )
+        }
+
+        @Provides
+        @PerService
+        fun provideRotationStore(factory: RotationStoreFactory): RotationStore {
+            return factory.create()
         }
     }
 

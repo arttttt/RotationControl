@@ -65,11 +65,11 @@ class RotationServiceController(
 
             states
                 .map { state ->
-                    RotationServiceView.State(
+                    RotationServiceView.State.Active(
                         selectedButton = state.orientationMode.toNotificationButton()
                     )
                 }
-                .bindTo(view.renderer)
+                .bindTo(view::render)
 
             states
                 .map(State::orientationMode::get)

@@ -1,6 +1,5 @@
 package com.arttttt.rotationcontrolv3.ui.rotation.view
 
-import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.arkivanov.mvikotlin.core.utils.diff
-import com.arkivanov.mvikotlin.core.view.ViewRenderer
+import com.arttttt.rotationcontrolv3.MainActivity
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
@@ -27,10 +26,17 @@ class RotationServiceViewImpl(
         private const val NO_ID = -1
     }
 
-    override val renderer: ViewRenderer<RotationServiceView.State> = diff {
+    private val activeRenderer = diff {
         diff(
-            get = RotationServiceView.State::selectedButton,
+            get = RotationServiceView.State.Active::selectedButton,
             set = this@RotationServiceViewImpl::handleActiveButtonChanged,
+        )
+    }
+
+    private val errorRenderer = diff<RotationServiceView.State.Error> {
+        diff(
+            get = { it },
+            set = { handleErrorState() },
         )
     }
 
@@ -43,6 +49,13 @@ class RotationServiceViewImpl(
         R.id.btn_landscape,
         R.id.btn_landscape_reverse,
     )
+
+    override fun render(model: RotationServiceView.State) {
+        when (model) {
+            is RotationServiceView.State.Active -> activeRenderer.render(model)
+            is RotationServiceView.State.Error -> errorRenderer.render(model)
+        }
+    }
 
     override fun handleClick(intent: Intent) {
         val clickedButtonId = intent
@@ -76,6 +89,27 @@ class RotationServiceViewImpl(
                     .apply {
                         flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
                     }
+            )
+        )
+    }
+
+    private fun handleErrorState() {
+        events.tryEmit(
+            RotationServiceView.UiEvent.NotificationUpdated(
+                notification = NotificationCompat
+                    .Builder(context, channelId)
+                    .setSmallIcon(R.drawable.ic_rotate)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentText("Permissions not granted")
+                    .setContentIntent(
+                        PendingIntent.getActivity(
+                            context,
+                            0,
+                            Intent(context, MainActivity::class.java),
+                            PendingIntent.FLAG_IMMUTABLE,
+                        )
+                    )
+                    .build()
             )
         )
     }

@@ -8,9 +8,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface RotationServiceView {
 
-    data class State(
-        val selectedButton: NotificationButton
-    )
+    sealed class State {
+
+        data class Active(
+            val selectedButton: NotificationButton
+        ) : State()
+
+        data object Error : State()
+    }
 
     sealed class UiEvent {
 
@@ -27,9 +32,9 @@ interface RotationServiceView {
         ) : UiEvent()
     }
 
-    val renderer: ViewRenderer<State>
-
     val events: Flow<UiEvent>
+
+    fun render(state: State)
 
     fun handleClick(intent: Intent)
 }

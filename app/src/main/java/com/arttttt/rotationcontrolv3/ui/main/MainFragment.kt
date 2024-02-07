@@ -13,6 +13,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.arttttt.navigation.MenuAppNavigator
 import com.arttttt.navigation.factory.CustomFragmentFactory
@@ -38,6 +39,9 @@ import com.github.terrakok.cicerone.NavigatorHolder
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -167,17 +171,15 @@ class MainFragment(
 
                 if (!isAllPermissionsGranted) return@launch
 
-                val isServiceRunning = requireContext().isServiceRunning<RotationService>()
+                val isServiceRunning = RotationService.status.value == RotationService.Status.RUNNING
 
                 if (isServiceRunning) {
-                    fab.setImageResource(R.drawable.ic_start)
-
                     stopRotationService()
                 } else {
-                    fab.setImageResource(R.drawable.ic_stop)
-
                     startRotationService()
                 }
+
+                fab.setImageResource(RotationService.status.value.toFabIconRes())
             }
         }
 
@@ -200,6 +202,14 @@ class MainFragment(
                 },
                 selectedItem = selectedMenuItem,
             )
+        }
+
+        viewLifecycleOwner.lifecycle.coroutineScope.launch {
+            RotationService
+                .status
+                .map { status -> status.toFabIconRes() }
+                .onEach(fab::setImageResource)
+                .launchIn(this)
         }
     }
 
@@ -300,6 +310,13 @@ class MainFragment(
         requireContext().stopService(rotationServiceIntent)
     }
 
+    private fun RotationService.Status.toFabIconRes(): Int {
+        return when (this) {
+            RotationService.Status.HALTED -> R.drawable.ic_start
+            RotationService.Status.RUNNING -> R.drawable.ic_stop
+        }
+    }
+
     private val Permission.messageRes: Int
         get() {
             return when (this) {
@@ -309,18 +326,4 @@ class MainFragment(
                 else -> throw IllegalStateException("unsupported permission: $this")
             }
         }
-
-    @Suppress("DEPRECATION")
-    private inline fun<reified T : Service> Context.isServiceRunning(): Boolean {
-        val manager = ContextCompat.getSystemService(this, ActivityManager::class.java) ?: return false
-
-        val serviceName = T::class.qualifiedName
-
-        return manager
-            .getRunningServices(Int.MAX_VALUE)
-            .any { info ->
-                info.service.className == serviceName
-            }
-    }
-
 }

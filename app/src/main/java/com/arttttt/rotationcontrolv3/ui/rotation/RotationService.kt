@@ -16,6 +16,10 @@ import com.arttttt.rotationcontrolv3.ui.rotation.di.DaggerRotationServiceCompone
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class RotationService : Service() {
@@ -28,6 +32,14 @@ class RotationService : Service() {
         private const val NOTIFICATION_ID = 1
 
         private const val FOREGROUND_SERVICE_TYPE_ABSENT = 0
+
+        private val _status = MutableStateFlow(Status.HALTED)
+        val status: StateFlow<Status> = _status
+    }
+
+    enum class Status {
+        RUNNING,
+        HALTED;
     }
 
     @get:Suppress("DEPRECATION")
@@ -77,12 +89,14 @@ class RotationService : Service() {
         )
 
         lifecycle.resume()
+        _status.tryEmit(Status.RUNNING)
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
         lifecycle.destroy()
+        _status.tryEmit(Status.HALTED)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

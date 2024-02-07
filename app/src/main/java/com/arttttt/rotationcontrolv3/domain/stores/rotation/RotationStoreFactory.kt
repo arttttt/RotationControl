@@ -23,7 +23,10 @@ class RotationStoreFactory @Inject constructor(
                     orientationMode = null,
                     error = null,
                 ),
-                bootstrapper = SimpleBootstrapper(RotationStore.Action.GetOrientation),
+                bootstrapper = SimpleBootstrapper(
+                    RotationStore.Action.GetOrientation,
+                    RotationStore.Action.SubscribeForAccelerometer,
+                ),
                 executorFactory = {
                     RotationExecutor(
                         sensorsRepository = sensorsRepository,

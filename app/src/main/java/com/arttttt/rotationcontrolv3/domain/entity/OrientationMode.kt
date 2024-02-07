@@ -1,7 +1,6 @@
 package com.arttttt.rotationcontrolv3.domain.entity
 
 import android.os.Parcelable
-import android.view.Surface
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
@@ -12,10 +11,10 @@ sealed class OrientationMode : Parcelable {
 
         fun of(value: Int): OrientationMode {
             return when (value) {
-                0 -> Portrait
-                1 -> PortraitReverse
-                2 -> Landscape
-                3 -> LandscapeReverse
+                Portrait.value -> Portrait
+                Landscape.value -> PortraitReverse
+                PortraitReverse.value -> Landscape
+                LandscapeReverse.value -> LandscapeReverse
                 else -> Auto
             }
         }

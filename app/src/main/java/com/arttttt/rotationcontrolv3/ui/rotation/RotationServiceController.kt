@@ -62,19 +62,6 @@ class RotationServiceController(
                     }
                 }
                 .bindTo(view::render)
-
-            /*
-            sensorsRepository
-                .getRotationStatuses()
-                .filterIsInstance<RotationStatus.Enabled>()
-                .bindTo {
-
-                    states.update { state ->
-                        state.copy(
-                            orientationMode = OrientationMode.Auto
-                        )
-                    }
-                }*/
         }
     }
 

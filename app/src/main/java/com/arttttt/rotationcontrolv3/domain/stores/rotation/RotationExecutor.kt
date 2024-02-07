@@ -7,10 +7,10 @@ import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.PermissionsVerifier
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -19,6 +19,8 @@ class RotationExecutor(
     private val permissionsVerifier: PermissionsVerifier,
     private val orientationRepository: OrientationRepository,
 ) : CoroutineExecutor<RotationStore.Intent, RotationStore.Action, RotationStore.State, RotationStore.Message, RotationStore.Label>() {
+
+    private var accelerometerEventsJob: Job? = null
 
     override fun executeAction(action: RotationStore.Action) {
         when (action) {
@@ -34,8 +36,9 @@ class RotationExecutor(
     }
 
     private fun subscribeForAccelerometerEvents() {
-        sensorsRepository
+        accelerometerEventsJob = sensorsRepository
             .getRotationStatuses()
+            .distinctUntilChanged()
             .filter { permissionsVerifier.areAllPermissionsGranted() }
             .onEach { status ->
                 dispatch(
@@ -51,6 +54,8 @@ class RotationExecutor(
     }
 
     private fun setOrientation(mode: OrientationMode) {
+        accelerometerEventsJob?.cancel()
+
         scope.launch {
             kotlin
                 .runCatching {
@@ -62,10 +67,14 @@ class RotationExecutor(
                     when (mode) {
                         OrientationMode.Auto -> sensorsRepository.enableRotation()
                         else -> {
-                            sensorsRepository.disableRotation()
+                            if (state().orientationMode == OrientationMode.Auto) {
+                                sensorsRepository.disableRotation()
+                            }
                             orientationRepository.setOrientation(mode)
                         }
                     }
+
+                    subscribeForAccelerometerEvents()
 
                     RotationStore.Message.OrientationReceived(mode)
                 }

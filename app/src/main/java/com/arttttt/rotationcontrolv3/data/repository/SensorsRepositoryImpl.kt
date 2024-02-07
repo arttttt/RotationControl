@@ -50,7 +50,7 @@ class SensorsRepositoryImpl @Inject constructor(
             context.contentResolver.unregisterContentObserver(observer)
         }
     }
-        .shareIn(GlobalScope, SharingStarted.WhileSubscribed(), replay = 1)
+        .shareIn(GlobalScope, SharingStarted.WhileSubscribed())
 
     override fun enableRotation() {
         Settings.System.putInt(

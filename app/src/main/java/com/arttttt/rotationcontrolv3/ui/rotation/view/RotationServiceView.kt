@@ -34,7 +34,7 @@ interface RotationServiceView {
 
     val events: Flow<UiEvent>
 
-    fun render(state: State)
+    fun render(model: State)
 
     fun handleClick(intent: Intent)
 }

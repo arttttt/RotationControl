@@ -17,9 +17,6 @@ recyclerview = "1.3.2"
 timber = "5.0.1"
 ksp = "1.9.22-1.0.17"
 cicerone = "7.1"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
 
 [libraries]
 androidx-activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -42,9 +39,6 @@ mvikotlin-main = { module = "com.arkivanov.mvikotlin:mvikotlin-main", version.re
 mvikotlin-core = { module = "com.arkivanov.mvikotlin:mvikotlin", version.ref = "mvikotlin" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 cicerone = { module = "com.github.terrakok:cicerone", version.ref = "cicerone" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

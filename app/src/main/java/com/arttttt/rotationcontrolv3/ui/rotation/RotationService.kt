@@ -9,6 +9,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
+import com.arkivanov.essenty.instancekeeper.InstanceKeeperDispatcher
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
@@ -65,6 +66,8 @@ class RotationService : Service() {
         NotificationManagerCompat.from(applicationContext)
     }
 
+    private val instanceKeeper = InstanceKeeperDispatcher()
+
     @Inject
     lateinit var controller: RotationServiceController
 
@@ -73,6 +76,7 @@ class RotationService : Service() {
             .factory()
             .create(
                 dependencies = applicationContext.appComponent,
+                instanceKeeper = instanceKeeper,
             )
             .inject(this)
 
@@ -97,6 +101,7 @@ class RotationService : Service() {
 
         lifecycle.destroy()
         _status.tryEmit(Status.HALTED)
+        instanceKeeper.destroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

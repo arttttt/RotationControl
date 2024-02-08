@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.mvikotlin.main)
     implementation(libs.mvikotlin.logging)
     implementation(libs.mvikotlin.extensions.coroutines)
+    implementation(libs.essenty.lifecycle)
+    implementation(libs.essenty.stateKeeper)
+    implementation(libs.essenty.instanceKeeper)
 
     implementation(libs.timber)
 }

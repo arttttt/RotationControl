@@ -1,8 +1,10 @@
 package com.arttttt.rotationcontrolv3.ui.rotation.di
 
+import android.content.Context
 import com.arttttt.rotationcontrolv3.data.repository.OrientationRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.SensorsRepositoryImpl
 import com.arttttt.rotationcontrolv3.di.scopes.PerService
+import com.arttttt.rotationcontrolv3.domain.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
@@ -34,11 +36,9 @@ abstract class RotationServiceModule {
         @PerService
         fun providePermissionsVerifier(
             permissionsRepository: PermissionsRepository,
-            settingsRepository: SettingsRepository,
         ): PermissionsVerifier {
             return PermissionsVerifier(
                 permissionsRepository = permissionsRepository,
-                settingsRepository = settingsRepository,
             )
         }
 
@@ -46,6 +46,14 @@ abstract class RotationServiceModule {
         @PerService
         fun provideRotationStore(factory: RotationStoreFactory): RotationStore {
             return factory.create()
+        }
+
+        @Provides
+        @PerService
+        fun provideForcedOrientationManager(context: Context): ForcedOrientationManager {
+            return ForcedOrientationManager(
+                context = context,
+            )
         }
     }
 

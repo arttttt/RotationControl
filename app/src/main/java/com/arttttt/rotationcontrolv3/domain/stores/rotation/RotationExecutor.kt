@@ -1,23 +1,30 @@
 package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.arttttt.rotationcontrolv3.domain.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.entity.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
+import com.arttttt.rotationcontrolv3.domain.entity.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
+import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.PermissionsVerifier
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RotationExecutor(
     private val sensorsRepository: SensorsRepository,
     private val permissionsVerifier: PermissionsVerifier,
     private val orientationRepository: OrientationRepository,
+    private val forcedOrientationManager: ForcedOrientationManager,
+    private val settingsRepository: SettingsRepository,
 ) : CoroutineExecutor<RotationStore.Intent, RotationStore.Action, RotationStore.State, RotationStore.Message, RotationStore.Label>() {
 
     private var accelerometerEventsJob: Job? = null
@@ -35,11 +42,23 @@ class RotationExecutor(
         }
     }
 
+    override fun dispose() {
+        super.dispose()
+
+        forcedOrientationManager.clear()
+    }
+
     private fun subscribeForAccelerometerEvents() {
         accelerometerEventsJob = sensorsRepository
             .getRotationStatuses()
             .distinctUntilChanged()
-            .filter { permissionsVerifier.areAllPermissionsGranted() }
+            .filter {
+                permissionsVerifier.areAllPermissionsGranted(
+                    forced = withContext(Dispatchers.IO) {
+                        settingsRepository.getSetting(Setting.ForcedMode::class).value
+                    }
+                )
+            }
             .onEach { status ->
                 dispatch(
                     RotationStore.Message.OrientationReceived(
@@ -59,18 +78,28 @@ class RotationExecutor(
         scope.launch {
             kotlin
                 .runCatching {
-                    if (!permissionsVerifier.areAllPermissionsGranted()) {
+                    val forced = withContext(Dispatchers.IO) {
+                        settingsRepository.getSetting(Setting.ForcedMode::class).value
+                    }
+
+                    if (!permissionsVerifier.areAllPermissionsGranted(forced)) {
                         throw NoPermissionsException()
                     }
+
+                    forced
                 }
-                .map {
+                .map { forced ->
                     when (mode) {
                         OrientationMode.Auto -> sensorsRepository.enableRotation()
                         else -> {
                             if (state().orientationMode == OrientationMode.Auto) {
                                 sensorsRepository.disableRotation()
                             }
-                            orientationRepository.setOrientation(mode)
+
+                            setOrientation(
+                                forced = forced,
+                                mode = mode,
+                            )
                         }
                     }
 
@@ -88,7 +117,11 @@ class RotationExecutor(
         scope.launch {
             kotlin
                 .runCatching {
-                    if (!permissionsVerifier.areAllPermissionsGranted()) {
+                    val forced = withContext(Dispatchers.IO) {
+                        settingsRepository.getSetting(Setting.ForcedMode::class).value
+                    }
+
+                    if (!permissionsVerifier.areAllPermissionsGranted(forced)) {
                         throw NoPermissionsException()
                     }
                 }
@@ -100,6 +133,17 @@ class RotationExecutor(
                 .recover(RotationStore.Message::ErrorOccurred)
                 .getOrThrow()
                 .let(::dispatch)
+        }
+    }
+
+    private fun setOrientation(
+        forced: Boolean,
+        mode: OrientationMode
+    ) {
+        if (forced) {
+            forcedOrientationManager.forceApplyOrientation(mode)
+        } else {
+            orientationRepository.setOrientation(mode)
         }
     }
 }

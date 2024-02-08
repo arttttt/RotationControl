@@ -9,6 +9,7 @@ kotlin = "1.9.22"
 coreKtx = "1.12.0"
 appcompat = "1.6.1"
 kotlinCoroutines = "1.8.0-RC2"
+essenty = "2.0.0-alpha04"
 lifecycleRuntime = "2.6.2"
 material = "1.11.0"
 multidex = "2.0.1"
@@ -33,6 +34,9 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
+essenty-lifecycle = { module = "com.arkivanov.essenty:lifecycle", version.ref = "essenty" }
+essenty-stateKeeper = { module = "com.arkivanov.essenty:state-keeper", version.ref = "essenty" }
+essenty-instanceKeeper = { module = "com.arkivanov.essenty:instance-keeper", version.ref = "essenty" }
 mvikotlin-extensions-coroutines = { module = "com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines", version.ref = "mvikotlin" }
 mvikotlin-logging = { module = "com.arkivanov.mvikotlin:mvikotlin-logging", version.ref = "mvikotlin" }
 mvikotlin-main = { module = "com.arkivanov.mvikotlin:mvikotlin-main", version.ref = "mvikotlin" }

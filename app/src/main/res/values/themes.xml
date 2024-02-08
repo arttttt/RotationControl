@@ -1,15 +1,12 @@
 <resources>
 
-    <style name="Theme.RotationControl" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.RotationControl.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="bottomSheetDialogTheme">@style/RotationControl.Dialog.BottomSheet</item>
+        <item name="alertDialogTheme">@style/RotationControl.Dialog.Alert</item>
     </style>
 
-    <style name="RotationControl.Widget.Button.Notification" parent="Theme.RotationControl">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:scaleType">centerInside</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-    </style>
+    <style name="Theme.RotationControl" parent="Theme.RotationControl.Base" />
 
 </resources>

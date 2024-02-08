@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RotationControl.Widget.Button.Notification" parent="Theme.RotationControl">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="RotationControl.Widget.BottomAppBar" parent="Theme.RotationControl">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="elevation">0dp</item>
+        <item name="navigationIconTint">@android:color/white</item>
+    </style>
+
+    <style name="RotationControl.Widget.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSecondary</item>
+    </style>
+
+    <style name="RotationControl.Widget.FloatingActionButton" parent="Theme.RotationControl">
+        <item name="backgroundTint">@color/colorSecondary</item>
+    </style>
+
+    <style name="RotationControl.Widget.Switch" parent="Theme.RotationControl">
+        <item name="colorControlActivated">@color/colorSecondary</item>
+    </style>
+
+</resources>

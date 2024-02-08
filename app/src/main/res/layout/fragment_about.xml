@@ -8,6 +8,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sourcesButton"
+        style="@style/RotationControl.Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="16dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorSecondary"
         android:textSize="16sp"
         app:fontFamily="sans-serif-medium"
         tools:text="App version: 1.0.0" />

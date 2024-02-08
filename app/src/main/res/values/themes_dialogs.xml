@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RotationControl.Dialog.BottomSheetBase" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="bottomSheetStyle">@style/RotationControl.Dialog.BottomSheet.BottomSheet</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="shapeAppearance">@style/RotationControl.ShapeAppearance.BottomSheet</item>
+    </style>
+
+    <style name="RotationControl.Dialog.BottomSheet" parent="RotationControl.Dialog.BottomSheetBase"/>
+
+    <style name="RotationControl.Dialog.BottomSheet.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/RotationControl.ShapeAppearance.BottomSheet</item>
+    </style>
+
+    <style name="RotationControl.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/RotationControl.Dialog.Alert.ButtonBar</item>
+        <item name="buttonBarPositiveButtonStyle">@style/RotationControl.Dialog.Alert.ButtonBar</item>
+    </style>
+
+    <style name="RotationControl.Dialog.Alert.ButtonBar" parent="Widget.AppCompat.Button.Borderless">
+        <item name="elevation">0dp</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+    </style>
+
+</resources>

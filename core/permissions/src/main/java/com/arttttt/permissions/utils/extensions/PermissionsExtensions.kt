@@ -3,6 +3,7 @@ package com.arttttt.permissions.utils.extensions
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.entity.StandardPermission
 
@@ -24,6 +25,13 @@ fun Permission.Status.Companion.of(value: Boolean): Permission.Status {
 
 context(StandardPermission)
 fun checkStatusImpl(context: Context): Permission.Status {
+    return Permission.Status.of(ContextCompat.checkSelfPermission(context, permission))
+}
+
+fun checkStatusImpl(
+    context: Context,
+    permission: String,
+): Permission.Status {
     return Permission.Status.of(ContextCompat.checkSelfPermission(context, permission))
 }
 

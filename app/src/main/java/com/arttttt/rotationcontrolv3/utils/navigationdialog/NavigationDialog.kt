@@ -16,7 +16,7 @@ class NavigationDialog private constructor(
     interface Item {
 
         val id: Int
-        val title: CharSequence
+        val title: Int
     }
 
     companion object {

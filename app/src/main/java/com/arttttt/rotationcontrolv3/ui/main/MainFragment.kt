@@ -54,13 +54,13 @@ class MainFragment(
         data object Settings : MenuItem() {
 
             override val id: Int = R.id.item_settings
-            override val title: CharSequence = "Settings"
+            override val title: Int = R.string.menu_item_settings
         }
 
         data object About : MenuItem() {
 
             override val id: Int = R.id.item_about
-            override val title: CharSequence = "About"
+            override val title: Int = R.string.menu_item_about
         }
     }
 

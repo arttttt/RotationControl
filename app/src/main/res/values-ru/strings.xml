@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="menu_item_settings">Настройки</string>
+    <string name="menu_item_about">О приложении</string>
+
+    <string name="button_sources_text">Исходный код</string>
+
+    <string name="start_on_boot">Запускать Rotation Сontrol при старте системы</string>
+    <string name="forced_mode">Принудительное применение ориентации экрана</string>
+
+    <string name="notice_text">Предупреждение</string>
+    <string name="show_notifications_permission_text">Для корректной функциональности приложения требуется разрешение на изменение системных настроек</string>
+    <string name="can_write_settings_permission_text">Чтобы приложение работало правильно, оно должно иметь разрешение на внесение изменений в системные настройки</string>
+    <string name="draw_overlay_permission_text">Принудительное управление ориентацией экрана активировано. Для корректной работы приложению требуется разрешение на использование всплывающих окон</string>
+    <string name="rotation_control_version">Версия приложения: %s</string>
+
+</resources>

@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -11,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.arttttt.rotationcontrolv3"
-        minSdk = 15
+        minSdk = 16
         targetSdk = 34
         versionCode = 10
         versionName = "2.0.0"
@@ -72,6 +74,10 @@ dependencies {
     implementation(libs.essenty.lifecycle)
     implementation(libs.essenty.stateKeeper)
     implementation(libs.essenty.instanceKeeper)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlyticsKtx)
+    implementation(libs.firebase.analyticsKtx)
 
     implementation(libs.timber)
 }

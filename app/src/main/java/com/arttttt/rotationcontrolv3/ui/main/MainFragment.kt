@@ -1,8 +1,5 @@
 package com.arttttt.rotationcontrolv3.ui.main
 
-import android.app.ActivityManager
-import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -160,10 +157,11 @@ class MainFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setImageResource(R.drawable.ic_start)
+        val launchServiceButton = view.findViewById<FloatingActionButton>(R.id.launchServiceButton)
 
-        fab.setOnClickListener {
+        view.unsafeCastTo<ViewGroup>().bringChildToFront(launchServiceButton)
+
+        launchServiceButton.setOnClickListener {
             job?.cancel()
 
             job = lifecycleScope.launch {
@@ -178,8 +176,6 @@ class MainFragment(
                 } else {
                     startRotationService()
                 }
-
-                fab.setImageResource(RotationService.status.value.toFabIconRes())
             }
         }
 
@@ -196,8 +192,8 @@ class MainFragment(
                     selectedMenuItem = item
 
                     when (item) {
-                        is MenuItem.Settings -> fab.show()
-                        is MenuItem.About -> fab.hide()
+                        is MenuItem.Settings -> launchServiceButton.show()
+                        is MenuItem.About -> launchServiceButton.hide()
                     }
                 },
                 selectedItem = selectedMenuItem,
@@ -208,7 +204,7 @@ class MainFragment(
             RotationService
                 .status
                 .map { status -> status.toFabIconRes() }
-                .onEach(fab::setImageResource)
+                .onEach(launchServiceButton::setImageResource)
                 .launchIn(this)
         }
     }

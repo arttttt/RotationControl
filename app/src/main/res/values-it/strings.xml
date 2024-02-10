@@ -1,4 +1,7 @@
 <resources>
+
+    <!--todo: update-->
+
     <string name="start_on_boot">Avvia controllo rotazione all\'avvio del sistema</string>
     <string name="notice_text">Avviso</string>
     <string name="can_write_settings_permission_text">Per funzionare correttamente, l\'applicazione necessita dell\'autorizzazione per scrivere le impostazioni di sistema</string>
@@ -8,4 +11,5 @@
     <string name="rotation_control_version">Versione dell\'applicazione: %s</string>
     <string name="draw_overlay_permission_text">La modalità forzata è abilitata. Per funzionare correttamente, l\'applicazione richiede l\'autorizzazione per disegnare sovrapposizioni</string>
     <string name="forced_mode">Applicazione dell\'orientamento forzato.</string>
+
 </resources>

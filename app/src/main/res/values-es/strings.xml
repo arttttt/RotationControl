@@ -1,5 +1,7 @@
 <resources>
 
+    <!--todo: update-->
+
     <string name="start_on_boot">Iniciar el control de rotación en el arranque del sistema</string>
     <string name="notice_text">Darse cuenta</string>
     <string name="can_write_settings_permission_text">Para funcionar correctamente, la aplicación necesita permiso para escribir la configuración del sistema</string>

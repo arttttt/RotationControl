@@ -10,9 +10,9 @@
     <string name="forced_mode">Принудительное применение ориентации экрана</string>
 
     <string name="notice_text">Предупреждение</string>
-    <string name="show_notifications_permission_text">Для корректной функциональности приложения требуется разрешение на изменение системных настроек</string>
-    <string name="can_write_settings_permission_text">Чтобы приложение работало правильно, оно должно иметь разрешение на внесение изменений в системные настройки</string>
-    <string name="draw_overlay_permission_text">Принудительное управление ориентацией экрана активировано. Для корректной работы приложению требуется разрешение на использование всплывающих окон</string>
+    <string name="show_notifications_permission_text">Для корректной работы приложения требуется разрешение на показ уведомлений</string>
+    <string name="can_write_settings_permission_text">Чтобы приложение работало правильно, требуется разрешение на внесение изменений в системные настройки</string>
+    <string name="draw_overlay_permission_text">Активировано принудительное управление ориентацией экрана. Для корректной работы приложению требуется разрешение на использование всплывающих окон</string>
     <string name="rotation_control_version">Версия приложения: %s</string>
 
 </resources>

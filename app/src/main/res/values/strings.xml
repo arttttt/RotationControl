@@ -9,9 +9,9 @@
     <string name="forced_mode">Forced orientation applying</string>
 
     <string name="notice_text">Notice</string>
-    <string name="show_notifications_permission_text">For proper functionality, Rotation Control requires permission to show notifications</string>
-    <string name="can_write_settings_permission_text">For proper functionality, Rotation Control requires permission to modify system settings</string>
-    <string name="draw_overlay_permission_text">When the Force mode is enabled, Rotation Control requires permission to draw overlays for proper functioning</string>
+    <string name="show_notifications_permission_text">For the app to work correctly, permission to display notifications is required</string>
+    <string name="can_write_settings_permission_text">For the app to function properly, permission to make changes to system settings is required</string>
+    <string name="draw_overlay_permission_text">Forced screen orientation mode is activated. For the app to work correctly, permission to draw overlays is required</string>
     <string name="rotation_control_version">App version: %s</string>
 
 </resources>

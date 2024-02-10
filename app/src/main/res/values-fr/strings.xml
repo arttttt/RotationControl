@@ -1,0 +1,11 @@
+<resources>
+    <string name="start_on_boot">Démarrer le contrôle de rotation au démarrage du système</string>
+    <string name="notice_text">Remarquer</string>
+    <string name="can_write_settings_permission_text">Pour fonctionner correctement, l\'application a besoin de l\'autorisation d\'écrire les paramètres système.</string>
+    <string name="menu_item_settings">Réglages</string>
+    <string name="menu_item_about">A propos de l\'application</string>
+    <string name="button_sources_text">Voir les sources</string>
+    <string name="rotation_control_version">Version de l\'application: %s</string>
+    <string name="draw_overlay_permission_text">Le mode de forçage est activé. Pour fonctionner correctement, l\'application doit avoir l\'autorisation de dessiner des superpositions.</string>
+    <string name="forced_mode">Orientation forcée s\'appliquant.</string>
+</resources>

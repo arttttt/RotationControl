@@ -85,6 +85,7 @@ class RotationServiceViewImpl(
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                     .setCustomContentView(remoteViews)
+                    .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
                     .build()
                     .apply {
                         flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE

@@ -165,25 +165,25 @@ class MainFragment(
             job?.cancel()
 
             job = lifecycleScope.launch {
-                val isAllPermissionsGranted = kotlin
-                    .runCatching {
-                        checkAndGetPermissions()
-                    }
-                    .onFailure {
-                        showDialog(
-                            title = R.string.cant_request_permission,
-                            message = R.string.cant_request_permission_message,
-                        )
-                    }
-                    .getOrDefault(false)
-
-                if (!isAllPermissionsGranted) return@launch
-
                 val isServiceRunning = RotationService.status.value == RotationService.Status.RUNNING
 
                 if (isServiceRunning) {
                     stopRotationService()
                 } else {
+                    val isAllPermissionsGranted = kotlin
+                        .runCatching {
+                            checkAndGetPermissions()
+                        }
+                        .onFailure {
+                            showDialog(
+                                title = R.string.cant_request_permission,
+                                message = R.string.cant_request_permission_message,
+                            )
+                        }
+                        .getOrDefault(false)
+
+                    if (!isAllPermissionsGranted) return@launch
+
                     startRotationService()
                 }
             }

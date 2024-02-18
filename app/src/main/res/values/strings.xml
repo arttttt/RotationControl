@@ -14,4 +14,7 @@
     <string name="draw_overlay_permission_text">Forced screen orientation mode is activated. For the app to work correctly, permission to draw overlays is required</string>
     <string name="rotation_control_version">App version: %s</string>
 
+    <string name="cant_request_permission">Can\'t request permissions</string>
+    <string name="cant_request_permission_message">Sorry, but something went wrong. Rotation Control can\'t request the necessary permissions</string>
+
 </resources>

@@ -165,7 +165,17 @@ class MainFragment(
             job?.cancel()
 
             job = lifecycleScope.launch {
-                val isAllPermissionsGranted = checkAndGetPermissions()
+                val isAllPermissionsGranted = kotlin
+                    .runCatching {
+                        checkAndGetPermissions()
+                    }
+                    .onFailure {
+                        showDialog(
+                            title = R.string.cant_request_permission,
+                            message = R.string.cant_request_permission_message,
+                        )
+                    }
+                    .getOrDefault(false)
 
                 if (!isAllPermissionsGranted) return@launch
 
@@ -275,11 +285,12 @@ class MainFragment(
     }
 
     private suspend fun showDialog(
+        title: Int = R.string.notice_text,
         message: Int,
     ) {
         return suspendCancellableCoroutine { continuation ->
             val dialog = AlertDialog.Builder(requireContext())
-                .setTitle(R.string.notice_text)
+                .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     continuation.resume(Unit)

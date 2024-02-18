@@ -58,6 +58,12 @@ class RotationServiceViewImpl(
     }
 
     override fun handleClick(intent: Intent) {
+        when (intent.action) {
+            NOTIFICATION_BUTTON_CLICKED_ACTION -> handleButtonClicked(intent)
+        }
+    }
+
+    private fun handleButtonClicked(intent: Intent) {
         val clickedButtonId = intent
             .getIntExtra(
                 NOTIFICATION_BUTTON_CLICKED_ACTION,
@@ -122,6 +128,17 @@ class RotationServiceViewImpl(
         )
     }
 
+    private fun getUiEventFromButtonId(id: Int): RotationServiceView.UiEvent? {
+        return when (id) {
+            R.id.btn_auto -> RotationServiceView.UiEvent.ButtonEvent.AutoClicked
+            R.id.btn_portrait -> RotationServiceView.UiEvent.ButtonEvent.PortraitClicked
+            R.id.btn_portrait_reverse -> RotationServiceView.UiEvent.ButtonEvent.PortraitReverseClicked
+            R.id.btn_landscape -> RotationServiceView.UiEvent.ButtonEvent.LandscapeClicked
+            R.id.btn_landscape_reverse -> RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked
+            else -> null
+        }
+    }
+
     private fun RemoteViews.configureButtons(
         context: Context,
         isButtonActive: (Int) -> Boolean,
@@ -136,6 +153,8 @@ class RotationServiceViewImpl(
                         context,
                         RotationService::class.java
                     ).apply {
+                        action = NOTIFICATION_BUTTON_CLICKED_ACTION
+
                         putExtra(
                             NOTIFICATION_BUTTON_CLICKED_ACTION,
                             buttonId,
@@ -150,17 +169,6 @@ class RotationServiceViewImpl(
                 buttonId = buttonId,
                 isActive = isButtonActive.invoke(buttonId),
             )
-        }
-    }
-
-    private fun getUiEventFromButtonId(id: Int): RotationServiceView.UiEvent? {
-        return when (id) {
-            R.id.btn_auto -> RotationServiceView.UiEvent.ButtonEvent.AutoClicked
-            R.id.btn_portrait -> RotationServiceView.UiEvent.ButtonEvent.PortraitClicked
-            R.id.btn_portrait_reverse -> RotationServiceView.UiEvent.ButtonEvent.PortraitReverseClicked
-            R.id.btn_landscape -> RotationServiceView.UiEvent.ButtonEvent.LandscapeClicked
-            R.id.btn_landscape_reverse -> RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked
-            else -> null
         }
     }
 

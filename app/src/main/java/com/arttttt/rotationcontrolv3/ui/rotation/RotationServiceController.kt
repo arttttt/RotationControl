@@ -18,9 +18,10 @@ class RotationServiceController(
     private val rotationStore: RotationStore,
 ) {
 
-    fun interface PlatformCallback {
+    interface PlatformCallback {
 
         fun onNotificationUpdated(notification: Notification)
+        fun stopService()
     }
 
     var platformCallback: PlatformCallback? = null
@@ -48,6 +49,13 @@ class RotationServiceController(
                 .filterIsInstance<RotationServiceView.UiEvent.NotificationUpdated>()
                 .bindTo { event ->
                     platformCallback?.onNotificationUpdated(event.notification)
+                }
+
+            view
+                .events
+                .filterIsInstance<RotationServiceView.UiEvent.StopServiceClicked>()
+                .bindTo {
+                    platformCallback?.stopService()
                 }
 
             rotationStore

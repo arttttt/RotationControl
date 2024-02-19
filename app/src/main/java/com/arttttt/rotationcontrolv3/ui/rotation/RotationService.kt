@@ -82,9 +82,16 @@ class RotationService : Service() {
 
         super.onCreate()
 
-        controller.platformCallback = RotationServiceController.PlatformCallback { notification ->
-            createNotificationChannel()
-            showServiceNotification(notification)
+        controller.platformCallback = object : RotationServiceController.PlatformCallback {
+            override fun onNotificationUpdated(notification: Notification) {
+                createNotificationChannel()
+                showServiceNotification(notification)
+            }
+
+            override fun stopService() {
+                ServiceCompat.stopForeground(this@RotationService, ServiceCompat.STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
         }
 
         controller.onViewCreated(

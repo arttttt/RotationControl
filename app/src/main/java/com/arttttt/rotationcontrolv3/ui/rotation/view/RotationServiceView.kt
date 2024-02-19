@@ -30,6 +30,8 @@ interface RotationServiceView {
         data class NotificationUpdated(
             val notification: Notification,
         ) : UiEvent()
+
+        data object StopServiceClicked : UiEvent()
     }
 
     val events: Flow<UiEvent>

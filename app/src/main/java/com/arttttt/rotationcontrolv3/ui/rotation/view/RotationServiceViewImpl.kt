@@ -22,6 +22,7 @@ class RotationServiceViewImpl(
     companion object {
 
         private const val NOTIFICATION_BUTTON_CLICKED_ACTION = "notification_button_clicked_action"
+        private const val STOP_SERVICE_ACTION = "stop_service_action"
 
         private const val NO_ID = -1
     }
@@ -60,6 +61,7 @@ class RotationServiceViewImpl(
     override fun handleClick(intent: Intent) {
         when (intent.action) {
             NOTIFICATION_BUTTON_CLICKED_ACTION -> handleButtonClicked(intent)
+            STOP_SERVICE_ACTION -> events.tryEmit(RotationServiceView.UiEvent.StopServiceClicked)
         }
     }
 
@@ -92,6 +94,22 @@ class RotationServiceViewImpl(
                     .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                     .setCustomContentView(remoteViews)
                     .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+                    .addAction(
+                        NotificationCompat.Action
+                            .Builder(
+                                null,
+                                context.getString(R.string.stop_service),
+                                PendingIntent.getService(
+                                    context,
+                                    0,
+                                    Intent(context, RotationService::class.java).apply {
+                                        action = STOP_SERVICE_ACTION
+                                    },
+                                    PendingIntent.FLAG_IMMUTABLE,
+                                ),
+                            )
+                            .build()
+                    )
                     .build()
                     .apply {
                         flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE

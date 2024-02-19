@@ -17,4 +17,6 @@
     <string name="cant_request_permission">Can\'t request permissions</string>
     <string name="cant_request_permission_message">Sorry, but something went wrong. Rotation Control can\'t request the necessary permissions</string>
 
+    <string name="stop_service">Stop service</string>
+
 </resources>

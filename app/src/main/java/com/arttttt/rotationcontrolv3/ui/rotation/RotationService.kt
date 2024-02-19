@@ -88,7 +88,8 @@ class RotationService : Service() {
                 showServiceNotification(notification)
             }
 
-            override fun stopService() {
+            override fun stopService(payload: Intent?) {
+                payload?.let(this@RotationService::startActivity)
                 ServiceCompat.stopForeground(this@RotationService, ServiceCompat.STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }

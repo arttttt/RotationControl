@@ -1,6 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
 import android.app.Notification
+import android.content.Intent
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
@@ -21,7 +22,7 @@ class RotationServiceController(
     interface PlatformCallback {
 
         fun onNotificationUpdated(notification: Notification)
-        fun stopService()
+        fun stopService(payload: Intent?)
     }
 
     var platformCallback: PlatformCallback? = null
@@ -54,8 +55,8 @@ class RotationServiceController(
             view
                 .events
                 .filterIsInstance<RotationServiceView.UiEvent.StopServiceClicked>()
-                .bindTo {
-                    platformCallback?.stopService()
+                .bindTo { event ->
+                    platformCallback?.stopService(event.payload)
                 }
 
             rotationStore

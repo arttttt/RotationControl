@@ -15,4 +15,9 @@
     <string name="draw_overlay_permission_text">Активировано принудительное управление ориентацией экрана. Для корректной работы приложению требуется разрешение на использование всплывающих окон</string>
     <string name="rotation_control_version">Версия приложения: %s</string>
 
+    <string name="cant_request_permission">Не получилось запросить разрешения</string>
+    <string name="cant_request_permission_message">Что-то пошло не так. Rotation Control не смог запросить необходимые разрешения</string>
+
+    <string name="stop_service">Остановить сервис</string>
+
 </resources>

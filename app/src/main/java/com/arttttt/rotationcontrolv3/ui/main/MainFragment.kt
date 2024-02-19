@@ -36,6 +36,7 @@ import com.github.terrakok.cicerone.NavigatorHolder
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -167,6 +168,8 @@ class MainFragment(
             job = lifecycleScope.launch {
                 val isServiceRunning = RotationService.status.value == RotationService.Status.RUNNING
 
+                ensureActive()
+
                 if (isServiceRunning) {
                     stopRotationService()
                 } else {
@@ -183,6 +186,8 @@ class MainFragment(
                         .getOrDefault(false)
 
                     if (!isAllPermissionsGranted) return@launch
+
+                    ensureActive()
 
                     startRotationService()
                 }

@@ -17,8 +17,6 @@ import com.arttttt.rotationcontrolv3.ui.rotation.di.DaggerRotationServiceCompone
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject

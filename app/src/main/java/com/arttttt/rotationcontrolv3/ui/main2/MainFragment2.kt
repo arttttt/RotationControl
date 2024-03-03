@@ -24,8 +24,8 @@ import com.arttttt.rotationcontrolv3.domain.entity.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
-import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies2
 import com.arttttt.rotationcontrolv3.ui.main2.di.DaggerMainComponent2
+import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponentDependencies2
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.arttttt.utils.unsafeCastTo

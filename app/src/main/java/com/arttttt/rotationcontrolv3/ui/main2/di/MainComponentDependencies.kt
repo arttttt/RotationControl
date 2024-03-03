@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.ui.main.di
+package com.arttttt.rotationcontrolv3.ui.main2.di
 
 import android.content.Context
 import com.arttttt.navigation.FlowMenuRouter
@@ -8,7 +8,7 @@ import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
 
-interface MainComponentDependencies {
+interface MainComponentDependencies2 {
 
     @get:RootRouterQualifier
     val rootRouter: FlowMenuRouter

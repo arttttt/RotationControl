@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.rotationcontrolv3.di.modules.FragmentFactoryModuleJava
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.di.AboutComponentDependencies
-import com.arttttt.rotationcontrolv3.ui.main.di.MainComponentDependencies2
-import com.arttttt.rotationcontrolv3.ui.main.di.MainModule2
 import com.arttttt.rotationcontrolv3.ui.main2.MainFragment2
 import com.arttttt.rotationcontrolv3.ui.settings.di.SettingsDependencies
 import dagger.BindsInstance

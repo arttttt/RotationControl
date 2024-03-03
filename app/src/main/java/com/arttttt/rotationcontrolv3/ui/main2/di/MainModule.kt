@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.ui.main.di
+package com.arttttt.rotationcontrolv3.ui.main2.di
 
 import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.navigation.FlowMenuRouter
@@ -14,7 +14,6 @@ import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
-import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponent2
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -23,7 +22,7 @@ import dagger.Provides
 import dagger.multibindings.IntoMap
 
 @Module
-object MainModule {
+object MainModule2 {
 
     @Provides
     @PerScreen
@@ -63,14 +62,14 @@ object MainModule {
     @Provides
     @IntoMap
     @FragmentClassKey(AboutFragment::class)
-    fun provideAboutFragmentProvider(component: MainComponent): FragmentProvider {
+    fun provideAboutFragmentProvider(component: MainComponent2): FragmentProvider {
         return AboutFragment.provider(component)
     }
 
     @Provides
     @IntoMap
     @FragmentClassKey(SettingsFragment::class)
-    fun provideSettingsFragmentProvider(component: MainComponent): FragmentProvider {
+    fun provideSettingsFragmentProvider(component: MainComponent2): FragmentProvider {
         return SettingsFragment.provider(component)
     }
 }

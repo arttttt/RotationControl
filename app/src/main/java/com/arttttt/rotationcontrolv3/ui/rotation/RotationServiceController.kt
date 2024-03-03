@@ -22,7 +22,7 @@ class RotationServiceController(
     interface PlatformCallback {
 
         fun onNotificationUpdated(notification: Notification)
-        fun stopService(payload: Intent?)
+        fun stopService()
     }
 
     var platformCallback: PlatformCallback? = null
@@ -55,8 +55,8 @@ class RotationServiceController(
             view
                 .events
                 .filterIsInstance<RotationServiceView.UiEvent.StopServiceClicked>()
-                .bindTo { event ->
-                    platformCallback?.stopService(event.payload)
+                .bindTo {
+                    platformCallback?.stopService()
                 }
 
             rotationStore

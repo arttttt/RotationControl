@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
+import androidx.core.content.IntentSanitizer
 import com.arkivanov.mvikotlin.core.utils.diff
 import com.arttttt.rotationcontrolv3.MainActivity
 import com.arttttt.rotationcontrolv3.R
@@ -24,9 +26,8 @@ class RotationServiceViewImpl(
     companion object {
 
         private const val NOTIFICATION_BUTTON_CLICKED_ACTION = "notification_button_clicked_action"
-        private const val STOP_SERVICE_ACTION = "stop_service_action"
 
-        private const val LAUNCH_PAYLOAD = "launch_payload"
+        const val STOP_SERVICE_ACTION = "stop_service_action"
 
         private const val NO_ID = -1
     }
@@ -66,15 +67,7 @@ class RotationServiceViewImpl(
         when (intent.action) {
             NOTIFICATION_BUTTON_CLICKED_ACTION -> handleButtonClicked(intent)
             STOP_SERVICE_ACTION -> {
-                events.tryEmit(
-                    RotationServiceView.UiEvent.StopServiceClicked(
-                        payload = IntentCompat.getParcelableExtra(
-                            intent,
-                            LAUNCH_PAYLOAD,
-                            Intent::class.java,
-                        )
-                    )
-                )
+                events.tryEmit(RotationServiceView.UiEvent.StopServiceClicked)
             }
         }
     }
@@ -134,6 +127,22 @@ class RotationServiceViewImpl(
 
     @SuppressLint("LaunchActivityFromNotification")
     private fun handleErrorState() {
+        val contentIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(
+                Intent(context, MainActivity::class.java).apply {
+                    putExtra(
+                        MainActivity.LAUNCH_PAYLOAD,
+                        Intent(context, RotationService::class.java).apply {
+                            action = STOP_SERVICE_ACTION
+                        }
+                    )
+                }
+            )
+
+            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+
         events.tryEmit(
             RotationServiceView.UiEvent.NotificationUpdated(
                 notification = NotificationCompat
@@ -141,23 +150,7 @@ class RotationServiceViewImpl(
                     .setSmallIcon(R.drawable.ic_rotate)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setContentText("Permissions not granted")
-                    .setContentIntent(
-                        PendingIntent.getService(
-                            context,
-                            0,
-                            Intent(context, RotationService::class.java).apply {
-                                action = STOP_SERVICE_ACTION
-
-                                putExtra(
-                                    LAUNCH_PAYLOAD,
-                                    Intent(context, MainActivity::class.java).apply {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                    },
-                                )
-                            },
-                            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
-                        ),
-                    )
+                    .setContentIntent(contentIntent)
                     .build()
             )
         )

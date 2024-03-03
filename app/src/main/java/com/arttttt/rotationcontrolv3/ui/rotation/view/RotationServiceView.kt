@@ -31,9 +31,7 @@ interface RotationServiceView {
             val notification: Notification,
         ) : UiEvent()
 
-        data class StopServiceClicked(
-            val payload: Intent?
-        ) : UiEvent()
+        data object StopServiceClicked : UiEvent()
     }
 
     val events: Flow<UiEvent>

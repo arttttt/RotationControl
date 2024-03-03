@@ -12,6 +12,6 @@ class ContainerCoordinator @Inject constructor(
 ) {
 
     fun start() {
-        router.newRootScreen(Screens.MainScreen())
+        router.newRootScreen(Screens.MainScreen2())
     }
 }

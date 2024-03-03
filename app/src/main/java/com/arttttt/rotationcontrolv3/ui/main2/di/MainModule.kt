@@ -14,6 +14,7 @@ import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
+import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponent2
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder

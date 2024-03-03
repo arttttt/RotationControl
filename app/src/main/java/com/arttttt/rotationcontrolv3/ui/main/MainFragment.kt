@@ -47,7 +47,7 @@ import kotlin.coroutines.resume
 
 
 class MainFragment(
-    private val dependencies: MainComponentDependencies,
+    private val dependencies: MainComponentDependencies
 ) : Fragment(R.layout.fragment_main) {
 
     sealed class MenuItem : NavigationDialog.Item {

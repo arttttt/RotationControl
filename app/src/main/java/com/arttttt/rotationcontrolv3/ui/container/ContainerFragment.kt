@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.rotationcontrolv3.ui.container.di.DaggerContainerComponent
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
-import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import javax.inject.Inject

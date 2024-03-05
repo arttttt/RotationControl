@@ -1,8 +1,8 @@
 package com.arttttt.rotationcontrolv3.data.repository
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import com.arttttt.rotationcontrolv3.domain.entity.AppInfo
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 
@@ -23,26 +23,46 @@ class AppsRepositoryImpl(
         addCategory(Intent.CATEGORY_HOME)
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     override suspend fun getInstalledApps(): List<AppInfo> {
         val pm = context.packageManager
 
-        val result = buildSet {
-            addAll(pm.queryIntentActivities(launcherIntent, FLAGS))
-            addAll(pm.queryIntentActivities(homeIntent, FLAGS))
+        val result = buildMap {
+            pm
+                .queryIntentActivities(launcherIntent, PackageManager.MATCH_DEFAULT_ONLY)
+                .forEach { info ->
+                    if (!containsKey(info.activityInfo.applicationInfo.packageName)) {
+                        put(
+                            info.activityInfo.applicationInfo.packageName,
+                            info.activityInfo.applicationInfo,
+                        )
+                    }
+                }
+
+            pm
+                .queryIntentActivities(homeIntent, PackageManager.MATCH_DEFAULT_ONLY)
+                .forEach { info ->
+                    if (!containsKey(info.activityInfo.applicationInfo.packageName)) {
+                        put(
+                            info.activityInfo.applicationInfo.packageName,
+                            info.activityInfo.applicationInfo,
+                        )
+                    }
+                }
         }
 
-        return result.mapNotNull { info ->
-            val title = pm
-                .getApplicationLabel(info.activityInfo.applicationInfo)
-                .takeIf { it.isNotEmpty() }
-                ?.toString()
-                ?: return@mapNotNull null
+        return result
+            .mapNotNull { (_, info) ->
+                val title = pm
+                    .getApplicationLabel(info)
+                    .takeIf { it.isNotEmpty() }
+                    ?.toString()
+                    ?: return@mapNotNull null
 
-            AppInfo(
-                title = title,
-                pkg = info.activityInfo.applicationInfo.packageName,
-            )
-        }
+                AppInfo(
+                    title = title,
+                    pkg = info.packageName,
+                )
+            }
+            .sortedBy { info -> info.title }
     }
 }

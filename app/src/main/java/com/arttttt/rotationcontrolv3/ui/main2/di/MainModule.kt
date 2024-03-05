@@ -14,6 +14,7 @@ import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
+import com.arttttt.rotationcontrolv3.ui.apps.AppsFragment
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
@@ -71,5 +72,12 @@ object MainModule2 {
     @FragmentClassKey(SettingsFragment::class)
     fun provideSettingsFragmentProvider(component: MainComponent2): FragmentProvider {
         return SettingsFragment.provider(component)
+    }
+
+    @Provides
+    @IntoMap
+    @FragmentClassKey(AppsFragment::class)
+    fun provideAppsFragmentProvider(component: MainComponent2): FragmentProvider {
+        return AppsFragment.provider(component)
     }
 }

@@ -24,6 +24,7 @@ import com.arttttt.rotationcontrolv3.domain.entity.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
+import com.arttttt.rotationcontrolv3.ui.apps.AppsFragment
 import com.arttttt.rotationcontrolv3.ui.main2.di.DaggerMainComponent2
 import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponentDependencies2
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
@@ -63,6 +64,13 @@ class MainFragment2(
             override val id: Int = R.id.item_about
             override val title: Int = R.string.menu_item_about
             override val icon: Int = R.drawable.ic_info_24
+        }
+
+        data object Apps : MenuItem {
+
+            override val id: Int = R.id.item_apps
+            override val title: Int = R.string.menu_item_apps
+            override val icon: Int = R.drawable.ic_apps_24
         }
     }
 
@@ -150,6 +158,7 @@ class MainFragment2(
         val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         bottomNavigation.addMenuItem(MenuItem.Settings)
+        bottomNavigation.addMenuItem(MenuItem.Apps)
         bottomNavigation.addMenuItem(MenuItem.About)
 
         bottomNavigation.setOnItemSelectedListener { item ->
@@ -193,6 +202,11 @@ class MainFragment2(
             MenuItem.About.id -> {
                 childFragmentManager.commit {
                     replace<AboutFragment>(R.id.container)
+                }
+            }
+            MenuItem.Apps.id -> {
+                childFragmentManager.commit {
+                    replace<AppsFragment>(R.id.container)
                 }
             }
         }
@@ -291,7 +305,7 @@ class MainFragment2(
     private fun FloatingActionButton.setVisibilityByMenuItem(id: Int) {
         when (id) {
             MenuItem.Settings.id -> show()
-            MenuItem.About.id -> hide()
+            else -> hide()
         }
     }
 }

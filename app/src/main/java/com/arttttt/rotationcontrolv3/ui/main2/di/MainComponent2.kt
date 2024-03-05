@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.arttttt.rotationcontrolv3.di.modules.FragmentFactoryModuleJava
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
 import com.arttttt.rotationcontrolv3.ui.about.di.AboutComponentDependencies
+import com.arttttt.rotationcontrolv3.ui.apps.di.AppsComponentDependencies
 import com.arttttt.rotationcontrolv3.ui.main2.MainFragment2
 import com.arttttt.rotationcontrolv3.ui.settings.di.SettingsDependencies
 import dagger.BindsInstance
@@ -19,7 +20,7 @@ import dagger.Component
         FragmentFactoryModuleJava::class,
     ]
 )
-interface MainComponent2 : AboutComponentDependencies, SettingsDependencies {
+interface MainComponent2 : AboutComponentDependencies, SettingsDependencies, AppsComponentDependencies {
 
     @Component.Factory
     interface Factory {

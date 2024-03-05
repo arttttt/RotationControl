@@ -3,5 +3,6 @@
 
     <item name="item_settings" type="id" />
     <item name="item_about" type="id" />
+    <item name="item_apps" type="id" />
 
 </resources>

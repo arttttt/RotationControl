@@ -3,6 +3,7 @@
 
     <string name="menu_item_settings">Настройки</string>
     <string name="menu_item_about">О приложении</string>
+    <string name="menu_item_apps">Приложения</string>
 
     <string name="button_sources_text">Исходный код</string>
 

@@ -1,13 +1,12 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
 import android.app.Notification
-import android.content.Intent
 import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.states
-import com.arttttt.rotationcontrolv3.domain.entity.NoPermissionsException
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.exceptions.NoPermissionsException
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView

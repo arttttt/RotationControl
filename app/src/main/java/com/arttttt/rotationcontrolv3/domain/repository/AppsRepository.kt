@@ -1,6 +1,6 @@
 package com.arttttt.rotationcontrolv3.domain.repository
 
-import com.arttttt.rotationcontrolv3.domain.entity.AppInfo
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppInfo
 
 interface AppsRepository {
 

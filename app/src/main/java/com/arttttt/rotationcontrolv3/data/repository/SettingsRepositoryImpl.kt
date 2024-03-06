@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.arttttt.rotationcontrolv3.data.framework.BootReceiver
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.utils.unsafeCastTo
 import kotlinx.coroutines.flow.first

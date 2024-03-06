@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.stores.settings
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import kotlin.reflect.KClass
 
 interface SettingsStore : Store<SettingsStore.Intent, SettingsStore.State, SettingsStore.Label> {

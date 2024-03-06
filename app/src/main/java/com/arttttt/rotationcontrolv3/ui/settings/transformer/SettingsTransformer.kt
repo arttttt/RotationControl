@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.settings.transformer
 
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.models.SettingAdapterItem
 import com.arttttt.rotationcontrolv3.ui.settings.view.SettingsView

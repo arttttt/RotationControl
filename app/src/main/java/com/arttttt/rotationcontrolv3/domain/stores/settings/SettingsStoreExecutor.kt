@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.stores.settings
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.utils.unsafeCastTo
 import kotlinx.coroutines.Dispatchers

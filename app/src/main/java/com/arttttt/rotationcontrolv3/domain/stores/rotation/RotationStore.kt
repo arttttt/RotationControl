@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 
 interface RotationStore : Store<RotationStore.Intent, RotationStore.State, RotationStore.Label> {
 

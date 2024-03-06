@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.data.repository
 import android.content.Context
 import android.provider.Settings
 import androidx.core.hardware.display.DisplayManagerCompat
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.utils.toBoolean
 import javax.inject.Inject

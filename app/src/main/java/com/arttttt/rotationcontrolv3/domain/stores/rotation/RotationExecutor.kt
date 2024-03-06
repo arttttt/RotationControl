@@ -2,10 +2,10 @@ package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
-import com.arttttt.rotationcontrolv3.domain.entity.NoPermissionsException
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
-import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.exceptions.NoPermissionsException
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.RotationStatus
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository

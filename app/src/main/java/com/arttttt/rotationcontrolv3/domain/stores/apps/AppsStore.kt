@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.stores.apps
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.rotationcontrolv3.domain.entity.AppInfo
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppInfo
 
 interface AppsStore : Store<AppsStore.Intent, AppsStore.State, AppsStore.Label> {
 

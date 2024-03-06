@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.provider.Settings
-import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope

@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.data.repository
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import com.arttttt.rotationcontrolv3.domain.entity.AppInfo
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppInfo
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 import javax.inject.Inject
 

@@ -20,7 +20,7 @@ import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.data.model.DrawOverlayPermission
 import com.arttttt.rotationcontrolv3.data.model.NotificationsPermission
 import com.arttttt.rotationcontrolv3.data.model.WriteSettingsPermission
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment

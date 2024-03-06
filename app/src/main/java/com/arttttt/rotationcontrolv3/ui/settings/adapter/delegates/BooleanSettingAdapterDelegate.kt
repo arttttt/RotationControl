@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.settings.adapter.delegates
 
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.models.SettingAdapterItem
 import com.arttttt.rotationcontrolv3.utils.adapterdelegates.dsl.adapterDelegate
 import com.google.android.material.switchmaterial.SwitchMaterial

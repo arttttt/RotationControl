@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.domain.entity
+package com.arttttt.rotationcontrolv3.domain.entity.apps
 
 data class AppInfo(
     val title: String,

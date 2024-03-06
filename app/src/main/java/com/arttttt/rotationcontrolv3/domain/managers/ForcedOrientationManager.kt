@@ -7,7 +7,7 @@ import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.getSystemService
-import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
+import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ForcedOrientationManager(

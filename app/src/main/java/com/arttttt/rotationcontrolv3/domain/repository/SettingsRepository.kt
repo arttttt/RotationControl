@@ -1,6 +1,6 @@
 package com.arttttt.rotationcontrolv3.domain.repository
 
-import com.arttttt.rotationcontrolv3.domain.entity.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import kotlin.reflect.KClass
 
 interface SettingsRepository {

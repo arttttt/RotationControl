@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.domain.entity
+package com.arttttt.rotationcontrolv3.domain.entity.rotation
 
 sealed class RotationStatus {
 

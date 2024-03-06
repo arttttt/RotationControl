@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.domain.entity
+package com.arttttt.rotationcontrolv3.domain.entity.exceptions
 
 class NoPermissionsException : Throwable() {
 

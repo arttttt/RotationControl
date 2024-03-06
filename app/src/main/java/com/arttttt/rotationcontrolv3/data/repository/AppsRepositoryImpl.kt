@@ -1,14 +1,27 @@
 package com.arttttt.rotationcontrolv3.data.repository
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppEvent
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppInfo
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.shareIn
 import javax.inject.Inject
 
+@OptIn(DelicateCoroutinesApi::class)
 class AppsRepositoryImpl @Inject constructor(
-    private val context: Context,
+    context: Context,
 ) : AppsRepository {
 
     private val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
@@ -19,12 +32,31 @@ class AppsRepositoryImpl @Inject constructor(
         addCategory(Intent.CATEGORY_HOME)
     }
 
-    override suspend fun getInstalledApps(): List<AppInfo> {
-        val pm = context.packageManager
+    private val pm = context.packageManager
 
-        val result = buildMap {
-            pm
-                .queryIntentActivities(launcherIntent, PackageManager.MATCH_DEFAULT_ONLY)
+    private val appEventsFlow = context
+        .appChangesFlow()
+        .shareIn(
+            scope = GlobalScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5000L,
+            ),
+        )
+
+    override suspend fun getInstalledApps(): List<AppInfo> {
+        return pm
+            .getAppsMap()
+            .mapNotNull { (_, info) -> info.toAppInfo(pm) }
+    }
+
+    override fun getAppEventsFlow(): Flow<AppEvent> {
+        return appEventsFlow
+    }
+
+    private fun PackageManager.getAppsMap(): Map<String, ApplicationInfo> {
+        return buildMap {
+            this@getAppsMap
+                .queryIntentActivities(launcherIntent, PackageManager.GET_META_DATA)
                 .forEach { info ->
                     if (!containsKey(info.activityInfo.applicationInfo.packageName)) {
                         put(
@@ -34,8 +66,8 @@ class AppsRepositoryImpl @Inject constructor(
                     }
                 }
 
-            pm
-                .queryIntentActivities(homeIntent, PackageManager.MATCH_DEFAULT_ONLY)
+            this@getAppsMap
+                .queryIntentActivities(homeIntent, PackageManager.GET_META_DATA)
                 .forEach { info ->
                     if (!containsKey(info.activityInfo.applicationInfo.packageName)) {
                         put(
@@ -45,20 +77,79 @@ class AppsRepositoryImpl @Inject constructor(
                     }
                 }
         }
+    }
 
-        return result
-            .mapNotNull { (_, info) ->
-                val title = pm
-                    .getApplicationLabel(info)
-                    .takeIf { it.isNotEmpty() }
-                    ?.toString()
-                    ?: return@mapNotNull null
+    private fun ApplicationInfo.toAppInfo(pm: PackageManager): AppInfo? {
+        val title = pm
+            .getApplicationLabel(this)
+            .takeIf { it.isNotEmpty() }
+            ?.toString()
+            ?: return null
 
-                AppInfo(
-                    title = title,
-                    pkg = info.packageName,
-                )
+        return AppInfo(
+            title = title,
+            pkg = this.packageName,
+        )
+    }
+
+    private fun Context.appChangesFlow(): Flow<AppEvent> {
+        return callbackFlow {
+            val receiver = object : BroadcastReceiver() {
+                override fun onReceive(
+                    context: Context,
+                    intent: Intent?,
+                ) {
+                    val packageName = intent?.data?.schemeSpecificPart ?: return
+
+                    val title = try {
+                        packageManager
+                            .getApplicationInfo(packageName, 0)
+                            .let(packageManager::getApplicationLabel)
+                            .toString()
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        "Unknown"
+                    }
+
+                    val appInfo = AppInfo(
+                        title = title,
+                        pkg = packageName,
+                    )
+
+                    when (intent.action) {
+                        Intent.ACTION_PACKAGE_REMOVED -> {
+                            trySend(
+                                AppEvent.AppRemoved(
+                                    appInfo = appInfo,
+                                )
+                            )
+                        }
+                        Intent.ACTION_PACKAGE_ADDED -> {
+                            trySend(
+                                AppEvent.AppInstalled(
+                                    appInfo = appInfo,
+                                )
+                            )
+                        }
+                    }
+                }
             }
-            .sortedBy { info -> info.title }
+
+            val intentFilter = IntentFilter().apply {
+                addAction(Intent.ACTION_PACKAGE_REMOVED)
+                addAction(Intent.ACTION_PACKAGE_ADDED)
+                addDataScheme("package")
+            }
+
+            ContextCompat.registerReceiver(
+                this@appChangesFlow,
+                receiver,
+                intentFilter,
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
+
+            awaitClose {
+                this@appChangesFlow.unregisterReceiver(receiver)
+            }
+        }
     }
 }

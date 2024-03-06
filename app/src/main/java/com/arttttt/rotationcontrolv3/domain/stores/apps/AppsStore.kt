@@ -13,6 +13,7 @@ interface AppsStore : Store<AppsStore.Intent, AppsStore.State, AppsStore.Label> 
     sealed class Action {
 
         data object LoadApps : Action()
+        data object SubscribeForAppsChanges : Action()
     }
 
     sealed class Intent
@@ -21,7 +22,7 @@ interface AppsStore : Store<AppsStore.Intent, AppsStore.State, AppsStore.Label> 
 
         data object ProgressStarted : Message()
         data object ProgressFinished : Message()
-        data class AppsLoaded(
+        data class AppsReceived(
             val apps: List<AppInfo>,
         ) : Message()
     }

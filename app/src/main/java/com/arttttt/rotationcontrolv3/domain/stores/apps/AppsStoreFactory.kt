@@ -24,6 +24,7 @@ class AppsStoreFactory @Inject constructor(
                 initialState = initialState,
                 bootstrapper = SimpleBootstrapper(
                     AppsStore.Action.LoadApps,
+                    AppsStore.Action.SubscribeForAppsChanges,
                 ),
                 executorFactory = {
                     AppsStoreExecutor(

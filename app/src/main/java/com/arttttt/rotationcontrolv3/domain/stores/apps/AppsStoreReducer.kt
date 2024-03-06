@@ -14,7 +14,7 @@ object AppsStoreReducer : Reducer<AppsStore.State, AppsStore.Message> {
                 isInProgress = false,
             )
 
-            is AppsStore.Message.AppsLoaded -> copy(
+            is AppsStore.Message.AppsReceived -> copy(
                 apps = msg.apps,
             )
         }

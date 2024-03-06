@@ -6,9 +6,9 @@ import com.arkivanov.mvikotlin.core.utils.diff
 import com.arkivanov.mvikotlin.core.view.BaseMviView
 import com.arkivanov.mvikotlin.core.view.ViewRenderer
 import com.arttttt.rotationcontrolv3.R
+import com.arttttt.rotationcontrolv3.ui.apps.adapter.AppsDiffCallback
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.delegates.AppAdapterDelegate
 import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AsyncListDifferDelegationAdapter
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.EqualsDiffCallback
 
 class AppsViewImpl(
     root: View
@@ -19,7 +19,7 @@ class AppsViewImpl(
             delegates = setOf(
                 AppAdapterDelegate()
             ),
-            diffCallback = EqualsDiffCallback(),
+            diffCallback = AppsDiffCallback(),
         )
     }
 

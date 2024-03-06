@@ -5,6 +5,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="bottomSheetDialogTheme">@style/RotationControl.Dialog.BottomSheet</item>
         <item name="alertDialogTheme">@style/RotationControl.Dialog.Alert</item>
+        <item name="appBarLayoutStyle">@style/RotationControl.Widget.AppBar</item>
     </style>
 
     <style name="Theme.RotationControl" parent="Theme.RotationControl.Base" />

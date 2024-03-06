@@ -28,4 +28,8 @@
         <item name="colorControlActivated">@color/colorSecondary</item>
     </style>
 
+    <style name="RotationControl.Widget.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
 </resources>

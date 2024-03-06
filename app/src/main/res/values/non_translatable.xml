@@ -4,5 +4,6 @@
     <string name="app_name_release" translatable="false">Rotation Control</string>
     <string name="app_name_dev" translatable="false">RC dev</string>
     <string name="github_link" translatable="false" tools:ignore="MissingTranslation">https://github.com/arttttt/RotationControl</string>
+    <string name="accessibility_service_title" translatable="false">Launched app detection</string>
 
 </resources>

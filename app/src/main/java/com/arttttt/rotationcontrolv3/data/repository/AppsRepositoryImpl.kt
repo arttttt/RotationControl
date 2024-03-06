@@ -5,15 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.arttttt.rotationcontrolv3.domain.entity.AppInfo
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
+import javax.inject.Inject
 
-class AppsRepositoryImpl(
+class AppsRepositoryImpl @Inject constructor(
     private val context: Context,
 ) : AppsRepository {
-
-    companion object {
-
-        private const val FLAGS = 128
-    }
 
     private val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
         addCategory(Intent.CATEGORY_LAUNCHER)

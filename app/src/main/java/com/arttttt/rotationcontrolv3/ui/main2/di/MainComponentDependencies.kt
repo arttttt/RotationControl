@@ -1,6 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.main2.di
 
 import android.content.Context
+import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
@@ -18,4 +19,5 @@ interface MainComponentDependencies2 {
     val settingsStore: SettingsStore
     val permissionsRepository: PermissionsRepository
     val settingsRepository: SettingsRepository
+    val storeFactory: StoreFactory
 }

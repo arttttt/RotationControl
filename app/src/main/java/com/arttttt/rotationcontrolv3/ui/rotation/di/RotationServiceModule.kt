@@ -4,11 +4,10 @@ import android.content.Context
 import com.arttttt.rotationcontrolv3.data.repository.OrientationRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.SensorsRepositoryImpl
 import com.arttttt.rotationcontrolv3.di.scopes.PerService
-import com.arttttt.rotationcontrolv3.domain.ForcedOrientationManager
+import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
-import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStoreFactory
 import com.arttttt.rotationcontrolv3.ui.rotation.PermissionsVerifier

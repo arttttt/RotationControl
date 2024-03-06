@@ -5,7 +5,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arttttt.rotationcontrolv3.domain.ForcedOrientationManager
+import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository

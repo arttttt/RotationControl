@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.domain
+package com.arttttt.rotationcontrolv3.domain.managers
 
 import android.content.Context
 import android.content.pm.ActivityInfo

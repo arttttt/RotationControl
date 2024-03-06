@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arttttt.rotationcontrolv3.domain.ForcedOrientationManager
+import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.entity.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.entity.RotationStatus

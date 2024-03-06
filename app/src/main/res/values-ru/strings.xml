@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="menu_item_settings">Настройки</string>
-    <string name="menu_item_about">О приложении</string>
-    <string name="menu_item_apps">Приложения</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О приложении</string>
+    <string name="apps">Приложения</string>
 
     <string name="button_sources_text">Исходный код</string>
 

@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.apps.di
 
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
-import com.arttttt.rotationcontrolv3.ui.apps.AppsFragment
+import com.arttttt.rotationcontrolv3.ui.apps.platform.AppsFragment
 import dagger.Component
 
 @PerScreen

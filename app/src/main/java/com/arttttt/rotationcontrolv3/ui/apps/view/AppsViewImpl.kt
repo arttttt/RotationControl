@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.view.BaseMviView
 import com.arkivanov.mvikotlin.core.view.ViewRenderer
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.AppsDiffCallback
+import com.arttttt.rotationcontrolv3.ui.apps.adapter.delegates.AccessibilityAdapterDelegate
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.delegates.AppAdapterDelegate
 import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AsyncListDifferDelegationAdapter
 
@@ -17,7 +18,10 @@ class AppsViewImpl(
     private val adapter by lazy {
         AsyncListDifferDelegationAdapter(
             delegates = setOf(
-                AppAdapterDelegate()
+                AppAdapterDelegate(),
+                AccessibilityAdapterDelegate(
+                    onClick = {},
+                )
             ),
             diffCallback = AppsDiffCallback(),
         )

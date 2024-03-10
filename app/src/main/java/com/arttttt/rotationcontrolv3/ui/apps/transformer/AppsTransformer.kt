@@ -2,6 +2,7 @@ package com.arttttt.rotationcontrolv3.ui.apps.transformer
 
 import android.content.Context
 import com.arttttt.rotationcontrolv3.RotationControlAccessibilityService
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.models.AccessibilityListItem
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.models.AppAdapterItem
@@ -23,10 +24,11 @@ class AppsTransformer @Inject constructor(
 
     private fun createItems(state: AppsStore.State): List<ListItem> {
         return if (context.isAccessibilityServiceEnabled<RotationControlAccessibilityService>()) {
-            state.apps.map { info ->
+            state.apps.map { (_, info) ->
                 AppAdapterItem(
                     title = info.title,
                     appPackage = info.pkg,
+                    orientation = info.orientation.toTitle(),
                     icon = context.packageManager.getApplicationIcon(info.pkg),
                 )
             }
@@ -34,6 +36,17 @@ class AppsTransformer @Inject constructor(
             listOf(
                 AccessibilityListItem
             )
+        }
+    }
+
+    private fun AppOrientation.toTitle(): String {
+        return when (this) {
+            AppOrientation.GLOBAL -> "Global"
+            AppOrientation.PORTRAIT -> "Portrait"
+            AppOrientation.PORTRAIT_REVERSE -> "Portrait reverse"
+            AppOrientation.LANDSCAPE -> "Landscape"
+            AppOrientation.LANDSCAPE_REVERSE -> "Landscape reverse"
+            AppOrientation.AUTO -> "Auto"
         }
     }
 }

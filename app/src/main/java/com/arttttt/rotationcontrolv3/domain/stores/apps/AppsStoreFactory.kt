@@ -15,7 +15,7 @@ class AppsStoreFactory @Inject constructor(
         val name = AppsStore::class.qualifiedName
         val initialState = AppsStore.State(
             isInProgress = false,
-            apps = emptyList(),
+            apps = emptyMap(),
         )
 
         return object : AppsStore,

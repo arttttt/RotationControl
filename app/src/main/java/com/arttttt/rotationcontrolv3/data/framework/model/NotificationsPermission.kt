@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.data.model
+package com.arttttt.rotationcontrolv3.data.framework.model
 
 import android.Manifest
 import android.os.Build

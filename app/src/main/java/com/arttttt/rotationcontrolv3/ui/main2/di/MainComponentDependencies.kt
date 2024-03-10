@@ -6,6 +6,7 @@ import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
+import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
 
@@ -20,4 +21,5 @@ interface MainComponentDependencies2 {
     val permissionsRepository: PermissionsRepository
     val settingsRepository: SettingsRepository
     val storeFactory: StoreFactory
+    val appsStore: AppsStore
 }

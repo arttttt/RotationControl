@@ -12,6 +12,7 @@ import com.arttttt.rotationcontrolv3.ui.apps.di.AppsComponentDependencies
 import com.arttttt.rotationcontrolv3.ui.apps.di.DaggerAppsComponent
 import com.arttttt.rotationcontrolv3.ui.apps.view.AppsViewImpl
 import com.arttttt.rotationcontrolv3.utils.resultcontracts.AccessibilityResultContract
+import com.arttttt.utils.doOnDestroy
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -67,7 +68,21 @@ class AppsFragment(
         super.onViewCreated(view, savedInstanceState)
 
         controller.onViewCreated(
-            view = AppsViewImpl(view),
+            view = AppsViewImpl(
+                root = view,
+                showDialog = { callback ->
+                    val dialog = OrientationBottomSheetDialog(
+                        context = requireContext(),
+                        onClick = callback,
+                    )
+
+                    viewLifecycleOwner.lifecycle.doOnDestroy {
+                        dialog.dismiss()
+                    }
+
+                    dialog.show()
+                }
+            ),
             lifecycle = viewLifecycleOwner.essentyLifecycle(),
         )
     }

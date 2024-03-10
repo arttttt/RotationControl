@@ -2,6 +2,7 @@ package com.arttttt.rotationcontrolv3.domain.stores.apps
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppEvent
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -29,6 +30,47 @@ class AppsStoreExecutor(
                 loadApps()
                 subscribeForAppsChanges()
             }
+            is AppsStore.Intent.SetAppOrientation -> {
+                setAppOrientation(
+                    pkg = intent.pkg,
+                    appOrientation = intent.appOrientation,
+                )
+            }
+        }
+    }
+
+    private fun setAppOrientation(
+        pkg: String,
+        appOrientation: AppOrientation,
+    ) {
+        scope.launch {
+            val updatedApps = withContext(Dispatchers.IO) {
+                appsRepository.setAppOrientation(
+                    pkg = pkg,
+                    appOrientation = appOrientation,
+                )
+
+                val info = state().apps.getValue(pkg)
+
+                state()
+                    .apps
+                    .toMutableMap()
+                    .apply {
+                        put(
+                            key = pkg,
+                            value = info.copy(
+                                orientation = appOrientation,
+                            )
+                        )
+                    }
+                    .toMap()
+            }
+
+            dispatch(
+                AppsStore.Message.AppsReceived(
+                    apps = updatedApps,
+                )
+            )
         }
     }
 
@@ -48,7 +90,10 @@ class AppsStoreExecutor(
                     apps = withContext(Dispatchers.IO) {
                         appsRepository
                             .getInstalledApps()
-                            .sortedBy { info -> info.title }
+                            .associateBy { info -> info.pkg }
+                            .toList()
+                            .sortedBy { it.second.title }
+                            .toMap()
                     }
                 )
             )
@@ -58,23 +103,26 @@ class AppsStoreExecutor(
     }
 
     private suspend fun handleAppEvent(event: AppEvent) {
-        val mutableApps = state().apps.toMutableList()
+        val mutableApps = state().apps.toMutableMap()
 
         val updatedApps = withContext(Dispatchers.IO) {
             val apps = when (event) {
                 is AppEvent.AppRemoved -> {
-                    mutableApps.filter { info ->
-                        info.pkg != event.appInfo.pkg
+                    mutableApps.apply {
+                        remove(event.appInfo.pkg)
                     }
                 }
                 is AppEvent.AppInstalled -> {
                     mutableApps.apply {
-                        add(event.appInfo)
+                        put(event.appInfo.pkg, event.appInfo)
                     }
                 }
             }
 
-            apps.sortedBy { info -> info.title }
+            apps
+                .toList()
+                .sortedBy { it.second.title }
+                .toMap()
         }
 
         dispatch(

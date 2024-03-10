@@ -28,13 +28,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/orientationTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
     <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="8dp"
         android:orientation="vertical"
-        app:constraint_referenced_ids="titleTextView,packageTextView"
+        app:constraint_referenced_ids="titleTextView,packageTextView,orientationTextView"
         app:flow_verticalGap="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

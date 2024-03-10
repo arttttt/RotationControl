@@ -62,7 +62,7 @@
         </service>
 
         <receiver
-            android:name=".data.framework.BootReceiver"
+            android:name=".data.framework.receivers.BootReceiver"
             android:enabled="false"
             android:exported="true">
 

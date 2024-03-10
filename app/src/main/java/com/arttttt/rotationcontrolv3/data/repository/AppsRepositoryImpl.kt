@@ -7,8 +7,12 @@ import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import androidx.room.Dao
+import com.arttttt.rotationcontrolv3.data.db.AppOrientationDbModel
+import com.arttttt.rotationcontrolv3.data.db.AppsOrientationDao
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppEvent
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppInfo
+import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -22,6 +26,7 @@ import javax.inject.Inject
 @OptIn(DelicateCoroutinesApi::class)
 class AppsRepositoryImpl @Inject constructor(
     context: Context,
+    private val appsOrientationDao: AppsOrientationDao,
 ) : AppsRepository {
 
     private val launcherIntent = Intent(Intent.ACTION_MAIN).apply {
@@ -46,11 +51,32 @@ class AppsRepositoryImpl @Inject constructor(
     override suspend fun getInstalledApps(): List<AppInfo> {
         return pm
             .getAppsMap()
-            .mapNotNull { (_, info) -> info.toAppInfo(pm) }
+            .mapNotNull { (_, info) ->
+                val appOrientation = appsOrientationDao.getAppOrientation(
+                    pkg = info.packageName,
+                )
+
+                info.toAppInfo(
+                    pm = pm,
+                    appOrientation = appOrientation,
+                )
+            }
     }
 
     override fun getAppEventsFlow(): Flow<AppEvent> {
         return appEventsFlow
+    }
+
+    override suspend fun setAppOrientation(
+        pkg: String,
+        appOrientation: AppOrientation,
+    ) {
+        appsOrientationDao.insertAppOrientation(
+            AppOrientationDbModel(
+                pkg = pkg,
+                orientation = appOrientation.ordinal,
+            )
+        )
     }
 
     private fun PackageManager.getAppsMap(): Map<String, ApplicationInfo> {
@@ -79,7 +105,10 @@ class AppsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun ApplicationInfo.toAppInfo(pm: PackageManager): AppInfo? {
+    private fun ApplicationInfo.toAppInfo(
+        pm: PackageManager,
+        appOrientation: AppOrientationDbModel?,
+    ): AppInfo? {
         val title = pm
             .getApplicationLabel(this)
             .takeIf { it.isNotEmpty() }
@@ -89,6 +118,9 @@ class AppsRepositoryImpl @Inject constructor(
         return AppInfo(
             title = title,
             pkg = this.packageName,
+            orientation = AppOrientation.of(
+                value = appOrientation?.orientation,
+            ) ?: AppOrientation.GLOBAL
         )
     }
 
@@ -113,6 +145,7 @@ class AppsRepositoryImpl @Inject constructor(
                     val appInfo = AppInfo(
                         title = title,
                         pkg = packageName,
+                        orientation = AppOrientation.GLOBAL,
                     )
 
                     when (intent.action) {
@@ -150,6 +183,20 @@ class AppsRepositoryImpl @Inject constructor(
             awaitClose {
                 this@appChangesFlow.unregisterReceiver(receiver)
             }
+        }
+    }
+
+    private fun AppOrientation.Companion.of(
+        value: Int?
+    ): AppOrientation? {
+        return when (value) {
+            AppOrientation.GLOBAL.ordinal -> AppOrientation.GLOBAL
+            AppOrientation.AUTO.ordinal -> AppOrientation.AUTO
+            AppOrientation.PORTRAIT.ordinal -> AppOrientation.PORTRAIT
+            AppOrientation.PORTRAIT_REVERSE.ordinal -> AppOrientation.PORTRAIT_REVERSE
+            AppOrientation.LANDSCAPE.ordinal -> AppOrientation.LANDSCAPE
+            AppOrientation.LANDSCAPE_REVERSE.ordinal -> AppOrientation.LANDSCAPE_REVERSE
+            else -> null
         }
     }
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 class AppsController @Inject constructor(
@@ -51,6 +50,23 @@ class AppsController @Inject constructor(
                 }
                 .filter { isServiceEnabled -> isServiceEnabled == true }
                 .map { AppsStore.Intent.LoadApps }
+                .bindTo(appsStore)
+
+            view
+                .events
+                .filterIsInstance<AppsView.UiEvent.AppClicked>()
+                .map { event -> AppsView.Command.ShowOrientationDialog(event.pkg) }
+                .bindTo(view::handleCommand)
+
+            view
+                .events
+                .filterIsInstance<AppsView.UiEvent.AppOrientationSelected>()
+                .map { event ->
+                    AppsStore.Intent.SetAppOrientation(
+                        pkg = event.pkg,
+                        appOrientation = event.appOrientation,
+                    )
+                }
                 .bindTo(appsStore)
         }
     }

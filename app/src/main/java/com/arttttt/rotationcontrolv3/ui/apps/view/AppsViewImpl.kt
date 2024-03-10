@@ -12,7 +12,7 @@ import com.arttttt.rotationcontrolv3.ui.apps.adapter.delegates.AppAdapterDelegat
 import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AsyncListDifferDelegationAdapter
 
 class AppsViewImpl(
-    root: View
+    root: View,
 ) : BaseMviView<AppsView.Model, AppsView.UiEvent>(), AppsView {
 
     private val adapter by lazy {
@@ -20,7 +20,9 @@ class AppsViewImpl(
             delegates = setOf(
                 AppAdapterDelegate(),
                 AccessibilityAdapterDelegate(
-                    onClick = {},
+                    onClick = {
+                        dispatch(AppsView.UiEvent.EnableAccessibilityServiceClicked)
+                    },
                 )
             ),
             diffCallback = AppsDiffCallback(),

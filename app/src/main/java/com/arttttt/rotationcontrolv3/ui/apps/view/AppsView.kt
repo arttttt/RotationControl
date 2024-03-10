@@ -9,5 +9,8 @@ interface AppsView : MviView<AppsView.Model, AppsView.UiEvent> {
         val items: List<ListItem>
     )
 
-    sealed class UiEvent
+    sealed class UiEvent {
+
+        data object EnableAccessibilityServiceClicked : UiEvent()
+    }
 }

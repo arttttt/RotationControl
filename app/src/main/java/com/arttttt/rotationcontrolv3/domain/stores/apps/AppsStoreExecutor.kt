@@ -24,7 +24,12 @@ class AppsStoreExecutor(
     }
 
     override fun executeIntent(intent: AppsStore.Intent) {
-        super.executeIntent(intent)
+        when (intent) {
+            is AppsStore.Intent.LoadApps -> {
+                loadApps()
+                subscribeForAppsChanges()
+            }
+        }
     }
 
     private fun subscribeForAppsChanges() {

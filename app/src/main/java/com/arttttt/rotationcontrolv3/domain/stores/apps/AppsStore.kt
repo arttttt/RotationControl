@@ -16,7 +16,10 @@ interface AppsStore : Store<AppsStore.Intent, AppsStore.State, AppsStore.Label> 
         data object SubscribeForAppsChanges : Action()
     }
 
-    sealed class Intent
+    sealed class Intent {
+
+        data object LoadApps : Intent()
+    }
 
     sealed class Message {
 

@@ -21,6 +21,7 @@ cicerone = "7.1"
 googleServices = "4.4.1"
 firebaseCrashlytics = "2.9.9"
 firebaseBom = "28.4.2"
+room = "2.6.1"
 
 [libraries]
 androidx-activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -49,6 +50,9 @@ cicerone = { module = "com.github.terrakok:cicerone", version.ref = "cicerone" }
 firebase-analyticsKtx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlyticsKtx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

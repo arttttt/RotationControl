@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.arttttt.rotationcontrolv3.data.framework.receivers.BootReceiver
+import com.arttttt.rotationcontrolv3.framework.receivers.BootReceiver
 import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.utils.unsafeCastTo

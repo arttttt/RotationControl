@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
-import com.arttttt.rotationcontrolv3.RotationControlAccessibilityService
+import com.arttttt.rotationcontrolv3.framework.services.AppOrientationAccessibilityService
 import com.arttttt.rotationcontrolv3.utils.extensions.isAccessibilityServiceEnabled
 
 class AccessibilityResultContract(
@@ -17,6 +17,6 @@ class AccessibilityResultContract(
     override fun parseResult(resultCode: Int, intent: Intent?): Boolean {
         return contextProvider
             .invoke()
-            .isAccessibilityServiceEnabled<RotationControlAccessibilityService>()
+            .isAccessibilityServiceEnabled<AppOrientationAccessibilityService>()
     }
 }

@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.apps.transformer
 
 import android.content.Context
-import com.arttttt.rotationcontrolv3.RotationControlAccessibilityService
+import com.arttttt.rotationcontrolv3.framework.services.AppOrientationAccessibilityService
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.models.AccessibilityListItem
@@ -23,7 +23,7 @@ class AppsTransformer @Inject constructor(
     }
 
     private fun createItems(state: AppsStore.State): List<ListItem> {
-        return if (context.isAccessibilityServiceEnabled<RotationControlAccessibilityService>()) {
+        return if (context.isAccessibilityServiceEnabled<AppOrientationAccessibilityService>()) {
             state.apps.map { (_, info) ->
                 AppAdapterItem(
                     title = info.title,

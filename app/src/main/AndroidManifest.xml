@@ -44,7 +44,7 @@
             android:foregroundServiceType="specialUse" />
 
         <service
-            android:name=".RotationControlAccessibilityService"
+            android:name=".framework.services.AppOrientationAccessibilityService"
             android:exported="true"
             android:label="@string/accessibility_service_title"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -62,7 +62,7 @@
         </service>
 
         <receiver
-            android:name=".data.framework.receivers.BootReceiver"
+            android:name=".framework.receivers.BootReceiver"
             android:enabled="false"
             android:exported="true">
 

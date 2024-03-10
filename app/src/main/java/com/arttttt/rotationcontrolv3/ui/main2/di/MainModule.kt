@@ -8,8 +8,8 @@ import com.arttttt.permissions.domain.entity.StandardPermission
 import com.arttttt.permissions.domain.repository.PermissionsRequester
 import com.arttttt.permissions.presentation.handlers.StandardPermissionHandler
 import com.arttttt.permissions.presentation.handlers.StartForResultPermissionHandler
-import com.arttttt.rotationcontrolv3.data.framework.model.DrawOverlayPermission
-import com.arttttt.rotationcontrolv3.data.framework.model.WriteSettingsPermission
+import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
+import com.arttttt.rotationcontrolv3.framework.model.WriteSettingsPermission
 import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen

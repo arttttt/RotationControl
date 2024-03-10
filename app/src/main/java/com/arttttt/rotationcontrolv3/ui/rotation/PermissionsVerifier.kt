@@ -1,9 +1,9 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
 import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.rotationcontrolv3.data.framework.model.DrawOverlayPermission
-import com.arttttt.rotationcontrolv3.data.framework.model.NotificationsPermission
-import com.arttttt.rotationcontrolv3.data.framework.model.WriteSettingsPermission
+import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
+import com.arttttt.rotationcontrolv3.framework.model.NotificationsPermission
+import com.arttttt.rotationcontrolv3.framework.model.WriteSettingsPermission
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 
 class PermissionsVerifier(

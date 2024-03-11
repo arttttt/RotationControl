@@ -7,16 +7,32 @@ import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
 import com.arttttt.rotationcontrolv3.framework.services.di.DaggerAppOrientationAccessibilityServiceComponent
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
-import timber.log.Timber
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class AppOrientationAccessibilityService : AccessibilityService() {
+
+    sealed interface AccessibilityServiceEvent {
+
+        data class WindowChanged(
+            val pkg: String,
+        ) : AccessibilityServiceEvent
+    }
+
+    private val events = MutableSharedFlow<AccessibilityServiceEvent>(
+        extraBufferCapacity = 1,
+    )
 
     private val lifecycle = LifecycleRegistry()
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            Timber.e(event.packageName.toString())
+            events.tryEmit(
+                AccessibilityServiceEvent.WindowChanged(
+                    pkg = event.packageName.toString(),
+                )
+            )
         }
     }
 
@@ -34,6 +50,11 @@ class AppOrientationAccessibilityService : AccessibilityService() {
             .inject(this)
 
         super.onCreate()
+
+        controller.onCreated(
+            lifecycle = lifecycle,
+            events = events.asSharedFlow(),
+        )
 
         lifecycle.resume()
     }

@@ -9,7 +9,8 @@ import androidx.room.RoomDatabase
     entities = [
         AppOrientationDbModel::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false,
 )
 abstract class AppsDatabase : RoomDatabase() {
 

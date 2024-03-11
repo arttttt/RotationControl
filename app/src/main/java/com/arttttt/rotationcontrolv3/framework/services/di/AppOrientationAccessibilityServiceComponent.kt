@@ -8,6 +8,9 @@ import dagger.Component
 @Component(
     dependencies = [
         AppOrientationAccessibilityServiceDependencies::class,
+    ],
+    modules = [
+        AppOrientationAccessibilityServiceModule::class,
     ]
 )
 interface AppOrientationAccessibilityServiceComponent {

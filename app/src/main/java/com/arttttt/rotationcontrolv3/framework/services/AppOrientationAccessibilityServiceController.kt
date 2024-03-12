@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AppOrientationAccessibilityServiceController @Inject constructor(
-    private val appsStore: AppsStore,
     private val appOrientationStore: AppOrientationStore,
 ) {
 

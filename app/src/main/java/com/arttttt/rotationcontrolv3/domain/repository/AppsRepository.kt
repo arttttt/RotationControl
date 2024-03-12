@@ -15,4 +15,6 @@ interface AppsRepository {
         pkg: String,
         appOrientation: AppOrientation,
     )
+
+    suspend fun getAppOrientation(pkg: String): AppOrientation?
 }

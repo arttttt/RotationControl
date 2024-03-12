@@ -79,6 +79,14 @@ class AppsRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getAppOrientation(pkg: String): AppOrientation? {
+        val appOrientation = appsOrientationDao.getAppOrientation(
+            pkg = pkg
+        )
+
+        return AppOrientation.of(appOrientation?.orientation)
+    }
+
     private fun PackageManager.getAppsMap(): Map<String, ApplicationInfo> {
         return buildMap {
             this@getAppsMap

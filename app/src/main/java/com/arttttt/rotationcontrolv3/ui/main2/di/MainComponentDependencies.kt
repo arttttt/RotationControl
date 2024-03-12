@@ -4,6 +4,7 @@ import android.content.Context
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arttttt.navigation.FlowMenuRouter
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
+import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
@@ -21,5 +22,5 @@ interface MainComponentDependencies2 {
     val permissionsRepository: PermissionsRepository
     val settingsRepository: SettingsRepository
     val storeFactory: StoreFactory
-    val appsStore: AppsStore
+    val appsRepository: AppsRepository
 }

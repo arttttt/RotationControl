@@ -9,6 +9,9 @@ import dagger.Component
     dependencies = [
         AppsComponentDependencies::class,
     ],
+    modules = [
+        AppsModule::class,
+    ]
 )
 interface AppsComponent {
 

@@ -1,10 +1,15 @@
 package com.arttttt.rotationcontrolv3.di.modules
 
+import android.content.Context
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.arttttt.rotationcontrolv3.data.db.AppsDatabase
+import com.arttttt.rotationcontrolv3.data.db.AppsOrientationDao
+import com.arttttt.rotationcontrolv3.data.repository.AppsRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.PermissionsRepositoryImpl
 import com.arttttt.rotationcontrolv3.data.repository.SettingsRepositoryImpl
+import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
@@ -39,6 +44,20 @@ abstract class AppModule {
                 delegate = DefaultStoreFactory(),
             )
         }
+
+        @Provides
+        @Singleton
+        fun provideAppsDatabase(context: Context): AppsDatabase {
+            return AppsDatabase.create(
+                context = context,
+            )
+        }
+
+        @Provides
+        @Singleton
+        fun provideAppsOrientationDao(db: AppsDatabase): AppsOrientationDao {
+            return db.getAppsOrientationDao()
+        }
     }
 
     @Binds
@@ -52,4 +71,8 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindPermissionsRepository(impl: PermissionsRepositoryImpl): PermissionsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAppsRepository(impl: AppsRepositoryImpl): AppsRepository
 }

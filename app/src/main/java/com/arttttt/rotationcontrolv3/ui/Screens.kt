@@ -5,7 +5,7 @@ import android.net.Uri
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.arttttt.navigation.FragmentFactoryScreen
-import com.arttttt.rotationcontrolv3.ui.main2.MainFragment2
+import com.arttttt.rotationcontrolv3.ui.main2.platform.MainFragment2
 import com.github.terrakok.cicerone.androidx.ActivityScreen
 
 object Screens {

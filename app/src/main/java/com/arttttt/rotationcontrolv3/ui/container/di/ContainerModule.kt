@@ -5,7 +5,7 @@ import com.arttttt.navigation.factory.FragmentProvider
 import com.arttttt.rotationcontrolv3.di.keys.FragmentClassKey
 import com.arttttt.rotationcontrolv3.di.qualifiers.RootRouterQualifier
 import com.arttttt.rotationcontrolv3.di.scopes.PerScreen
-import com.arttttt.rotationcontrolv3.ui.main2.MainFragment2
+import com.arttttt.rotationcontrolv3.ui.main2.platform.MainFragment2
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
 import dagger.Module

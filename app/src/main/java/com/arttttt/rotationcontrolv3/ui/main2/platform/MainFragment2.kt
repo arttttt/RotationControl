@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.ui.main2
+package com.arttttt.rotationcontrolv3.ui.main2.platform
 
 import android.content.Intent
 import android.os.Bundle

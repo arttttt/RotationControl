@@ -64,8 +64,6 @@ class RotationService : Service() {
         NotificationManagerCompat.from(applicationContext)
     }
 
-    private val instanceKeeper = InstanceKeeperDispatcher()
-
     @Inject
     lateinit var controller: RotationServiceController
 
@@ -74,7 +72,6 @@ class RotationService : Service() {
             .factory()
             .create(
                 dependencies = applicationContext.appComponent,
-                instanceKeeper = instanceKeeper,
             )
             .inject(this)
 
@@ -106,7 +103,6 @@ class RotationService : Service() {
 
         lifecycle.destroy()
         _status.tryEmit(Status.HALTED)
-        instanceKeeper.destroy()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

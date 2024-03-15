@@ -30,37 +30,5 @@ abstract class RotationServiceModule {
                 rotationStore = rotationStore,
             )
         }
-
-        @Provides
-        @PerService
-        fun providePermissionsVerifier(
-            permissionsRepository: PermissionsRepository,
-        ): PermissionsVerifier {
-            return PermissionsVerifier(
-                permissionsRepository = permissionsRepository,
-            )
-        }
-
-        @Provides
-        @PerService
-        fun provideRotationStore(factory: RotationStoreFactory): RotationStore {
-            return factory.create()
-        }
-
-        @Provides
-        @PerService
-        fun provideForcedOrientationManager(context: Context): ForcedOrientationManager {
-            return ForcedOrientationManager(
-                context = context,
-            )
-        }
     }
-
-    @Binds
-    @PerService
-    abstract fun bindSensorsRepository(impl: SensorsRepositoryImpl): SensorsRepository
-
-    @Binds
-    @PerService
-    abstract fun bindsOrientationRepository(impl: OrientationRepositoryImpl): OrientationRepository
 }

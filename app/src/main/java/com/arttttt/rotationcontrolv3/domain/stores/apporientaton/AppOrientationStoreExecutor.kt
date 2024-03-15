@@ -2,6 +2,9 @@ package com.arttttt.rotationcontrolv3.domain.stores.apporientaton
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.repository.AppsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * todo: provide dispatchers provider
@@ -28,5 +31,20 @@ class AppOrientationStoreExecutor(
                 pkg = pkg,
             )
         )
+
+        scope.launch {
+            val appOrientation = withContext(Dispatchers.IO) {
+                appsRepository.getAppOrientation(pkg)
+            }
+
+            appOrientation ?: return@launch
+
+            publish(
+                AppOrientationStore.Label.LaunchedAppChanged(
+                    pkg = pkg,
+                    appOrientation = appOrientation,
+                )
+            )
+        }
     }
 }

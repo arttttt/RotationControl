@@ -1,8 +1,9 @@
 package com.arttttt.rotationcontrolv3.domain.stores.apporientaton
  
  import com.arkivanov.mvikotlin.core.store.Store
- 
- interface AppOrientationStore : Store<AppOrientationStore.Intent, AppOrientationStore.State, AppOrientationStore.Label> {
+ import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
+
+interface AppOrientationStore : Store<AppOrientationStore.Intent, AppOrientationStore.State, AppOrientationStore.Label> {
  
      data class State(
          val lastLaunchedAppPkg: String?
@@ -24,5 +25,11 @@ package com.arttttt.rotationcontrolv3.domain.stores.apporientaton
          ) : Message()
      }
  
-     sealed class Label
+     sealed class Label {
+
+         data class LaunchedAppChanged(
+             val pkg: String,
+             val appOrientation: AppOrientation,
+         ) : Label()
+     }
  }

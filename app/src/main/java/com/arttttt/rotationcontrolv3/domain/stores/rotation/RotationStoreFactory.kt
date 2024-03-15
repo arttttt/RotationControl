@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 class RotationStoreFactory @Inject constructor(
     private val storeFactory: StoreFactory,
-    private val instanceKeeper: InstanceKeeper,
     private val sensorsRepository: SensorsRepository,
     private val permissionsVerifier: PermissionsVerifier,
     private val orientationRepository: OrientationRepository,
@@ -23,29 +22,27 @@ class RotationStoreFactory @Inject constructor(
 ) {
 
     fun create(): RotationStore {
-        return instanceKeeper.getStore {
-            object : RotationStore,
-                Store<RotationStore.Intent, RotationStore.State, RotationStore.Label> by storeFactory.create(
-                    name = RotationStore::class.java.name,
-                    initialState = RotationStore.State(
-                        orientationMode = null,
-                        error = null,
-                    ),
-                    bootstrapper = SimpleBootstrapper(
-                        RotationStore.Action.GetOrientation,
-                        RotationStore.Action.SubscribeForAccelerometer,
-                    ),
-                    executorFactory = {
-                        RotationExecutor(
-                            sensorsRepository = sensorsRepository,
-                            permissionsVerifier = permissionsVerifier,
-                            orientationRepository = orientationRepository,
-                            forcedOrientationManager = forcedOrientationManager,
-                            settingsRepository = settingsRepository,
-                        )
-                    },
-                    reducer = RotationReducer,
-                ) {}
-        }
+        return object : RotationStore,
+            Store<RotationStore.Intent, RotationStore.State, RotationStore.Label> by storeFactory.create(
+                name = RotationStore::class.java.name,
+                initialState = RotationStore.State(
+                    orientationMode = null,
+                    error = null,
+                ),
+                bootstrapper = SimpleBootstrapper(
+                    RotationStore.Action.GetOrientation,
+                    RotationStore.Action.SubscribeForAccelerometer,
+                ),
+                executorFactory = {
+                    RotationExecutor(
+                        sensorsRepository = sensorsRepository,
+                        permissionsVerifier = permissionsVerifier,
+                        orientationRepository = orientationRepository,
+                        forcedOrientationManager = forcedOrientationManager,
+                        settingsRepository = settingsRepository,
+                    )
+                },
+                reducer = RotationReducer,
+            ) {}
     }
 }

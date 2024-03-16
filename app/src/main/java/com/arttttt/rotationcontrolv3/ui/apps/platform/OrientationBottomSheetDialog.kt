@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
+import com.arttttt.rotationcontrolv3.utils.extensions.dp
+import com.arttttt.rotationcontrolv3.utils.extensions.toPx
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 /**
@@ -27,9 +30,28 @@ class OrientationBottomSheetDialog(
             ViewGroup.LayoutParams.WRAP_CONTENT,
         )
         root.orientation = LinearLayout.VERTICAL
+        ViewCompat.setPaddingRelative(
+            root,
+            0,
+            24.dp.toPx(),
+            0,
+            8.dp.toPx(),
+        )
 
-        AppOrientation.entries.forEach { appOrientation ->
+        AppOrientation.entries.forEachIndexed { index, appOrientation ->
             val itemView = inflater.inflate(R.layout.dialog_simple_item, root, false)
+
+            ViewCompat.setPaddingRelative(
+                itemView,
+                8.dp.toPx(),
+                0,
+                8.dp.toPx(),
+                if (index < AppOrientation.entries.size - 1) {
+                    8.dp.toPx()
+                } else {
+                    0
+                },
+            )
 
             itemView
                 .findViewById<ImageView>(R.id.iconImageView)

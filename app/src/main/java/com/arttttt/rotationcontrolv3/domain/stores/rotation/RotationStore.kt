@@ -6,6 +6,7 @@ import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 interface RotationStore : Store<RotationStore.Intent, RotationStore.State, RotationStore.Label> {
 
     data class State(
+        val globalOrientationMode: OrientationMode?,
         val orientationMode: OrientationMode?,
         val error: Throwable?,
     )

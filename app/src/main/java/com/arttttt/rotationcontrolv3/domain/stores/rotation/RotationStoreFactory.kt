@@ -27,6 +27,7 @@ class RotationStoreFactory @Inject constructor(
                 name = RotationStore::class.java.name,
                 initialState = RotationStore.State(
                     orientationMode = null,
+                    globalOrientationMode = null,
                     error = null,
                 ),
                 bootstrapper = SimpleBootstrapper(

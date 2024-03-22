@@ -49,6 +49,8 @@ class RotationExecutor(
     }
 
     private fun subscribeForAccelerometerEvents() {
+        return
+
         accelerometerEventsJob = sensorsRepository
             .getRotationStatuses()
             .distinctUntilChanged()

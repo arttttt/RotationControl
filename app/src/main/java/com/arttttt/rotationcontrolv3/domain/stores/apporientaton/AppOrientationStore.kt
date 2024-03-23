@@ -29,7 +29,7 @@ interface AppOrientationStore : Store<AppOrientationStore.Intent, AppOrientation
 
          data class LaunchedAppChanged(
              val pkg: String,
-             val appOrientation: AppOrientation,
+             val appOrientation: AppOrientation?,
          ) : Label()
      }
  }

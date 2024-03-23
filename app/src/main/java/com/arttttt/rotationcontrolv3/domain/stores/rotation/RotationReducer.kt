@@ -6,11 +6,15 @@ object RotationReducer : Reducer<RotationStore.State, RotationStore.Message> {
 
     override fun RotationStore.State.reduce(msg: RotationStore.Message): RotationStore.State {
         return when (msg) {
-            is RotationStore.Message.OrientationReceived -> copy(
-                orientationMode = msg.orientationMode,
+            is RotationStore.Message.GlobalOrientationReceived -> copy(
+                globalOrientationMode = msg.orientationMode,
+            )
+            is RotationStore.Message.AppOrientationReceived -> copy(
+                appOrientationMode = appOrientationMode,
             )
             is RotationStore.Message.ErrorOccurred -> copy(
-                orientationMode = null,
+                globalOrientationMode = null,
+                appOrientationMode = null,
                 error = msg.error,
             )
         }

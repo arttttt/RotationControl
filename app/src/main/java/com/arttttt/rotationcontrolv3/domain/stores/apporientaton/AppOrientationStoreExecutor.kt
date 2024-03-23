@@ -37,8 +37,6 @@ class AppOrientationStoreExecutor(
                 appsRepository.getAppOrientation(pkg)
             }
 
-            appOrientation ?: return@launch
-
             publish(
                 AppOrientationStore.Label.LaunchedAppChanged(
                     pkg = pkg,

@@ -7,7 +7,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.stores.apporientaton.AppOrientationStore
-import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,8 +44,8 @@ class AppOrientationAccessibilityServiceController @Inject constructor(
                 .mapNotNull { label ->
                     label
                         .appOrientation
-                        .toOrientationMode()
-                        ?.let(RotationStore.Intent::SetOrientationMode)
+                        ?.toOrientationMode()
+                        .let(RotationStore.Intent::SetAppOrientationMode)
                 }
                 .bindTo(rotationStore)
         }

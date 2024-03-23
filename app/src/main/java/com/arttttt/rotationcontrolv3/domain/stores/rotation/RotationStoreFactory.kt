@@ -1,7 +1,5 @@
 package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -26,12 +24,12 @@ class RotationStoreFactory @Inject constructor(
             Store<RotationStore.Intent, RotationStore.State, RotationStore.Label> by storeFactory.create(
                 name = RotationStore::class.java.name,
                 initialState = RotationStore.State(
-                    orientationMode = null,
+                    appOrientationMode = null,
                     globalOrientationMode = null,
                     error = null,
                 ),
                 bootstrapper = SimpleBootstrapper(
-                    RotationStore.Action.GetOrientation,
+                    RotationStore.Action.GetGlobalOrientation,
                     RotationStore.Action.SubscribeForAccelerometer,
                 ),
                 executorFactory = {

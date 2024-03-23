@@ -7,27 +7,35 @@ interface RotationStore : Store<RotationStore.Intent, RotationStore.State, Rotat
 
     data class State(
         val globalOrientationMode: OrientationMode?,
-        val orientationMode: OrientationMode?,
+        val appOrientationMode: OrientationMode?,
         val error: Throwable?,
     )
 
     sealed class Action {
 
-        data object GetOrientation : Action()
+        data object GetGlobalOrientation : Action()
         data object SubscribeForAccelerometer : Action()
     }
 
     sealed class Intent {
 
-        data class SetOrientationMode(
+        data class SetGlobalOrientationMode(
             val orientationMode: OrientationMode,
+        ) : Intent()
+
+        data class SetAppOrientationMode(
+            val orientationMode: OrientationMode?,
         ) : Intent()
     }
 
     sealed class Message {
 
-        data class OrientationReceived(
-            val orientationMode: OrientationMode
+        data class GlobalOrientationReceived(
+            val orientationMode: OrientationMode,
+        ) : Message()
+
+        data class AppOrientationReceived(
+            val orientationMode: OrientationMode?,
         ) : Message()
 
         data class ErrorOccurred(

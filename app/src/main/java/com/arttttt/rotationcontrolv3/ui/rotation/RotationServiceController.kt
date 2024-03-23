@@ -38,7 +38,7 @@ class RotationServiceController(
                 .events
                 .filterIsInstance<RotationServiceView.UiEvent.ButtonEvent>()
                 .map { event ->
-                    RotationStore.Intent.SetOrientationMode(
+                    RotationStore.Intent.SetGlobalOrientationMode(
                         orientationMode = OrientationMode.of(event)
                     )
                 }
@@ -63,8 +63,8 @@ class RotationServiceController(
                 .mapNotNull { state ->
                     when {
                         state.error is NoPermissionsException -> RotationServiceView.State.Error
-                        state.orientationMode != null -> RotationServiceView.State.Active(
-                            selectedButton = state.orientationMode.toNotificationButton()
+                        state.globalOrientationMode != null -> RotationServiceView.State.Active(
+                            selectedButton = state.globalOrientationMode.toNotificationButton()
                         )
                         else -> null
                     }

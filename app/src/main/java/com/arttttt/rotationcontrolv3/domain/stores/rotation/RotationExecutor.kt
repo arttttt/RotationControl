@@ -31,14 +31,15 @@ class RotationExecutor(
 
     override fun executeAction(action: RotationStore.Action) {
         when (action) {
-            is RotationStore.Action.GetOrientation -> getOrientation()
+            is RotationStore.Action.GetGlobalOrientation -> getGlobalOrientation()
             is RotationStore.Action.SubscribeForAccelerometer -> subscribeForAccelerometerEvents()
         }
     }
 
     override fun executeIntent(intent: RotationStore.Intent) {
         when (intent) {
-            is RotationStore.Intent.SetOrientationMode -> setOrientation(intent.orientationMode)
+            is RotationStore.Intent.SetGlobalOrientationMode -> setGlobalOrientation(intent.orientationMode)
+            is RotationStore.Intent.SetAppOrientationMode -> setAppOrientation(intent.orientationMode)
         }
     }
 
@@ -63,7 +64,7 @@ class RotationExecutor(
             }
             .onEach { status ->
                 dispatch(
-                    RotationStore.Message.OrientationReceived(
+                    RotationStore.Message.GlobalOrientationReceived(
                         orientationMode = when (status) {
                             RotationStatus.Enabled -> OrientationMode.Auto
                             RotationStatus.Disabled -> orientationRepository.getSystemOrientation()
@@ -72,6 +73,73 @@ class RotationExecutor(
                 )
             }
             .launchIn(scope)
+    }
+
+    private fun setGlobalOrientation(mode: OrientationMode) {
+        scope.launch {
+            kotlin
+                .runCatching {
+                    withContext(Dispatchers.IO) {
+                        setOrientation2(
+                            currentOrientationMode = state().globalOrientationMode,
+                            newOrientationMode = mode,
+                        )
+                    }
+                }
+                .map { RotationStore.Message.GlobalOrientationReceived(mode) }
+                .recover(RotationStore.Message::ErrorOccurred)
+                .getOrNull()
+                ?.let(::dispatch)
+        }
+    }
+
+    private fun setAppOrientation(mode: OrientationMode?) {
+        val newMode = mode ?: state().globalOrientationMode ?: OrientationMode.Portrait
+
+        scope.launch {
+            kotlin
+                .runCatching {
+                    setOrientation2(
+                        currentOrientationMode = state().appOrientationMode ?: state().globalOrientationMode,
+                        newOrientationMode = newMode,
+                    )
+                }
+                .map { RotationStore.Message.AppOrientationReceived(newMode) }
+                .recover(RotationStore.Message::ErrorOccurred)
+                .getOrNull()
+                ?.let(::dispatch)
+        }
+    }
+
+    private suspend fun setOrientation2(
+        currentOrientationMode: OrientationMode?,
+        newOrientationMode: OrientationMode,
+    ) {
+        val granted = withContext(Dispatchers.IO) {
+            areAllPermissionsGranted()
+        }
+
+        if (!granted) return
+
+        when (newOrientationMode) {
+            is OrientationMode.Auto -> {
+                /**
+                 * todo: handle later
+                 */
+            }
+            else -> {
+                if (currentOrientationMode == OrientationMode.Auto) {
+                    sensorsRepository.disableRotation()
+                }
+
+                setOrientation(
+                    forced = isForceModeEnabled(),
+                    mode = newOrientationMode,
+                )
+            }
+        }
+
+        subscribeForAccelerometerEvents()
     }
 
     private fun setOrientation(mode: OrientationMode) {
@@ -94,7 +162,7 @@ class RotationExecutor(
                     when (mode) {
                         OrientationMode.Auto -> sensorsRepository.enableRotation()
                         else -> {
-                            if (state().orientationMode == OrientationMode.Auto) {
+                            if (state().globalOrientationMode == OrientationMode.Auto) {
                                 sensorsRepository.disableRotation()
                             }
 
@@ -107,7 +175,7 @@ class RotationExecutor(
 
                     subscribeForAccelerometerEvents()
 
-                    RotationStore.Message.OrientationReceived(mode)
+                    RotationStore.Message.GlobalOrientationReceived(mode)
                 }
                 .recover(RotationStore.Message::ErrorOccurred)
                 .getOrThrow()
@@ -115,7 +183,7 @@ class RotationExecutor(
         }
     }
 
-    private fun getOrientation() {
+    private fun getGlobalOrientation() {
         scope.launch {
             kotlin
                 .runCatching {
@@ -130,7 +198,7 @@ class RotationExecutor(
                 .map {
                     orientationRepository
                         .getSystemOrientation()
-                        .let(RotationStore.Message::OrientationReceived)
+                        .let(RotationStore.Message::GlobalOrientationReceived)
                 }
                 .recover(RotationStore.Message::ErrorOccurred)
                 .getOrThrow()
@@ -147,5 +215,13 @@ class RotationExecutor(
         } else {
             orientationRepository.setOrientation(mode)
         }
+    }
+
+    private suspend fun areAllPermissionsGranted(): Boolean {
+        return permissionsVerifier.areAllPermissionsGranted2()
+    }
+
+    private suspend fun isForceModeEnabled(): Boolean {
+        return settingsRepository.getSetting(Setting.ForcedMode::class).value
     }
 }

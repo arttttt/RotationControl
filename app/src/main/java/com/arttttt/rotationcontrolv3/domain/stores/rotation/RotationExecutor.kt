@@ -79,12 +79,10 @@ class RotationExecutor(
         scope.launch {
             kotlin
                 .runCatching {
-                    withContext(Dispatchers.IO) {
-                        setOrientation2(
-                            currentOrientationMode = state().globalOrientationMode,
-                            newOrientationMode = mode,
-                        )
-                    }
+                    setOrientation2(
+                        currentOrientationMode = state().globalOrientationMode,
+                        newOrientationMode = mode,
+                    )
                 }
                 .map { RotationStore.Message.GlobalOrientationReceived(mode) }
                 .recover(RotationStore.Message::ErrorOccurred)

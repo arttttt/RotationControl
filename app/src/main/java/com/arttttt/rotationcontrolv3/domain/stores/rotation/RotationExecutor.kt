@@ -117,7 +117,7 @@ class RotationExecutor(
             areAllPermissionsGranted()
         }
 
-        if (!granted) return
+        if (!granted) throw NoPermissionsException()
 
         when (newOrientationMode) {
             is OrientationMode.Auto -> {

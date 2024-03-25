@@ -10,7 +10,7 @@ object RotationReducer : Reducer<RotationStore.State, RotationStore.Message> {
                 globalOrientationMode = msg.orientationMode,
             )
             is RotationStore.Message.AppOrientationReceived -> copy(
-                appOrientationMode = appOrientationMode,
+                appOrientationMode = msg.orientationMode,
             )
             is RotationStore.Message.ErrorOccurred -> copy(
                 globalOrientationMode = null,

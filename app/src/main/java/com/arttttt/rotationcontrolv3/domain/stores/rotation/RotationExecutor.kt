@@ -64,11 +64,8 @@ class RotationExecutor(
             }
             .onEach { status ->
                 dispatch(
-                    RotationStore.Message.GlobalOrientationReceived(
-                        orientationMode = when (status) {
-                            RotationStatus.Enabled -> OrientationMode.Auto
-                            RotationStatus.Disabled -> orientationRepository.getSystemOrientation()
-                        }
+                    createCorrectUpdateMessage(
+                        status = status,
                     ),
                 )
             }
@@ -119,12 +116,13 @@ class RotationExecutor(
 
         if (!granted) throw NoPermissionsException()
 
+        accelerometerEventsJob?.cancel()
+
         when (newOrientationMode) {
-            is OrientationMode.Auto -> {
-                /**
-                 * todo: handle later
-                 */
-            }
+            is OrientationMode.Auto -> setAutoRotation(
+                mode = newOrientationMode,
+                forced = isForceModeEnabled(),
+            )
             else -> {
                 if (currentOrientationMode == OrientationMode.Auto) {
                     sensorsRepository.disableRotation()
@@ -140,47 +138,6 @@ class RotationExecutor(
         subscribeForAccelerometerEvents()
     }
 
-    private fun setOrientation(mode: OrientationMode) {
-        accelerometerEventsJob?.cancel()
-
-        scope.launch {
-            kotlin
-                .runCatching {
-                    val forced = withContext(Dispatchers.IO) {
-                        settingsRepository.getSetting(Setting.ForcedMode::class).value
-                    }
-
-                    if (!permissionsVerifier.areAllPermissionsGranted(forced)) {
-                        throw NoPermissionsException()
-                    }
-
-                    forced
-                }
-                .map { forced ->
-                    when (mode) {
-                        OrientationMode.Auto -> sensorsRepository.enableRotation()
-                        else -> {
-                            if (state().globalOrientationMode == OrientationMode.Auto) {
-                                sensorsRepository.disableRotation()
-                            }
-
-                            setOrientation(
-                                forced = forced,
-                                mode = mode,
-                            )
-                        }
-                    }
-
-                    subscribeForAccelerometerEvents()
-
-                    RotationStore.Message.GlobalOrientationReceived(mode)
-                }
-                .recover(RotationStore.Message::ErrorOccurred)
-                .getOrThrow()
-                .let(::dispatch)
-        }
-    }
-
     private fun getGlobalOrientation() {
         scope.launch {
             kotlin
@@ -193,14 +150,19 @@ class RotationExecutor(
                         throw NoPermissionsException()
                     }
                 }
-                .map {
-                    orientationRepository
-                        .getSystemOrientation()
-                        .let(RotationStore.Message::GlobalOrientationReceived)
+                .onSuccess {
+                    val mode = OrientationMode.Portrait
+
+                    setOrientation2(
+                        currentOrientationMode = null,
+                        newOrientationMode = mode,
+                    )
+
+                    dispatch(RotationStore.Message.GlobalOrientationReceived(mode))
                 }
-                .recover(RotationStore.Message::ErrorOccurred)
-                .getOrThrow()
-                .let(::dispatch)
+                .onFailure { e ->
+                    dispatch(RotationStore.Message.ErrorOccurred(e))
+                }
         }
     }
 
@@ -221,5 +183,34 @@ class RotationExecutor(
 
     private suspend fun isForceModeEnabled(): Boolean {
         return settingsRepository.getSetting(Setting.ForcedMode::class).value
+    }
+
+    private fun createCorrectUpdateMessage(
+        status: RotationStatus,
+    ): RotationStore.Message {
+        val factory = when {
+            state().appOrientationMode != null -> RotationStore.Message::AppOrientationReceived
+            else -> RotationStore.Message::GlobalOrientationReceived
+        }
+
+        return factory.invoke(
+            when (status) {
+                RotationStatus.Enabled -> OrientationMode.Auto
+                RotationStatus.Disabled -> orientationRepository.getSystemOrientation()
+            }
+        )
+    }
+
+    private fun setAutoRotation(
+        mode: OrientationMode,
+        forced: Boolean,
+    ) {
+        if (forced) {
+            forcedOrientationManager.forceApplyOrientation(
+                mode = mode
+            )
+        } else {
+            sensorsRepository.enableRotation()
+        }
     }
 }

@@ -45,10 +45,12 @@ class RotationExecutor(
         scope.launch {
             kotlin
                 .runCatching {
-                    setOrientation2(
-                        currentOrientationMode = state().globalOrientationMode,
-                        newOrientationMode = mode,
-                    )
+                    if (state().canApplyGlobalOrientation) {
+                        setOrientation2(
+                            currentOrientationMode = state().globalOrientationMode,
+                            newOrientationMode = mode,
+                        )
+                    }
                 }
                 .map { RotationStore.Message.GlobalOrientationReceived(mode) }
                 .recover(RotationStore.Message::ErrorOccurred)
@@ -168,4 +170,7 @@ class RotationExecutor(
             sensorsRepository.enableRotation()
         }
     }
+
+    private val RotationStore.State.canApplyGlobalOrientation: Boolean
+        get() = appOrientationMode == null
 }

@@ -6,8 +6,9 @@ import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arttttt.rotationcontrolv3.ui.main2.view.MainView
 import com.arttttt.rotationcontrolv3.utils.mvi.Controller
 import kotlinx.coroutines.Dispatchers
+import javax.inject.Inject
 
-class MainController : Controller<MainView> {
+class MainController @Inject constructor() : Controller<MainView> {
 
     override fun onViewCreated(
         view: MainView,

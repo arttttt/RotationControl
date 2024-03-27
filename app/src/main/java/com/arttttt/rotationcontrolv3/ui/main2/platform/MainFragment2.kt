@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import com.arkivanov.essenty.lifecycle.essentyLifecycle
 import com.arttttt.navigation.factory.CustomFragmentFactory
 import com.arttttt.navigation.factory.FragmentProvider
 import com.arttttt.permissions.domain.entity.Permission
@@ -25,8 +26,10 @@ import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
 import com.arttttt.rotationcontrolv3.ui.apps.platform.AppsFragment
+import com.arttttt.rotationcontrolv3.ui.main2.controller.MainController
 import com.arttttt.rotationcontrolv3.ui.main2.di.DaggerMainComponent2
 import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponentDependencies2
+import com.arttttt.rotationcontrolv3.ui.main2.view.MainViewImpl
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.arttttt.utils.unsafeCastTo
@@ -42,6 +45,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
+@Suppress("RedundantIf")
 class MainFragment2(
     private val dependencies: MainComponentDependencies2,
 ) : Fragment(R.layout.fragment_main2) {
@@ -93,6 +97,9 @@ class MainFragment2(
     @Inject
     lateinit var settingsRepository: SettingsRepository
 
+    @Inject
+    lateinit var controller: MainController
+
     private val rotationServiceIntent by lazy {
         Intent(
             requireContext(),
@@ -118,6 +125,13 @@ class MainFragment2(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        controller.onViewCreated(
+            view = MainViewImpl(
+                view = view,
+            ),
+            lifecycle = viewLifecycleOwner.essentyLifecycle(),
+        )
 
         val launchServiceButton = view.findViewById<FloatingActionButton>(R.id.fab)
 

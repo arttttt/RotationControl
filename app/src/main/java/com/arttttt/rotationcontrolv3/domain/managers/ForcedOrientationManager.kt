@@ -53,6 +53,7 @@ class ForcedOrientationManager(
         if (!isWindowInitialized.get()) return
 
         windowManager.removeViewImmediate(rootView)
+        isWindowInitialized.set(false)
     }
 
     private fun OrientationMode.toActivityOrientation(): Int {

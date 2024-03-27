@@ -85,10 +85,12 @@ class RotationExecutor(
 
         if (!granted) throw NoPermissionsException()
 
+        val isForcedModeEnabled = isForceModeEnabled()
+
         when (newOrientationMode) {
             is OrientationMode.Auto -> setAutoRotation(
                 mode = newOrientationMode,
-                forced = isForceModeEnabled(),
+                forced = isForcedModeEnabled,
             )
             else -> {
                 if (currentOrientationMode == OrientationMode.Auto) {
@@ -96,10 +98,14 @@ class RotationExecutor(
                 }
 
                 setOrientation(
-                    forced = isForceModeEnabled(),
+                    forced = isForcedModeEnabled,
                     mode = newOrientationMode,
                 )
             }
+        }
+
+        if (!isForcedModeEnabled) {
+            forcedOrientationManager.clear()
         }
     }
 

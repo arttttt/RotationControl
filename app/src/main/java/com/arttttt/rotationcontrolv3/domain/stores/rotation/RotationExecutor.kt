@@ -1,21 +1,16 @@
 package com.arttttt.rotationcontrolv3.domain.stores.rotation
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.entity.exceptions.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.entity.rotation.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.ui.rotation.PermissionsVerifier
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -27,12 +22,9 @@ class RotationExecutor(
     private val settingsRepository: SettingsRepository,
 ) : CoroutineExecutor<RotationStore.Intent, RotationStore.Action, RotationStore.State, RotationStore.Message, RotationStore.Label>() {
 
-    private var accelerometerEventsJob: Job? = null
-
     override fun executeAction(action: RotationStore.Action) {
         when (action) {
             is RotationStore.Action.GetGlobalOrientation -> getGlobalOrientation()
-            is RotationStore.Action.SubscribeForAccelerometer -> subscribeForAccelerometerEvents()
         }
     }
 
@@ -47,29 +39,6 @@ class RotationExecutor(
         super.dispose()
 
         forcedOrientationManager.clear()
-    }
-
-    private fun subscribeForAccelerometerEvents() {
-        return
-
-        accelerometerEventsJob = sensorsRepository
-            .getRotationStatuses()
-            .distinctUntilChanged()
-            .filter {
-                permissionsVerifier.areAllPermissionsGranted(
-                    forced = withContext(Dispatchers.IO) {
-                        settingsRepository.getSetting(Setting.ForcedMode::class).value
-                    }
-                )
-            }
-            .onEach { status ->
-                dispatch(
-                    createCorrectUpdateMessage(
-                        status = status,
-                    ),
-                )
-            }
-            .launchIn(scope)
     }
 
     private fun setGlobalOrientation(mode: OrientationMode) {
@@ -116,8 +85,6 @@ class RotationExecutor(
 
         if (!granted) throw NoPermissionsException()
 
-        accelerometerEventsJob?.cancel()
-
         when (newOrientationMode) {
             is OrientationMode.Auto -> setAutoRotation(
                 mode = newOrientationMode,
@@ -134,8 +101,6 @@ class RotationExecutor(
                 )
             }
         }
-
-        subscribeForAccelerometerEvents()
     }
 
     private fun getGlobalOrientation() {

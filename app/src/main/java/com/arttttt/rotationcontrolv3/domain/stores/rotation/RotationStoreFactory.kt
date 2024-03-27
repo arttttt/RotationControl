@@ -30,7 +30,6 @@ class RotationStoreFactory @Inject constructor(
                 ),
                 bootstrapper = SimpleBootstrapper(
                     RotationStore.Action.GetGlobalOrientation,
-                    RotationStore.Action.SubscribeForAccelerometer,
                 ),
                 executorFactory = {
                     RotationExecutor(

@@ -14,7 +14,6 @@ interface RotationStore : Store<RotationStore.Intent, RotationStore.State, Rotat
     sealed class Action {
 
         data object GetGlobalOrientation : Action()
-        data object SubscribeForAccelerometer : Action()
     }
 
     sealed class Intent {

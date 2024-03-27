@@ -3,13 +3,11 @@ package com.arttttt.rotationcontrolv3.ui.main2.platform
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.arkivanov.essenty.lifecycle.essentyLifecycle
 import com.arttttt.navigation.factory.CustomFragmentFactory
@@ -18,28 +16,25 @@ import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.repository.PermissionsRequester
 import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
-import com.arttttt.rotationcontrolv3.framework.model.NotificationsPermission
-import com.arttttt.rotationcontrolv3.framework.model.WriteSettingsPermission
 import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
+import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
+import com.arttttt.rotationcontrolv3.framework.model.NotificationsPermission
+import com.arttttt.rotationcontrolv3.framework.model.WriteSettingsPermission
 import com.arttttt.rotationcontrolv3.ui.about.AboutFragment
 import com.arttttt.rotationcontrolv3.ui.apps.platform.AppsFragment
 import com.arttttt.rotationcontrolv3.ui.main2.controller.MainController
 import com.arttttt.rotationcontrolv3.ui.main2.di.DaggerMainComponent2
 import com.arttttt.rotationcontrolv3.ui.main2.di.MainComponentDependencies2
+import com.arttttt.rotationcontrolv3.ui.main2.model.MenuItem
 import com.arttttt.rotationcontrolv3.ui.main2.view.MainViewImpl
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.arttttt.utils.unsafeCastTo
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -49,34 +44,6 @@ import kotlin.coroutines.resume
 class MainFragment2(
     private val dependencies: MainComponentDependencies2,
 ) : Fragment(R.layout.fragment_main2) {
-
-    sealed interface MenuItem {
-
-        val id: Int
-        val title: Int
-        val icon: Int
-
-        data object Settings : MenuItem {
-
-            override val id: Int = R.id.item_settings
-            override val title: Int = R.string.settings
-            override val icon: Int = R.drawable.ic_settings_24
-        }
-
-        data object About : MenuItem {
-
-            override val id: Int = R.id.item_about
-            override val title: Int = R.string.about
-            override val icon: Int = R.drawable.ic_info_24
-        }
-
-        data object Apps : MenuItem {
-
-            override val id: Int = R.id.item_apps
-            override val title: Int = R.string.apps
-            override val icon: Int = R.drawable.ic_apps_24
-        }
-    }
 
     companion object {
 
@@ -129,6 +96,7 @@ class MainFragment2(
         controller.onViewCreated(
             view = MainViewImpl(
                 view = view,
+                setMenuItem = ::setFragment,
             ),
             lifecycle = viewLifecycleOwner.essentyLifecycle(),
         )
@@ -166,31 +134,6 @@ class MainFragment2(
                 }
             }
         }
-
-        view.unsafeCastTo<ViewGroup>().bringChildToFront(launchServiceButton)
-
-        val bottomNavigation = view.findViewById<BottomNavigationView>(R.id.bottomNavigation)
-
-        bottomNavigation.addMenuItem(MenuItem.Settings)
-        bottomNavigation.addMenuItem(MenuItem.Apps)
-        bottomNavigation.addMenuItem(MenuItem.About)
-
-        bottomNavigation.setOnItemSelectedListener { item ->
-            setFragment(item.itemId)
-            launchServiceButton.setVisibilityByMenuItem(item.itemId)
-
-            true
-        }
-
-        bottomNavigation.selectedItemId = MenuItem.Settings.id
-
-        viewLifecycleOwner.lifecycle.coroutineScope.launch {
-            RotationService
-                .status
-                .map { status -> status.toFabIconRes() }
-                .onEach(launchServiceButton::setImageResource)
-                .launchIn(this)
-        }
     }
 
     override fun onDestroyView() {
@@ -200,25 +143,19 @@ class MainFragment2(
         job = null
     }
 
-    private fun BottomNavigationView.addMenuItem(item: MenuItem) {
-        menu.add(0, item.id, 0, item.title).apply {
-            setIcon(item.icon)
-        }
-    }
-
-    private fun setFragment(id: Int) {
-        when (id) {
-            MenuItem.Settings.id -> {
+    private fun setFragment(item: MenuItem) {
+        when (item) {
+            MenuItem.Settings -> {
                 childFragmentManager.commit {
                     replace<SettingsFragment>(R.id.container)
                 }
             }
-            MenuItem.About.id -> {
+            MenuItem.About -> {
                 childFragmentManager.commit {
                     replace<AboutFragment>(R.id.container)
                 }
             }
-            MenuItem.Apps.id -> {
+            MenuItem.Apps -> {
                 childFragmentManager.commit {
                     replace<AppsFragment>(R.id.container)
                 }
@@ -299,13 +236,6 @@ class MainFragment2(
         requireContext().stopService(rotationServiceIntent)
     }
 
-    private fun RotationService.Status.toFabIconRes(): Int {
-        return when (this) {
-            RotationService.Status.HALTED -> R.drawable.ic_start
-            RotationService.Status.RUNNING -> R.drawable.ic_stop
-        }
-    }
-
     private val Permission.messageRes: Int
         get() {
             return when (this) {
@@ -315,11 +245,4 @@ class MainFragment2(
                 else -> throw IllegalStateException("unsupported permission: $this")
             }
         }
-
-    private fun FloatingActionButton.setVisibilityByMenuItem(id: Int) {
-        when (id) {
-            MenuItem.Settings.id -> show()
-            else -> hide()
-        }
-    }
 }

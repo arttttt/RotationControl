@@ -5,7 +5,8 @@ import com.arkivanov.mvikotlin.core.view.MviView
 interface MainView : MviView<MainView.Model, MainView.UiEvent> {
 
     data class Model(
-        val value: Int = 0,
+        val isFabVisible: Boolean,
+        val fabIconRes: Int,
     )
 
     sealed class UiEvent

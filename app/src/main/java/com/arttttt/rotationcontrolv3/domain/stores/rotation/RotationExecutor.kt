@@ -3,7 +3,6 @@ package com.arttttt.rotationcontrolv3.domain.stores.rotation
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.entity.exceptions.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
-import com.arttttt.rotationcontrolv3.domain.entity.rotation.RotationStatus
 import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
@@ -70,7 +69,11 @@ class RotationExecutor(
                         newOrientationMode = newMode,
                     )
                 }
-                .map { RotationStore.Message.AppOrientationReceived(newMode) }
+                .map {
+                    RotationStore.Message.AppOrientationReceived(
+                        orientationMode = newMode.takeIf { mode != null },
+                    )
+                }
                 .recover(RotationStore.Message::ErrorOccurred)
                 .getOrNull()
                 ?.let(::dispatch)

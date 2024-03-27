@@ -150,22 +150,6 @@ class RotationExecutor(
         return settingsRepository.getSetting(Setting.ForcedMode::class).value
     }
 
-    private fun createCorrectUpdateMessage(
-        status: RotationStatus,
-    ): RotationStore.Message {
-        val factory = when {
-            state().appOrientationMode != null -> RotationStore.Message::AppOrientationReceived
-            else -> RotationStore.Message::GlobalOrientationReceived
-        }
-
-        return factory.invoke(
-            when (status) {
-                RotationStatus.Enabled -> OrientationMode.Auto
-                RotationStatus.Disabled -> orientationRepository.getSystemOrientation()
-            }
-        )
-    }
-
     private fun setAutoRotation(
         mode: OrientationMode,
         forced: Boolean,

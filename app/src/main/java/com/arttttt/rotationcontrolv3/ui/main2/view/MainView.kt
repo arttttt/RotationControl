@@ -9,17 +9,11 @@ interface MainView : MviView<MainView.Model, MainView.UiEvent> {
         val isFabVisible: Boolean,
         val fabIconRes: Int,
         val menuItems: Set<MenuItem>,
+        val selectedMenuItem: MenuItem,
     )
 
     sealed class UiEvent {
 
         data class BottomNavigationClicked(val id: Int) : UiEvent()
     }
-
-    sealed class Command {
-
-        data class SetMenuItem(val item: MenuItem) : Command()
-    }
-
-    fun handleCommand(command: Command)
 }

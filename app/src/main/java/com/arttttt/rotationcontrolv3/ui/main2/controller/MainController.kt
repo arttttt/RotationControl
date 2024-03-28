@@ -12,6 +12,8 @@ import com.arttttt.rotationcontrolv3.utils.mvi.Controller
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -21,15 +23,23 @@ import javax.inject.Inject
 
 class MainController @Inject constructor() : Controller<MainView> {
 
+    interface Callback {
+
+        fun onSetMenuItem(item: MenuItem)
+    }
+
+    var callback: Callback? = null
+
     private val uiState = MutableStateFlow(
         value = MainView.Model(
-            isFabVisible = false,
+            isFabVisible = true,
             fabIconRes = 0,
             menuItems = setOf(
                 MenuItem.Settings,
                 MenuItem.Apps,
                 MenuItem.About,
             ),
+            selectedMenuItem = MenuItem.Settings,
         )
     )
 
@@ -61,15 +71,17 @@ class MainController @Inject constructor() : Controller<MainView> {
                 .bindTo { event ->
                     uiState.update { state ->
                         state.copy(
-                            isFabVisible = event.isFabVisible
+                            isFabVisible = event.isFabVisible,
+                            selectedMenuItem = MenuItem.of(event.id),
                         )
                     }
+                }
 
-                    view.handleCommand(
-                        command = MainView.Command.SetMenuItem(
-                            item = MenuItem.of(event.id)
-                        )
-                    )
+            uiState
+                .map { state -> state.selectedMenuItem }
+                .distinctUntilChanged()
+                .bindTo { item ->
+                    callback?.onSetMenuItem(item)
                 }
         }
     }

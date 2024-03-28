@@ -13,7 +13,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainViewImpl(
     view: View,
-    private val setMenuItem: (MenuItem) -> Unit,
 ) : BaseMviView<MainView.Model, MainView.UiEvent>(), MainView {
 
     private val fab: FloatingActionButton = view.findViewById(R.id.fab)
@@ -44,6 +43,13 @@ class MainViewImpl(
                 }
             }
         )
+
+        diff(
+            get = MainView.Model::selectedMenuItem,
+            set = { item ->
+                bottomNavigation.selectedItemId = item.id
+            }
+        )
     }
 
     init {
@@ -53,12 +59,6 @@ class MainViewImpl(
             dispatch(MainView.UiEvent.BottomNavigationClicked(item.itemId))
 
             true
-        }
-    }
-
-    override fun handleCommand(command: MainView.Command) {
-        when (command) {
-            is MainView.Command.SetMenuItem -> setMenuItem.invoke(command.item)
         }
     }
 

@@ -93,10 +93,15 @@ class MainFragment2(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        controller.callback = object : MainController.Callback {
+            override fun onSetMenuItem(item: MenuItem) {
+                setFragment(item)
+            }
+        }
+
         controller.onViewCreated(
             view = MainViewImpl(
                 view = view,
-                setMenuItem = ::setFragment,
             ),
             lifecycle = viewLifecycleOwner.essentyLifecycle(),
         )

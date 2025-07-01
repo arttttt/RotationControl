@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.arttttt.rotationcontrolv3"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.arttttt.rotationcontrolv3"
         minSdk = 16
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 11
         versionName = "2.1.0"
 

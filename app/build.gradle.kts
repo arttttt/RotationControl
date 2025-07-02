@@ -17,8 +17,8 @@ android {
         applicationId = "com.arttttt.rotationcontrolv3"
         minSdk = 16
         targetSdk = 36
-        versionCode = 11
-        versionName = "2.1.0"
+        versionCode = 12
+        versionName = "2.2.0"
 
         multiDexEnabled = true
     }

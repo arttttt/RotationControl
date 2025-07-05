@@ -36,7 +36,7 @@ class MainController @Inject constructor() : Controller<MainView> {
             fabIconRes = 0,
             menuItems = setOf(
                 MenuItem.Settings,
-                MenuItem.Apps,
+                //MenuItem.Apps,
                 MenuItem.About,
             ),
             selectedMenuItem = MenuItem.Settings,

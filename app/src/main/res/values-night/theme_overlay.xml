@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RotationControl.ThemeOverlay.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorOnSurface">@color/colorInactiveButtonTint</item>
+    </style>
+
+</resources>

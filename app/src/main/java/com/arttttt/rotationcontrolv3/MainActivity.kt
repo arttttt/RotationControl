@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import androidx.core.content.IntentSanitizer
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.commit
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        setContentView(containerDelegate.createContainerView())
+        val view = containerDelegate.createContainerView()
+        setContentView(view)
 
         intent?.let(::handleLaunchIntent)
 
@@ -51,10 +53,15 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        val originalPadding = window.decorView.paddingTop
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false,
+        )
+
+        val originalPadding = view.paddingTop
 
         ViewCompat.setOnApplyWindowInsetsListener(
-            window.decorView,
+            view,
         ) { v, insets ->
             v.updatePadding(
                 top = originalPadding + insets.getInsets(WindowInsetsCompat.Type.statusBars()).top

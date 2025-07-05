@@ -2,7 +2,8 @@
 <resources>
 
     <style name="Theme.RotationControl" parent="Theme.RotationControl.Base">
-        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
 </resources>

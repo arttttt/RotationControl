@@ -2,11 +2,16 @@ package com.arttttt.rotationcontrolv3
 
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import androidx.core.content.IntentSanitizer
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
@@ -33,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        setContentView(containerDelegate.createContainerView())
+        val view = containerDelegate.createContainerView()
+        setContentView(view)
 
         intent?.let(::handleLaunchIntent)
 
@@ -45,6 +51,23 @@ class MainActivity : AppCompatActivity() {
                 null,
                 null,
             )
+        }
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false,
+        )
+
+        val originalPadding = view.paddingTop
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+            view,
+        ) { v, insets ->
+            v.updatePadding(
+                top = originalPadding + insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            )
+
+            insets
         }
     }
 

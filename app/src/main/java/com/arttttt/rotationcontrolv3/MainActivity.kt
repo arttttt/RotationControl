@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         intent?.let(::handleLaunchIntent)
 
+        configureInsets(view)
+
         if (savedInstanceState != null) return
 
         supportFragmentManager.commit {
@@ -51,23 +54,6 @@ class MainActivity : AppCompatActivity() {
                 null,
                 null,
             )
-        }
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false,
-        )
-
-        val originalPadding = view.paddingTop
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-            view,
-        ) { v, insets ->
-            v.updatePadding(
-                top = originalPadding + insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-            )
-
-            insets
         }
     }
 
@@ -105,5 +91,26 @@ class MainActivity : AppCompatActivity() {
         payload ?: return
 
         startService(payload)
+    }
+
+    private fun configureInsets(
+        view: View,
+    ) {
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false,
+        )
+
+        val originalPadding = view.paddingTop
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+            view,
+        ) { v, insets ->
+            v.updatePadding(
+                top = originalPadding + insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            )
+
+            insets
+        }
     }
 }

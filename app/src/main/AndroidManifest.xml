@@ -10,10 +10,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-
-    <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
@@ -43,24 +39,6 @@
             android:name=".ui.rotation.RotationService"
             android:exported="false"
             android:foregroundServiceType="specialUse" />
-
-        <service
-            android:name=".framework.services.AppOrientationAccessibilityService"
-            android:exported="true"
-            android:label="@string/accessibility_service_title"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-
-            <intent-filter>
-
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
-
-        </service>
 
         <receiver
             android:name=".framework.receivers.BootReceiver"

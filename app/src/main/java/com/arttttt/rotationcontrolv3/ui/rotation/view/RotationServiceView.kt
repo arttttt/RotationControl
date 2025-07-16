@@ -2,24 +2,25 @@ package com.arttttt.rotationcontrolv3.ui.rotation.view
 
 import android.app.Notification
 import android.content.Intent
+import android.content.res.Configuration
 import com.arkivanov.mvikotlin.core.view.ViewRenderer
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import kotlinx.coroutines.flow.Flow
 
 interface RotationServiceView {
 
-    sealed class State {
+    sealed interface State {
 
         data class Active(
             val selectedButton: NotificationButton
-        ) : State()
+        ) : State
 
-        data object Error : State()
+        data object Error : State
     }
 
-    sealed class UiEvent {
+    sealed interface UiEvent {
 
-        sealed class ButtonEvent : UiEvent() {
+        sealed class ButtonEvent : UiEvent {
             data object AutoClicked : ButtonEvent()
             data object PortraitClicked : ButtonEvent()
             data object PortraitReverseClicked : ButtonEvent()
@@ -29,9 +30,16 @@ interface RotationServiceView {
 
         data class NotificationUpdated(
             val notification: Notification,
-        ) : UiEvent()
+        ) : UiEvent
 
-        data object StopServiceClicked : UiEvent()
+        data object StopServiceClicked : UiEvent
+    }
+
+    sealed interface Command {
+
+        data class UpdateNotification(
+            val selectedButton: NotificationButton
+        ) : Command
     }
 
     val events: Flow<UiEvent>
@@ -39,4 +47,6 @@ interface RotationServiceView {
     fun render(model: State)
 
     fun handleClick(intent: Intent)
+
+    fun handleCommand(command: Command)
 }

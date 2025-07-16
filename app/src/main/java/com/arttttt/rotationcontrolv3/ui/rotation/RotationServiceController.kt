@@ -10,6 +10,7 @@ import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
 import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -18,11 +19,20 @@ class RotationServiceController(
     private val rotationStore: RotationStore,
 ) {
 
+    sealed interface Command {
+
+        data object ConfigurationChanged : Command
+    }
+
     interface PlatformCallback {
 
         fun onNotificationUpdated(notification: Notification)
         fun stopService()
     }
+
+    private val _commands: MutableSharedFlow<Command> = MutableSharedFlow(
+        extraBufferCapacity = 1,
+    )
 
     var platformCallback: PlatformCallback? = null
 
@@ -70,7 +80,22 @@ class RotationServiceController(
                     }
                 }
                 .bindTo(view::render)
+
+            _commands
+                .filterIsInstance<Command.ConfigurationChanged>()
+                .mapNotNull { rotationStore.state.globalOrientationMode }
+                .bindTo { globalOrientationMode ->
+                    view.handleCommand(
+                        RotationServiceView.Command.UpdateNotification(
+                            selectedButton = globalOrientationMode.toNotificationButton()
+                        )
+                    )
+                }
         }
+    }
+
+    fun handleCommand(command: Command) {
+        _commands.tryEmit(command)
     }
 
     private fun OrientationMode.Companion.of(event: RotationServiceView.UiEvent.ButtonEvent): OrientationMode {

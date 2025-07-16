@@ -1,6 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.rotation.view
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,8 +9,6 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
-import androidx.core.content.IntentCompat
-import androidx.core.content.IntentSanitizer
 import com.arkivanov.mvikotlin.core.utils.diff
 import com.arttttt.rotationcontrolv3.MainActivity
 import com.arttttt.rotationcontrolv3.R
@@ -72,6 +71,29 @@ class RotationServiceViewImpl(
         }
     }
 
+    override fun handleCommand(command: RotationServiceView.Command) {
+        when (command) {
+            is RotationServiceView.Command.UpdateNotification -> updateNotification(command.selectedButton)
+        }
+    }
+
+    private fun updateNotification(
+        activeButton: NotificationButton
+    ) {
+        val remoteViews = createRemoteViews()
+
+        remoteViews.configureButtons(
+            context = context,
+            isButtonActive = { id -> NotificationButton.of(id) == activeButton },
+        )
+
+        events.tryEmit(
+            RotationServiceView.UiEvent.NotificationUpdated(
+                notification = createNotification(remoteViews)
+            )
+        )
+    }
+
     private fun handleButtonClicked(intent: Intent) {
         val clickedButtonId = intent
             .getIntExtra(
@@ -94,33 +116,7 @@ class RotationServiceViewImpl(
 
         events.tryEmit(
             RotationServiceView.UiEvent.NotificationUpdated(
-                notification = NotificationCompat
-                    .Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_rotate)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                    .setCustomContentView(remoteViews)
-                    .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
-                    .addAction(
-                        NotificationCompat.Action
-                            .Builder(
-                                null,
-                                context.getString(R.string.stop_service),
-                                PendingIntent.getService(
-                                    context,
-                                    0,
-                                    Intent(context, RotationService::class.java).apply {
-                                        action = STOP_SERVICE_ACTION
-                                    },
-                                    PendingIntent.FLAG_IMMUTABLE,
-                                ),
-                            )
-                            .build()
-                    )
-                    .build()
-                    .apply {
-                        flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
-                    }
+                notification = createNotification(remoteViews)
             )
         )
     }
@@ -172,6 +168,38 @@ class RotationServiceViewImpl(
             R.id.btn_landscape_reverse -> RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked
             else -> null
         }
+    }
+
+    private fun createNotification(
+        remoteViews: RemoteViews,
+    ): Notification {
+        return NotificationCompat
+            .Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_rotate)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(remoteViews)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .addAction(
+                NotificationCompat.Action
+                    .Builder(
+                        null,
+                        context.getString(R.string.stop_service),
+                        PendingIntent.getService(
+                            context,
+                            0,
+                            Intent(context, RotationService::class.java).apply {
+                                action = STOP_SERVICE_ACTION
+                            },
+                            PendingIntent.FLAG_IMMUTABLE,
+                        ),
+                    )
+                    .build()
+            )
+            .build()
+            .apply {
+                flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
+            }
     }
 
     private fun RemoteViews.configureButtons(

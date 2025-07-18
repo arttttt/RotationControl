@@ -31,6 +31,7 @@ import com.arttttt.rotationcontrolv3.ui.main2.model.MenuItem
 import com.arttttt.rotationcontrolv3.ui.main2.view.MainViewImpl
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
+import com.arttttt.rotationcontrolv3.utils.extensions.resumeWhenActive
 import com.arttttt.utils.unsafeCastTo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
@@ -38,7 +39,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 @Suppress("RedundantIf")
 class MainFragment2(
@@ -217,10 +217,10 @@ class MainFragment2(
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    continuation.resume(Unit)
+                    continuation.resumeWhenActive(Unit)
                 }
                 .setOnCancelListener {
-                    continuation.resume(Unit)
+                    continuation.resumeWhenActive(Unit)
                 }
                 .create()
 

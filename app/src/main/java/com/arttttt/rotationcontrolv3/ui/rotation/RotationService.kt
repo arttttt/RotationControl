@@ -19,6 +19,7 @@ import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
 import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class RotationService : Service() {
@@ -33,7 +34,7 @@ class RotationService : Service() {
         private const val FOREGROUND_SERVICE_TYPE_ABSENT = 0
 
         private val _status = MutableStateFlow(Status.HALTED)
-        val status: StateFlow<Status> = _status
+        val status: StateFlow<Status> = _status.asStateFlow()
     }
 
     enum class Status {

@@ -1,10 +1,8 @@
 package com.arttttt.rotationcontrolv3.ui.main2.platform
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -32,6 +30,7 @@ import com.arttttt.rotationcontrolv3.ui.main2.view.MainViewImpl
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.settings.platform.SettingsFragment
 import com.arttttt.rotationcontrolv3.utils.extensions.resumeWhenActive
+import com.arttttt.rotationcontrolv3.utils.servicelauncher.RotationServiceLauncher
 import com.arttttt.utils.unsafeCastTo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Job
@@ -67,12 +66,8 @@ class MainFragment2(
     @Inject
     lateinit var controller: MainController
 
-    private val rotationServiceIntent by lazy {
-        Intent(
-            requireContext(),
-            RotationService::class.java,
-        )
-    }
+    @Inject
+    lateinit var rotationServiceLauncher: RotationServiceLauncher
 
     private var job: Job? = null
 
@@ -231,14 +226,11 @@ class MainFragment2(
     }
 
     private fun startRotationService() {
-        ContextCompat.startForegroundService(
-            requireContext(),
-            rotationServiceIntent,
-        )
+        rotationServiceLauncher.launch()
     }
 
     private fun stopRotationService() {
-        requireContext().stopService(rotationServiceIntent)
+        rotationServiceLauncher.stop()
     }
 
     private val Permission.messageRes: Int

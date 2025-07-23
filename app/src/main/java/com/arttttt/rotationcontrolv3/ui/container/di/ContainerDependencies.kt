@@ -8,6 +8,7 @@ import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
+import com.arttttt.rotationcontrolv3.utils.servicelauncher.RotationServiceLauncher
 
 interface ContainerDependencies {
 
@@ -18,4 +19,5 @@ interface ContainerDependencies {
     val settingsRepository: SettingsRepository
     val storeFactory: StoreFactory
     val appsRepository: AppsRepository
+    val rotationServiceLauncher: RotationServiceLauncher
 }

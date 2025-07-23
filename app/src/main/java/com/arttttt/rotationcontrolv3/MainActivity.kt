@@ -2,11 +2,9 @@ package com.arttttt.rotationcontrolv3
 
 import android.content.ComponentName
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import androidx.core.content.IntentSanitizer
 import androidx.core.view.ViewCompat
@@ -18,7 +16,6 @@ import androidx.fragment.app.replace
 import com.arttttt.rotationcontrolv3.ui.container.ContainerFragment
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceViewImpl
-import com.arttttt.rotationcontrolv3.utils.extensions.appComponent
 import com.arttttt.rotationcontrolv3.utils.navigation.NavigationContainerDelegate
 
 class MainActivity : AppCompatActivity() {

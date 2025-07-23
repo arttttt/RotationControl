@@ -10,6 +10,7 @@ import com.arttttt.permissions.data.model.IntentNoOpPermission
 import com.arttttt.permissions.domain.entity.IntentPermission
 import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.utils.extensions.of
+import androidx.core.net.toUri
 
 data object WriteSettingsPermission : IntentPermission by if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) IntentNoOpPermission else Impl23 {
 
@@ -18,7 +19,7 @@ data object WriteSettingsPermission : IntentPermission by if (Build.VERSION.SDK_
 
         override fun createIntent(context: Context): Intent {
             val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-            intent.setData(Uri.parse("package:" + context.packageName))
+            intent.setData(("package:" + context.packageName).toUri())
 
             return intent
         }

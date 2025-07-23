@@ -16,6 +16,8 @@ import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStoreFactory
 import com.arttttt.rotationcontrolv3.utils.resources.ResourceProviderImpl
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
+import com.arttttt.rotationcontrolv3.utils.servicelauncher.RotationServiceLauncher
+import com.arttttt.rotationcontrolv3.utils.servicelauncher.RotationServiceLauncherImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -75,4 +77,8 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindAppsRepository(impl: AppsRepositoryImpl): AppsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRotationsServiceLauncher(impl: RotationServiceLauncherImpl): RotationServiceLauncher
 }

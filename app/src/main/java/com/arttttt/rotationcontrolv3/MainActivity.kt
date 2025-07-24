@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                         .allowAction(RotationServiceViewImpl.STOP_SERVICE_ACTION)
                         .build()
                         .sanitizeByThrowing(payload)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     null
                 }
             }

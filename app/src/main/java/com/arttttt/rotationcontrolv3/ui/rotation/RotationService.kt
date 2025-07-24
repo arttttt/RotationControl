@@ -107,7 +107,7 @@ class RotationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        intent?.let(view::handleClick)
+        intent?.let(view::handleAction)
 
         return START_NOT_STICKY
     }

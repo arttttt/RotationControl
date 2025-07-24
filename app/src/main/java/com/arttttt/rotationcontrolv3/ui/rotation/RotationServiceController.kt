@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.merge
 
 class RotationServiceController(
     private val rotationStore: RotationStore,
@@ -81,8 +82,10 @@ class RotationServiceController(
                 }
                 .bindTo(view::render)
 
-            _commands
-                .filterIsInstance<Command.ConfigurationChanged>()
+            merge(
+                _commands.filterIsInstance<Command.ConfigurationChanged>(),
+                view.events.filterIsInstance<RotationServiceView.UiEvent.NotificationDeleted>(),
+            )
                 .mapNotNull { rotationStore.state.globalOrientationMode }
                 .bindTo { globalOrientationMode ->
                     view.handleCommand(

@@ -2,8 +2,6 @@ package com.arttttt.rotationcontrolv3.ui.rotation.view
 
 import android.app.Notification
 import android.content.Intent
-import android.content.res.Configuration
-import com.arkivanov.mvikotlin.core.view.ViewRenderer
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import kotlinx.coroutines.flow.Flow
 
@@ -33,6 +31,8 @@ interface RotationServiceView {
         ) : UiEvent
 
         data object StopServiceClicked : UiEvent
+
+        data object NotificationDeleted : UiEvent
     }
 
     sealed interface Command {
@@ -46,7 +46,7 @@ interface RotationServiceView {
 
     fun render(model: State)
 
-    fun handleClick(intent: Intent)
+    fun handleAction(intent: Intent)
 
     fun handleCommand(command: Command)
 }

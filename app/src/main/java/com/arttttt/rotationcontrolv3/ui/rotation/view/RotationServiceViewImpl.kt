@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
+import androidx.core.view.PointerIconCompat
 import com.arkivanov.mvikotlin.core.utils.diff
 import com.arttttt.rotationcontrolv3.MainActivity
 import com.arttttt.rotationcontrolv3.R
@@ -25,6 +27,8 @@ class RotationServiceViewImpl(
     companion object {
 
         private const val NOTIFICATION_BUTTON_CLICKED_ACTION = "notification_button_clicked_action"
+
+        private const val NOTIFICATION_DELETED_ACTION = "notification_deleted_action"
 
         const val STOP_SERVICE_ACTION = "stop_service_action"
 
@@ -62,9 +66,12 @@ class RotationServiceViewImpl(
         }
     }
 
-    override fun handleClick(intent: Intent) {
+    override fun handleAction(intent: Intent) {
         when (intent.action) {
             NOTIFICATION_BUTTON_CLICKED_ACTION -> handleButtonClicked(intent)
+            NOTIFICATION_DELETED_ACTION -> {
+                events.tryEmit(RotationServiceView.UiEvent.NotificationDeleted)
+            }
             STOP_SERVICE_ACTION -> {
                 events.tryEmit(RotationServiceView.UiEvent.StopServiceClicked)
             }
@@ -180,6 +187,17 @@ class RotationServiceViewImpl(
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(remoteViews)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setDeleteIntent(
+                PendingIntentCompat.getService(
+                    context,
+                    0,
+                    Intent(context, RotationService::class.java).apply {
+                        action = NOTIFICATION_DELETED_ACTION
+                    },
+                    PendingIntent.FLAG_UPDATE_CURRENT,
+                    false,
+                )
+            )
             .addAction(
                 NotificationCompat.Action
                     .Builder(
@@ -196,6 +214,7 @@ class RotationServiceViewImpl(
                     )
                     .build()
             )
+            .setOngoing(true)
             .build()
             .apply {
                 flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE

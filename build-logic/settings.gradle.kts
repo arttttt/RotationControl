@@ -17,13 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
 
-rootProject.name = "Rotation Control"
-
-includeBuild("build-logic")
-
-include(":app")
-include(":core:navigation")
-include(":core:permissions")
-include(":utils")
+rootProject.name = "build-logic"

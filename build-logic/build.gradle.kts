@@ -29,6 +29,11 @@ tasks {
 
 gradlePlugin {
     plugins {
+        register("app") {
+            id = "app"
+            implementationClass = "plugins.ApplicationPlugin"
+        }
+
         register("library") {
             id = "library"
             implementationClass = "plugins.LibraryPlugin"

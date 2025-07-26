@@ -1,8 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("app")
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.google.services)
@@ -11,12 +10,9 @@ plugins {
 
 android {
     namespace = "com.arttttt.rotationcontrolv3"
-    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.arttttt.rotationcontrolv3"
-        minSdk = 16
-        targetSdk = 36
         versionCode = 15
         versionName = "2.3.0"
 
@@ -42,15 +38,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     kotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-
             freeCompilerArgs.add("-Xcontext-receivers")
         }
     }

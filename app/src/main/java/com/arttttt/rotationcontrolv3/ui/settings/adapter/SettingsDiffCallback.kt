@@ -1,8 +1,8 @@
 package com.arttttt.rotationcontrolv3.ui.settings.adapter
 
+import com.arttttt.adapterdelegates.EqualsDiffCallback
+import com.arttttt.adapterdelegates.ListItem
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.models.SettingAdapterItem
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.EqualsDiffCallback
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.ListItem
 
 class SettingsDiffCallback : EqualsDiffCallback() {
 

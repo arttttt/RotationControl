@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils.adapterdelegates
+package com.arttttt.adapterdelegates
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup

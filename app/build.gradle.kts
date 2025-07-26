@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":adapterdelegates"))
     implementation(project(":core:navigation"))
     implementation(project(":core:permissions"))
     implementation(project(":utils"))

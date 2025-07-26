@@ -1,8 +1,8 @@
 package com.arttttt.rotationcontrolv3.ui.apps.view
 
 import com.arkivanov.mvikotlin.core.view.MviView
+import com.arttttt.adapterdelegates.ListItem
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.ListItem
 
 interface AppsView : MviView<AppsView.Model, AppsView.UiEvent> {
 

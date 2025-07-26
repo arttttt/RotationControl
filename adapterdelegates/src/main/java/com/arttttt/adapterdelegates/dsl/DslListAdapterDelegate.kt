@@ -1,7 +1,7 @@
-package com.arttttt.rotationcontrolv3.utils.adapterdelegates.dsl
+package com.arttttt.adapterdelegates.dsl
 
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AdapterDelegate
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.ListItem
+import com.arttttt.adapterdelegates.AdapterDelegate
+import com.arttttt.adapterdelegates.ListItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes

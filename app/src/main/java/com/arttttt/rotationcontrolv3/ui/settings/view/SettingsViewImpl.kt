@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arkivanov.mvikotlin.core.utils.diff
 import com.arkivanov.mvikotlin.core.view.BaseMviView
 import com.arkivanov.mvikotlin.core.view.ViewRenderer
+import com.arttttt.adapterdelegates.AsyncListDifferDelegationAdapter
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.SettingsDiffCallback
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.delegates.BooleanSettingAdapterDelegate
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.AsyncListDifferDelegationAdapter
 import com.arttttt.utils.clearAdapterOnDestroyView
 
 class SettingsViewImpl(

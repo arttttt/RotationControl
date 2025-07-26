@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("library")
-    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
@@ -18,15 +17,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     kotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
-
             freeCompilerArgs.add("-Xcontext-receivers")
         }
     }

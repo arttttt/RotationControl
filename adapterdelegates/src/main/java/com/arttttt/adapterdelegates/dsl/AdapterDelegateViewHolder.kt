@@ -1,4 +1,4 @@
-package com.arttttt.rotationcontrolv3.utils.adapterdelegates.dsl
+package com.arttttt.adapterdelegates.dsl
 
 import android.content.Context
 import android.view.View

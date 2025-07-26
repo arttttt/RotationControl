@@ -1,13 +1,13 @@
 package com.arttttt.rotationcontrolv3.ui.apps.transformer
 
 import android.content.Context
+import com.arttttt.adapterdelegates.ListItem
 import com.arttttt.rotationcontrolv3.framework.services.AppOrientationAccessibilityService
 import com.arttttt.rotationcontrolv3.domain.entity.apps.AppOrientation
 import com.arttttt.rotationcontrolv3.domain.stores.apps.AppsStore
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.models.AccessibilityListItem
 import com.arttttt.rotationcontrolv3.ui.apps.adapter.models.AppAdapterItem
 import com.arttttt.rotationcontrolv3.ui.apps.view.AppsView
-import com.arttttt.rotationcontrolv3.utils.adapterdelegates.ListItem
 import com.arttttt.rotationcontrolv3.utils.extensions.isAccessibilityServiceEnabled
 import com.arttttt.rotationcontrolv3.utils.mvi.Transformer
 import javax.inject.Inject

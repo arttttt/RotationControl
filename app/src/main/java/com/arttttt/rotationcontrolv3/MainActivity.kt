@@ -2,6 +2,7 @@ package com.arttttt.rotationcontrolv3
 
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity() {
     private fun configureInsets(
         view: View,
     ) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) return
+
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false,

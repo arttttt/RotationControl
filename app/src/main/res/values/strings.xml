@@ -24,4 +24,7 @@
     <string name="service_startup_error">Service startup error</string>
     <string name="permissions_not_granted">Required permissions are not granted. Open the app and grant them</string>
 
+    <string name="boot_start_channel_name">Start on boot</string>
+    <string name="boot_start_prompt">Tap to start Rotation Control</string>
+
 </resources>

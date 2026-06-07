@@ -25,4 +25,7 @@
     <string name="service_startup_error">Ошибка запуска сервиса</string>
     <string name="permissions_not_granted">Не выданы необходимые разрешения. Откройте приложение и предоставьте их</string>
 
+    <string name="boot_start_channel_name">Запуск при старте системы</string>
+    <string name="boot_start_prompt">Нажмите, чтобы запустить Rotation Control</string>
+
 </resources>

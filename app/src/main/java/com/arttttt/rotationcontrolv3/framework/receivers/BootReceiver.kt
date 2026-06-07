@@ -13,6 +13,6 @@ class BootReceiver : BroadcastReceiver() {
     ) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
 
-        context.appComponent.rotationServiceLauncher.launch()
+        context.appComponent.rotationServiceLauncher.launchOnBoot()
     }
 }

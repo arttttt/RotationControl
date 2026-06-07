@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">設定</string>
+    <string name="about">このアプリについて</string>
+    <string name="apps">アプリ</string>
+
+    <string name="button_sources_text">ソースコードを表示</string>
+
+    <string name="start_on_boot">システム起動時に Rotation Control を起動する</string>
+    <string name="forced_mode">画面の向きを強制する</string>
+
+    <string name="notice_text">注意</string>
+    <string name="show_notifications_permission_text">アプリが正しく動作するには、通知を表示する権限が必要です</string>
+    <string name="can_write_settings_permission_text">アプリが正しく動作するには、システム設定を変更する権限が必要です</string>
+    <string name="draw_overlay_permission_text">画面の向きを強制するモードが有効です。アプリが正しく動作するには、他のアプリの上に表示する権限が必要です</string>
+    <string name="rotation_control_version">アプリのバージョン: %s</string>
+
+    <string name="cant_request_permission">権限をリクエストできません</string>
+    <string name="cant_request_permission_message">問題が発生しました。Rotation Control は必要な権限をリクエストできませんでした</string>
+
+    <string name="stop_service">サービスを停止</string>
+
+    <string name="service_starting">サービスを開始しています…</string>
+    <string name="service_startup_error">サービスの起動エラー</string>
+    <string name="permissions_not_granted">必要な権限が許可されていません。アプリを開いて許可してください</string>
+
+    <string name="boot_start_channel_name">起動時に開始</string>
+    <string name="boot_start_prompt">タップして Rotation Control を起動</string>
+
+</resources>

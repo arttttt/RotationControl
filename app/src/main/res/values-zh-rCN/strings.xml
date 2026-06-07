@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">设置</string>
+    <string name="about">关于</string>
+    <string name="apps">应用</string>
+
+    <string name="button_sources_text">查看源代码</string>
+
+    <string name="start_on_boot">系统启动时启动 Rotation Control</string>
+    <string name="forced_mode">强制应用屏幕方向</string>
+
+    <string name="notice_text">注意</string>
+    <string name="show_notifications_permission_text">为使应用正常运行，需要显示通知的权限</string>
+    <string name="can_write_settings_permission_text">为使应用正常运行，需要修改系统设置的权限</string>
+    <string name="draw_overlay_permission_text">已启用强制屏幕方向模式。为使应用正常运行，需要在其他应用上层显示的权限</string>
+    <string name="rotation_control_version">应用版本：%s</string>
+
+    <string name="cant_request_permission">无法请求权限</string>
+    <string name="cant_request_permission_message">出了点问题。Rotation Control 无法请求所需的权限</string>
+
+    <string name="stop_service">停止服务</string>
+
+    <string name="service_starting">正在启动服务…</string>
+    <string name="service_startup_error">服务启动错误</string>
+    <string name="permissions_not_granted">未授予所需权限。请打开应用并授予权限</string>
+
+    <string name="boot_start_channel_name">开机启动</string>
+    <string name="boot_start_prompt">点按以启动 Rotation Control</string>
+
+</resources>

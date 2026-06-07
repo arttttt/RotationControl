@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Paramètres</string>
+    <string name="about">À propos</string>
+    <string name="apps">Applications</string>
+
+    <string name="button_sources_text">Voir les sources</string>
+
+    <string name="start_on_boot">Démarrer Rotation Control au démarrage du système</string>
+    <string name="forced_mode">Forcer l\'orientation</string>
+
+    <string name="notice_text">Avis</string>
+    <string name="show_notifications_permission_text">Pour que l\'application fonctionne correctement, l\'autorisation d\'afficher des notifications est requise</string>
+    <string name="can_write_settings_permission_text">Pour que l\'application fonctionne correctement, l\'autorisation de modifier les paramètres système est requise</string>
+    <string name="draw_overlay_permission_text">Le mode d\'orientation forcée de l\'écran est activé. Pour que l\'application fonctionne correctement, l\'autorisation d\'affichage par-dessus les autres applications est requise</string>
+    <string name="rotation_control_version">Version de l\'application : %s</string>
+
+    <string name="cant_request_permission">Impossible de demander les autorisations</string>
+    <string name="cant_request_permission_message">Une erreur s\'est produite. Rotation Control n\'a pas pu demander les autorisations nécessaires</string>
+
+    <string name="stop_service">Arrêter le service</string>
+
+    <string name="service_starting">Démarrage du service…</string>
+    <string name="service_startup_error">Erreur de démarrage du service</string>
+    <string name="permissions_not_granted">Les autorisations requises ne sont pas accordées. Ouvrez l\'application et accordez-les</string>
+
+    <string name="boot_start_channel_name">Lancement au démarrage</string>
+    <string name="boot_start_prompt">Appuyez pour démarrer Rotation Control</string>
+
+</resources>

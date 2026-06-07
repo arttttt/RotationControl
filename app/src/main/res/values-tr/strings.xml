@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Ayarlar</string>
+    <string name="about">Hakkında</string>
+    <string name="apps">Uygulamalar</string>
+
+    <string name="button_sources_text">Kaynak kodu görüntüle</string>
+
+    <string name="start_on_boot">Sistem açıldığında Rotation Control\'ü başlat</string>
+    <string name="forced_mode">Ekran yönünü zorla uygula</string>
+
+    <string name="notice_text">Uyarı</string>
+    <string name="show_notifications_permission_text">Uygulamanın düzgün çalışması için bildirim gösterme izni gereklidir</string>
+    <string name="can_write_settings_permission_text">Uygulamanın düzgün çalışması için sistem ayarlarını değiştirme izni gereklidir</string>
+    <string name="draw_overlay_permission_text">Zorunlu ekran yönü modu etkin. Uygulamanın düzgün çalışması için diğer uygulamaların üzerinde gösterme izni gereklidir</string>
+    <string name="rotation_control_version">Uygulama sürümü: %s</string>
+
+    <string name="cant_request_permission">İzinler istenemiyor</string>
+    <string name="cant_request_permission_message">Bir şeyler ters gitti. Rotation Control gerekli izinleri isteyemedi</string>
+
+    <string name="stop_service">Hizmeti durdur</string>
+
+    <string name="service_starting">Hizmet başlatılıyor…</string>
+    <string name="service_startup_error">Hizmet başlatma hatası</string>
+    <string name="permissions_not_granted">Gerekli izinler verilmedi. Uygulamayı açıp izinleri verin</string>
+
+    <string name="boot_start_channel_name">Açılışta başlatma</string>
+    <string name="boot_start_prompt">Rotation Control\'ü başlatmak için dokunun</string>
+
+</resources>

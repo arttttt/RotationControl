@@ -125,8 +125,7 @@ class RotationExecutor(
                     if (!permissionsVerifier.areAllPermissionsGranted(forced)) {
                         throw NoPermissionsException()
                     }
-                }
-                .onSuccess {
+
                     val mode = OrientationMode.Portrait
 
                     setOrientation2(
@@ -134,11 +133,12 @@ class RotationExecutor(
                         newOrientationMode = mode,
                     )
 
-                    dispatch(RotationStore.Message.GlobalOrientationReceived(mode))
+                    mode
                 }
-                .onFailure { e ->
-                    dispatch(RotationStore.Message.ErrorOccurred(e))
-                }
+                .map(RotationStore.Message::GlobalOrientationReceived)
+                .recover(RotationStore.Message::ErrorOccurred)
+                .getOrNull()
+                ?.let(::dispatch)
         }
     }
 

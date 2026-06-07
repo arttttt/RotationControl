@@ -1,11 +1,11 @@
 package com.arttttt.rotationcontrolv3.domain.repository
 
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
-import kotlin.reflect.KClass
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingValue
 
 interface SettingsRepository {
 
-    suspend fun <T> getSetting(clazz: KClass<out Setting<T>>): Setting<T>
-    suspend fun <T> saveSetting(clazz: KClass<out Setting<T>>, value: T)
-    suspend fun getAllSettings(): List<Setting<*>>
+    suspend fun <T> get(key: SettingKey<T>): T
+    suspend fun <T> save(key: SettingKey<T>, value: T)
+    suspend fun getAll(): List<SettingValue<*>>
 }

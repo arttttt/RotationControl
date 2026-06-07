@@ -8,14 +8,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.arttttt.rotationcontrolv3.framework.receivers.BootReceiver
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingValue
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
-import com.arttttt.utils.unsafeCastTo
+import com.arttttt.rotationcontrolv3.framework.receivers.BootReceiver
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlin.reflect.KClass
-
 
 class SettingsRepositoryImpl @Inject constructor(
     private val context: Context,
@@ -29,59 +28,57 @@ class SettingsRepositoryImpl @Inject constructor(
     }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(DATASTORE_NAME)
-    override suspend fun <T> getSetting(clazz: KClass<out Setting<T>>): Setting<T> {
-        val result = when (clazz) {
-            Setting.StartOnBoot::class -> {
-                Setting.StartOnBoot(
-                    value = context
-                        .packageManager
-                        .getComponentEnabledSetting(
-                            ComponentName(
-                                context,
-                                BootReceiver::class.java
-                            )
-                        ) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                )
-            }
-            Setting.ForcedMode::class -> {
-                Setting.ForcedMode(
-                    value = context.dataStore.data.first()[forcedOrientation] ?: false,
-                )
-            }
-            else -> throw IllegalArgumentException("unsupported setting")
-        }
 
-        return result.unsafeCastTo()
+    override suspend fun <T> get(key: SettingKey<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return when (key) {
+            SettingKey.StartOnBoot -> isComponentEnabled(BootReceiver::class)
+            SettingKey.ForcedMode -> readBoolean(forcedOrientation, SettingKey.ForcedMode.default)
+        } as T
     }
 
-    override suspend fun <T> saveSetting(clazz: KClass<out Setting<T>>, value: T) {
-        when (clazz) {
-            Setting.StartOnBoot::class -> {
-                context
-                    .packageManager
-                    .setComponentEnabledSetting(
-                        ComponentName(context, BootReceiver::class.java),
-                        if (value as Boolean) {
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                        } else {
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                        },
-                        PackageManager.DONT_KILL_APP,
-                    )
-            }
-
-            Setting.ForcedMode::class -> {
-                context.dataStore.edit { dataStore ->
-                    dataStore[forcedOrientation] = value as Boolean
-                }
-            }
+    override suspend fun <T> save(key: SettingKey<T>, value: T) {
+        when (key) {
+            SettingKey.StartOnBoot -> setComponentEnabled(BootReceiver::class, value as Boolean)
+            SettingKey.ForcedMode -> writeBoolean(forcedOrientation, value as Boolean)
         }
     }
 
-    override suspend fun getAllSettings(): List<Setting<*>> {
+    override suspend fun getAll(): List<SettingValue<*>> {
         return listOf(
-            getSetting(Setting.StartOnBoot::class),
-            getSetting(Setting.ForcedMode::class),
+            SettingValue(SettingKey.StartOnBoot, get(SettingKey.StartOnBoot)),
+            SettingValue(SettingKey.ForcedMode, get(SettingKey.ForcedMode)),
         )
+    }
+
+    private fun isComponentEnabled(component: KClass<*>): Boolean {
+        return context
+            .packageManager
+            .getComponentEnabledSetting(ComponentName(context, component.java)) ==
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+    }
+
+    private fun setComponentEnabled(component: KClass<*>, enabled: Boolean) {
+        context
+            .packageManager
+            .setComponentEnabledSetting(
+                ComponentName(context, component.java),
+                if (enabled) {
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                } else {
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                },
+                PackageManager.DONT_KILL_APP,
+            )
+    }
+
+    private suspend fun readBoolean(key: Preferences.Key<Boolean>, default: Boolean): Boolean {
+        return context.dataStore.data.first()[key] ?: default
+    }
+
+    private suspend fun writeBoolean(key: Preferences.Key<Boolean>, value: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[key] = value
+        }
     }
 }

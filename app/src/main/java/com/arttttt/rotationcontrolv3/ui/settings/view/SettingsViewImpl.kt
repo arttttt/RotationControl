@@ -18,10 +18,10 @@ class SettingsViewImpl(
     private val adapter = AsyncListDifferDelegationAdapter(
         delegates = setOf(
             BooleanSettingAdapterDelegate(
-                onCheckedChanged = { type, isChecked ->
+                onCheckedChanged = { key, isChecked ->
                     dispatch(
                         SettingsView.UiEvent.SettingsChanged(
-                            type = type,
+                            key = key,
                             value = isChecked,
                         )
                     )

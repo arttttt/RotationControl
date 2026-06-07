@@ -10,7 +10,6 @@ import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.ui.settings.transformer.SettingsTransformer
 import com.arttttt.rotationcontrolv3.ui.settings.view.SettingsView
 import com.arttttt.rotationcontrolv3.utils.mvi.Controller
-import com.arttttt.utils.unsafeCastTo
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -34,13 +33,15 @@ class SettingsController @Inject constructor(
             view
                 .events
                 .filterIsInstance<SettingsView.UiEvent.SettingsChanged<*>>()
-                .map { event ->
-                    SettingsStore.Intent.UpdateSettingValue(
-                        value = event.value,
-                        clazz = event.type.unsafeCastTo(),
-                    )
-                }
+                .map { event -> event.toIntent() }
                 .bindTo(settingsStore)
         }
+    }
+
+    private fun <T> SettingsView.UiEvent.SettingsChanged<T>.toIntent(): SettingsStore.Intent {
+        return SettingsStore.Intent.UpdateSettingValue(
+            key = key,
+            value = value,
+        )
     }
 }

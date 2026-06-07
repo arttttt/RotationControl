@@ -1,13 +1,12 @@
 package com.arttttt.rotationcontrolv3.ui.settings.transformer
 
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 import com.arttttt.rotationcontrolv3.domain.stores.settings.SettingsStore
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.models.SettingAdapterItem
 import com.arttttt.rotationcontrolv3.ui.settings.view.SettingsView
 import com.arttttt.rotationcontrolv3.utils.mvi.Transformer
 import com.arttttt.rotationcontrolv3.utils.resources.ResourcesProvider
-import com.arttttt.utils.unsafeCastTo
 import javax.inject.Inject
 
 class SettingsTransformer @Inject constructor(
@@ -16,17 +15,17 @@ class SettingsTransformer @Inject constructor(
 
     override fun invoke(state: SettingsStore.State): SettingsView.Model {
         return SettingsView.Model(
-            items = state.settings.map { appSettings ->
-                when (appSettings) {
-                    is Setting.StartOnBoot -> SettingAdapterItem.BooleanSetting(
-                        type = appSettings::class.unsafeCastTo(),
+            items = state.settings.map { setting ->
+                when (setting.key) {
+                    SettingKey.StartOnBoot -> SettingAdapterItem.BooleanSetting(
+                        key = SettingKey.StartOnBoot,
                         title = resourcesProvider.getString(R.string.start_on_boot),
-                        value = appSettings.value,
+                        value = setting.value as Boolean,
                     )
-                    is Setting.ForcedMode -> SettingAdapterItem.BooleanSetting(
-                        type = appSettings::class.unsafeCastTo(),
+                    SettingKey.ForcedMode -> SettingAdapterItem.BooleanSetting(
+                        key = SettingKey.ForcedMode,
                         title = resourcesProvider.getString(R.string.forced_mode),
-                        value = appSettings.value,
+                        value = setting.value as Boolean,
                     )
                 }
             }

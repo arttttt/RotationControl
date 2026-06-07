@@ -1,7 +1,7 @@
 package com.arttttt.rotationcontrolv3.ui.rotation
 
 import com.arttttt.permissions.utils.extensions.toBoolean
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
@@ -40,6 +40,6 @@ class PermissionsVerifier(
     }
 
     private suspend fun isForceModeEnabled(): Boolean {
-        return settingsRepository.getSetting(Setting.ForcedMode::class).value
+        return settingsRepository.get(SettingKey.ForcedMode)
     }
 }

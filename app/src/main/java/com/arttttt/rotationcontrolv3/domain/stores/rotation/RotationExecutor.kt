@@ -3,7 +3,7 @@ package com.arttttt.rotationcontrolv3.domain.stores.rotation
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arttttt.rotationcontrolv3.domain.entity.exceptions.NoPermissionsException
 import com.arttttt.rotationcontrolv3.domain.entity.rotation.OrientationMode
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 import com.arttttt.rotationcontrolv3.domain.managers.ForcedOrientationManager
 import com.arttttt.rotationcontrolv3.domain.repository.OrientationRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SensorsRepository
@@ -119,7 +119,7 @@ class RotationExecutor(
             kotlin
                 .runCatching {
                     val forced = withContext(Dispatchers.IO) {
-                        settingsRepository.getSetting(Setting.ForcedMode::class).value
+                        settingsRepository.get(SettingKey.ForcedMode)
                     }
 
                     if (!permissionsVerifier.areAllPermissionsGranted(forced)) {
@@ -158,7 +158,7 @@ class RotationExecutor(
     }
 
     private suspend fun isForceModeEnabled(): Boolean {
-        return settingsRepository.getSetting(Setting.ForcedMode::class).value
+        return settingsRepository.get(SettingKey.ForcedMode)
     }
 
     private fun setAutoRotation(

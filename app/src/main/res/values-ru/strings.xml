@@ -21,4 +21,8 @@
 
     <string name="stop_service">Остановить сервис</string>
 
+    <string name="service_starting">Сервис запускается…</string>
+    <string name="service_startup_error">Ошибка запуска сервиса</string>
+    <string name="permissions_not_granted">Не выданы необходимые разрешения. Откройте приложение и предоставьте их</string>
+
 </resources>

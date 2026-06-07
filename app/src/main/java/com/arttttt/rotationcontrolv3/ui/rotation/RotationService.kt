@@ -78,9 +78,11 @@ class RotationService : Service() {
 
         super.onCreate()
 
+        createNotificationChannel()
+        showServiceNotification(view.createNotification(RotationServiceView.State.Starting))
+
         controller.platformCallback = object : RotationServiceController.PlatformCallback {
             override fun onNotificationUpdated(notification: Notification) {
-                createNotificationChannel()
                 showServiceNotification(notification)
             }
 

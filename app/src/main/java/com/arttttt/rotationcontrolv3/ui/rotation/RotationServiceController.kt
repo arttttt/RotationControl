@@ -11,6 +11,7 @@ import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -71,15 +72,17 @@ class RotationServiceController(
 
             rotationStore
                 .states
-                .mapNotNull { state ->
+                .map { state ->
                     when {
-                        state.error is NoPermissionsException -> RotationServiceView.State.Error
+                        state.error is NoPermissionsException -> RotationServiceView.State.PermissionsError
+                        state.error != null -> RotationServiceView.State.StartupError
                         state.globalOrientationMode != null -> RotationServiceView.State.Active(
                             selectedButton = state.globalOrientationMode.toNotificationButton()
                         )
-                        else -> null
+                        else -> RotationServiceView.State.Starting
                     }
                 }
+                .distinctUntilChanged()
                 .bindTo(view::render)
 
             merge(

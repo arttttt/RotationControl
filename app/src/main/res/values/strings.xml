@@ -20,4 +20,8 @@
 
     <string name="stop_service">Stop service</string>
 
+    <string name="service_starting">Service is starting…</string>
+    <string name="service_startup_error">Service startup error</string>
+    <string name="permissions_not_granted">Required permissions are not granted. Open the app and grant them</string>
+
 </resources>

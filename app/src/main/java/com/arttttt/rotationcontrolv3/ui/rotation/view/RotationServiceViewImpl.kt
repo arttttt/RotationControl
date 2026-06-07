@@ -43,14 +43,6 @@ class RotationServiceViewImpl(
         R.id.btn_landscape_reverse,
     )
 
-    override fun render(model: RotationServiceView.State) {
-        events.tryEmit(
-            RotationServiceView.UiEvent.NotificationUpdated(
-                notification = createNotification(model),
-            )
-        )
-    }
-
     override fun createNotification(model: RotationServiceView.State): Notification {
         return when (model) {
             is RotationServiceView.State.Starting -> createStartingNotification()
@@ -72,14 +64,6 @@ class RotationServiceViewImpl(
             }
             STOP_SERVICE_ACTION -> {
                 events.tryEmit(RotationServiceView.UiEvent.StopServiceClicked)
-            }
-        }
-    }
-
-    override fun handleCommand(command: RotationServiceView.Command) {
-        when (command) {
-            is RotationServiceView.Command.UpdateNotification -> {
-                render(RotationServiceView.State.Active(command.selectedButton))
             }
         }
     }

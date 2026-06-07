@@ -30,29 +30,14 @@ interface RotationServiceView {
             data object LandscapeReverseClicked : ButtonEvent()
         }
 
-        data class NotificationUpdated(
-            val notification: Notification,
-        ) : UiEvent
-
         data object StopServiceClicked : UiEvent
 
         data object NotificationDeleted : UiEvent
     }
 
-    sealed interface Command {
-
-        data class UpdateNotification(
-            val selectedButton: NotificationButton
-        ) : Command
-    }
-
     val events: Flow<UiEvent>
-
-    fun render(model: State)
 
     fun createNotification(model: State): Notification
 
     fun handleAction(intent: Intent)
-
-    fun handleCommand(command: Command)
 }

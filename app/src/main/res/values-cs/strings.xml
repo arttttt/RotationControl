@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Nastavení</string>
+    <string name="about">O aplikaci</string>
+    <string name="apps">Aplikace</string>
+
+    <string name="button_sources_text">Zobrazit zdrojový kód</string>
+
+    <string name="start_on_boot">Spustit Rotation Control při startu systému</string>
+    <string name="forced_mode">Vynutit orientaci obrazovky</string>
+
+    <string name="notice_text">Upozornění</string>
+    <string name="show_notifications_permission_text">Pro správné fungování aplikace je vyžadováno oprávnění k zobrazování oznámení</string>
+    <string name="can_write_settings_permission_text">Pro správné fungování aplikace je vyžadováno oprávnění ke změně systémových nastavení</string>
+    <string name="draw_overlay_permission_text">Režim vynucené orientace obrazovky je aktivní. Pro správné fungování aplikace je vyžadováno oprávnění k zobrazení přes ostatní aplikace</string>
+    <string name="rotation_control_version">Verze aplikace: %s</string>
+
+    <string name="cant_request_permission">Nelze požádat o oprávnění</string>
+    <string name="cant_request_permission_message">Něco se pokazilo. Rotation Control nemohl požádat o potřebná oprávnění</string>
+
+    <string name="stop_service">Zastavit službu</string>
+
+    <string name="service_starting">Služba se spouští…</string>
+    <string name="service_startup_error">Chyba při spouštění služby</string>
+    <string name="permissions_not_granted">Potřebná oprávnění nebyla udělena. Otevřete aplikaci a udělte je</string>
+
+    <string name="boot_start_channel_name">Spuštění při startu</string>
+    <string name="boot_start_prompt">Klepnutím spustíte Rotation Control</string>
+
+</resources>

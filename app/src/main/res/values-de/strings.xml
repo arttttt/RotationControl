@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Einstellungen</string>
+    <string name="about">Über die App</string>
+    <string name="apps">Apps</string>
+
+    <string name="button_sources_text">Quellcode anzeigen</string>
+
+    <string name="start_on_boot">Rotation Control beim Systemstart starten</string>
+    <string name="forced_mode">Ausrichtung erzwingen</string>
+
+    <string name="notice_text">Hinweis</string>
+    <string name="show_notifications_permission_text">Für die korrekte Funktion der App ist die Berechtigung zum Anzeigen von Benachrichtigungen erforderlich</string>
+    <string name="can_write_settings_permission_text">Damit die App ordnungsgemäß funktioniert, ist die Berechtigung zum Ändern der Systemeinstellungen erforderlich</string>
+    <string name="draw_overlay_permission_text">Der Modus für die erzwungene Bildschirmausrichtung ist aktiviert. Für die korrekte Funktion der App ist die Berechtigung zur Anzeige über anderen Apps erforderlich</string>
+    <string name="rotation_control_version">App-Version: %s</string>
+
+    <string name="cant_request_permission">Berechtigungen können nicht angefordert werden</string>
+    <string name="cant_request_permission_message">Etwas ist schiefgelaufen. Rotation Control konnte die erforderlichen Berechtigungen nicht anfordern</string>
+
+    <string name="stop_service">Dienst beenden</string>
+
+    <string name="service_starting">Dienst wird gestartet…</string>
+    <string name="service_startup_error">Fehler beim Starten des Dienstes</string>
+    <string name="permissions_not_granted">Erforderliche Berechtigungen wurden nicht erteilt. Öffnen Sie die App und erteilen Sie sie</string>
+
+    <string name="boot_start_channel_name">Start beim Systemstart</string>
+    <string name="boot_start_prompt">Tippen, um Rotation Control zu starten</string>
+
+</resources>

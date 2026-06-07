@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Instellingen</string>
+    <string name="about">Over</string>
+    <string name="apps">Apps</string>
+
+    <string name="button_sources_text">Broncode bekijken</string>
+
+    <string name="start_on_boot">Rotation Control starten bij het opstarten van het systeem</string>
+    <string name="forced_mode">Oriëntatie afdwingen</string>
+
+    <string name="notice_text">Let op</string>
+    <string name="show_notifications_permission_text">Voor een goede werking van de app is toestemming om meldingen weer te geven vereist</string>
+    <string name="can_write_settings_permission_text">Voor een goede werking van de app is toestemming om systeeminstellingen te wijzigen vereist</string>
+    <string name="draw_overlay_permission_text">De modus voor geforceerde schermoriëntatie is ingeschakeld. Voor een goede werking van de app is toestemming om over andere apps weer te geven vereist</string>
+    <string name="rotation_control_version">App-versie: %s</string>
+
+    <string name="cant_request_permission">Kan geen toestemmingen aanvragen</string>
+    <string name="cant_request_permission_message">Er is iets misgegaan. Rotation Control kon de benodigde toestemmingen niet aanvragen</string>
+
+    <string name="stop_service">Service stoppen</string>
+
+    <string name="service_starting">Service wordt gestart…</string>
+    <string name="service_startup_error">Fout bij het starten van de service</string>
+    <string name="permissions_not_granted">De vereiste toestemmingen zijn niet verleend. Open de app en verleen ze</string>
+
+    <string name="boot_start_channel_name">Starten bij opstarten</string>
+    <string name="boot_start_prompt">Tik om Rotation Control te starten</string>
+
+</resources>

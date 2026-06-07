@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Inställningar</string>
+    <string name="about">Om</string>
+    <string name="apps">Appar</string>
+
+    <string name="button_sources_text">Visa källkod</string>
+
+    <string name="start_on_boot">Starta Rotation Control vid systemstart</string>
+    <string name="forced_mode">Tvinga skärmorientering</string>
+
+    <string name="notice_text">Observera</string>
+    <string name="show_notifications_permission_text">För att appen ska fungera korrekt krävs behörighet att visa aviseringar</string>
+    <string name="can_write_settings_permission_text">För att appen ska fungera korrekt krävs behörighet att ändra systeminställningar</string>
+    <string name="draw_overlay_permission_text">Läget för tvingad skärmorientering är aktiverat. För att appen ska fungera korrekt krävs behörighet att visas ovanpå andra appar</string>
+    <string name="rotation_control_version">Appversion: %s</string>
+
+    <string name="cant_request_permission">Det går inte att begära behörigheter</string>
+    <string name="cant_request_permission_message">Något gick fel. Rotation Control kunde inte begära de nödvändiga behörigheterna</string>
+
+    <string name="stop_service">Stoppa tjänsten</string>
+
+    <string name="service_starting">Tjänsten startar…</string>
+    <string name="service_startup_error">Fel vid start av tjänsten</string>
+    <string name="permissions_not_granted">De nödvändiga behörigheterna har inte beviljats. Öppna appen och bevilja dem</string>
+
+    <string name="boot_start_channel_name">Start vid systemstart</string>
+    <string name="boot_start_prompt">Tryck för att starta Rotation Control</string>
+
+</resources>

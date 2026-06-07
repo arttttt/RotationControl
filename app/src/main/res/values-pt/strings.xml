@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">Configurações</string>
+    <string name="about">Sobre</string>
+    <string name="apps">Aplicativos</string>
+
+    <string name="button_sources_text">Ver código-fonte</string>
+
+    <string name="start_on_boot">Iniciar o Rotation Control ao ligar o sistema</string>
+    <string name="forced_mode">Forçar a orientação</string>
+
+    <string name="notice_text">Aviso</string>
+    <string name="show_notifications_permission_text">Para que o aplicativo funcione corretamente, é necessária a permissão para exibir notificações</string>
+    <string name="can_write_settings_permission_text">Para que o aplicativo funcione corretamente, é necessária a permissão para alterar as configurações do sistema</string>
+    <string name="draw_overlay_permission_text">O modo de orientação forçada da tela está ativado. Para que o aplicativo funcione corretamente, é necessária a permissão para sobreposição sobre outros aplicativos</string>
+    <string name="rotation_control_version">Versão do aplicativo: %s</string>
+
+    <string name="cant_request_permission">Não é possível solicitar as permissões</string>
+    <string name="cant_request_permission_message">Algo deu errado. O Rotation Control não conseguiu solicitar as permissões necessárias</string>
+
+    <string name="stop_service">Parar o serviço</string>
+
+    <string name="service_starting">O serviço está iniciando…</string>
+    <string name="service_startup_error">Erro ao iniciar o serviço</string>
+    <string name="permissions_not_granted">As permissões necessárias não foram concedidas. Abra o aplicativo e conceda-as</string>
+
+    <string name="boot_start_channel_name">Início ao ligar</string>
+    <string name="boot_start_prompt">Toque para iniciar o Rotation Control</string>
+
+</resources>

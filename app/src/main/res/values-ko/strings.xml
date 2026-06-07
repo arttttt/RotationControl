@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings">설정</string>
+    <string name="about">정보</string>
+    <string name="apps">앱</string>
+
+    <string name="button_sources_text">소스 코드 보기</string>
+
+    <string name="start_on_boot">시스템 부팅 시 Rotation Control 시작</string>
+    <string name="forced_mode">화면 방향 강제 적용</string>
+
+    <string name="notice_text">안내</string>
+    <string name="show_notifications_permission_text">앱이 올바르게 작동하려면 알림 표시 권한이 필요합니다</string>
+    <string name="can_write_settings_permission_text">앱이 올바르게 작동하려면 시스템 설정을 변경할 수 있는 권한이 필요합니다</string>
+    <string name="draw_overlay_permission_text">화면 방향 강제 적용 모드가 활성화되어 있습니다. 앱이 올바르게 작동하려면 다른 앱 위에 표시할 수 있는 권한이 필요합니다</string>
+    <string name="rotation_control_version">앱 버전: %s</string>
+
+    <string name="cant_request_permission">권한을 요청할 수 없습니다</string>
+    <string name="cant_request_permission_message">문제가 발생했습니다. Rotation Control에서 필요한 권한을 요청할 수 없습니다</string>
+
+    <string name="stop_service">서비스 중지</string>
+
+    <string name="service_starting">서비스를 시작하는 중…</string>
+    <string name="service_startup_error">서비스 시작 오류</string>
+    <string name="permissions_not_granted">필요한 권한이 부여되지 않았습니다. 앱을 열고 권한을 부여하세요</string>
+
+    <string name="boot_start_channel_name">부팅 시 시작</string>
+    <string name="boot_start_prompt">Rotation Control을 시작하려면 탭하세요</string>
+
+</resources>

@@ -17,6 +17,8 @@ android {
         versionName = "2.3.1"
 
         multiDexEnabled = true
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

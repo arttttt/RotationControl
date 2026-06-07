@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.arkivanov.essenty.lifecycle.essentyLifecycle
 import com.arttttt.navigation.factory.CustomFragmentFactory
@@ -33,6 +34,7 @@ import com.arttttt.rotationcontrolv3.utils.extensions.resumeWhenActive
 import com.arttttt.rotationcontrolv3.utils.servicelauncher.RotationServiceLauncher
 import com.arttttt.utils.unsafeCastTo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
@@ -106,7 +108,7 @@ class MainFragment2(
         launchServiceButton.setOnClickListener {
             job?.cancel()
 
-            job = lifecycleScope.launch {
+            job = viewLifecycleOwner.lifecycleScope.launch {
                 val isServiceRunning = RotationService.status.value == RotationService.Status.RUNNING
 
                 ensureActive()
@@ -114,17 +116,18 @@ class MainFragment2(
                 if (isServiceRunning) {
                     stopRotationService()
                 } else {
-                    val isAllPermissionsGranted = kotlin
-                        .runCatching {
-                            checkAndGetPermissions()
-                        }
-                        .onFailure {
-                            showDialog(
-                                title = R.string.cant_request_permission,
-                                message = R.string.cant_request_permission_message,
-                            )
-                        }
-                        .getOrDefault(false)
+                    val isAllPermissionsGranted = try {
+                        checkAndGetPermissions()
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        showDialog(
+                            title = R.string.cant_request_permission,
+                            message = R.string.cant_request_permission_message,
+                        )
+
+                        false
+                    }
 
                     if (!isAllPermissionsGranted) return@launch
 
@@ -134,13 +137,6 @@ class MainFragment2(
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        job?.cancel()
-        job = null
     }
 
     private fun setFragment(item: MenuItem) {
@@ -208,6 +204,12 @@ class MainFragment2(
         message: Int,
     ) {
         return suspendCancellableCoroutine { continuation ->
+            if (!viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                continuation.resumeWhenActive(Unit)
+
+                return@suspendCancellableCoroutine
+            }
+
             val dialog = AlertDialog.Builder(requireContext())
                 .setTitle(title)
                 .setMessage(message)

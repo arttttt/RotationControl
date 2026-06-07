@@ -4,5 +4,7 @@ interface RotationServiceLauncher {
 
     fun launch()
 
+    fun launchOnBoot()
+
     fun stop()
 }

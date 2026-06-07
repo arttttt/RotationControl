@@ -11,9 +11,9 @@ import com.arttttt.rotationcontrolv3.domain.stores.rotation.RotationStore
 import com.arttttt.rotationcontrolv3.ui.rotation.model.NotificationButton
 import com.arttttt.rotationcontrolv3.ui.rotation.view.RotationServiceView
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 
 class RotationServiceController(
@@ -57,41 +57,27 @@ class RotationServiceController(
 
             view
                 .events
-                .filterIsInstance<RotationServiceView.UiEvent.NotificationUpdated>()
-                .bindTo { event ->
-                    platformCallback?.onNotificationUpdated(event.notification)
-                }
-
-            view
-                .events
                 .filterIsInstance<RotationServiceView.UiEvent.StopServiceClicked>()
                 .bindTo {
                     platformCallback?.stopService()
                 }
 
-            rotationStore
-                .states
-                .mapNotNull { state ->
-                    when {
-                        state.error is NoPermissionsException -> RotationServiceView.State.Error
-                        state.globalOrientationMode != null -> RotationServiceView.State.Active(
-                            selectedButton = state.globalOrientationMode.toNotificationButton()
-                        )
-                        else -> null
-                    }
-                }
-                .bindTo(view::render)
-
             merge(
-                _commands.filterIsInstance<Command.ConfigurationChanged>(),
-                view.events.filterIsInstance<RotationServiceView.UiEvent.NotificationDeleted>(),
+                rotationStore
+                    .states
+                    .map { state -> state.toViewState() }
+                    .distinctUntilChanged(),
+                _commands
+                    .filterIsInstance<Command.ConfigurationChanged>()
+                    .map { rotationStore.state.toViewState() },
+                view
+                    .events
+                    .filterIsInstance<RotationServiceView.UiEvent.NotificationDeleted>()
+                    .map { rotationStore.state.toViewState() },
             )
-                .mapNotNull { rotationStore.state.globalOrientationMode }
-                .bindTo { globalOrientationMode ->
-                    view.handleCommand(
-                        RotationServiceView.Command.UpdateNotification(
-                            selectedButton = globalOrientationMode.toNotificationButton()
-                        )
+                .bindTo { viewState ->
+                    platformCallback?.onNotificationUpdated(
+                        view.createNotification(viewState)
                     )
                 }
         }
@@ -99,6 +85,17 @@ class RotationServiceController(
 
     fun handleCommand(command: Command) {
         _commands.tryEmit(command)
+    }
+
+    private fun RotationStore.State.toViewState(): RotationServiceView.State {
+        return when {
+            error is NoPermissionsException -> RotationServiceView.State.PermissionsError
+            error != null -> RotationServiceView.State.StartupError
+            globalOrientationMode != null -> RotationServiceView.State.Active(
+                selectedButton = globalOrientationMode.toNotificationButton()
+            )
+            else -> RotationServiceView.State.Starting
+        }
     }
 
     private fun OrientationMode.Companion.of(event: RotationServiceView.UiEvent.ButtonEvent): OrientationMode {
@@ -111,7 +108,7 @@ class RotationServiceController(
         }
     }
 
-    private fun OrientationMode.toNotificationButton():NotificationButton {
+    private fun OrientationMode.toNotificationButton(): NotificationButton {
         return when (this) {
             is OrientationMode.Auto -> NotificationButton.Auto
             is OrientationMode.Portrait -> NotificationButton.Portrait

@@ -1,5 +1,6 @@
 package com.arttttt.rotationcontrolv3
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDexApplication
 import com.arttttt.rotationcontrolv3.di.components.AppComponent
 import com.arttttt.rotationcontrolv3.di.components.DaggerAppComponent
@@ -18,6 +19,8 @@ class App : MultiDexApplication(), AppComponentOwner {
 
     override fun onCreate() {
         super.onCreate()
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         Timber.plant(Timber.DebugTree())
     }

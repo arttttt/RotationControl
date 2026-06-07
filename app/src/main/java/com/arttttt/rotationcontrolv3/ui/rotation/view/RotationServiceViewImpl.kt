@@ -10,8 +10,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.PendingIntentCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
-import androidx.core.view.PointerIconCompat
-import com.arkivanov.mvikotlin.core.utils.diff
 import com.arttttt.rotationcontrolv3.MainActivity
 import com.arttttt.rotationcontrolv3.R
 import com.arttttt.rotationcontrolv3.ui.rotation.RotationService
@@ -35,20 +33,6 @@ class RotationServiceViewImpl(
         private const val NO_ID = -1
     }
 
-    private val activeRenderer = diff {
-        diff(
-            get = RotationServiceView.State.Active::selectedButton,
-            set = this@RotationServiceViewImpl::handleActiveButtonChanged,
-        )
-    }
-
-    private val errorRenderer = diff<RotationServiceView.State.Error> {
-        diff(
-            get = { it },
-            set = { handleErrorState() },
-        )
-    }
-
     override val events = MutableSharedFlow<RotationServiceView.UiEvent>(extraBufferCapacity = 1)
 
     private val buttonsList = listOf(
@@ -59,10 +43,16 @@ class RotationServiceViewImpl(
         R.id.btn_landscape_reverse,
     )
 
-    override fun render(model: RotationServiceView.State) {
-        when (model) {
-            is RotationServiceView.State.Active -> activeRenderer.render(model)
-            is RotationServiceView.State.Error -> errorRenderer.render(model)
+    override fun createNotification(model: RotationServiceView.State): Notification {
+        return when (model) {
+            is RotationServiceView.State.Starting -> createStartingNotification()
+            is RotationServiceView.State.Active -> createActiveNotification(model.selectedButton)
+            is RotationServiceView.State.PermissionsError -> createErrorNotification(
+                text = context.getString(R.string.permissions_not_granted),
+            )
+            is RotationServiceView.State.StartupError -> createErrorNotification(
+                text = context.getString(R.string.service_startup_error),
+            )
         }
     }
 
@@ -78,29 +68,6 @@ class RotationServiceViewImpl(
         }
     }
 
-    override fun handleCommand(command: RotationServiceView.Command) {
-        when (command) {
-            is RotationServiceView.Command.UpdateNotification -> updateNotification(command.selectedButton)
-        }
-    }
-
-    private fun updateNotification(
-        activeButton: NotificationButton
-    ) {
-        val remoteViews = createRemoteViews()
-
-        remoteViews.configureButtons(
-            context = context,
-            isButtonActive = { id -> NotificationButton.of(id) == activeButton },
-        )
-
-        events.tryEmit(
-            RotationServiceView.UiEvent.NotificationUpdated(
-                notification = createNotification(remoteViews)
-            )
-        )
-    }
-
     private fun handleButtonClicked(intent: Intent) {
         val clickedButtonId = intent
             .getIntExtra(
@@ -113,7 +80,20 @@ class RotationServiceViewImpl(
         getUiEventFromButtonId(clickedButtonId)?.let(events::tryEmit)
     }
 
-    private fun handleActiveButtonChanged(activeButton: NotificationButton) {
+    private fun createStartingNotification(): Notification {
+        return NotificationCompat
+            .Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_rotate)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentText(context.getString(R.string.service_starting))
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setOngoing(true)
+            .build()
+    }
+
+    private fun createActiveNotification(
+        activeButton: NotificationButton,
+    ): Notification {
         val remoteViews = createRemoteViews()
 
         remoteViews.configureButtons(
@@ -121,65 +101,6 @@ class RotationServiceViewImpl(
             isButtonActive = { id -> NotificationButton.of(id) == activeButton },
         )
 
-        events.tryEmit(
-            RotationServiceView.UiEvent.NotificationUpdated(
-                notification = createNotification(remoteViews)
-            )
-        )
-    }
-
-    @SuppressLint("LaunchActivityFromNotification")
-    private fun handleErrorState() {
-        val contentIntent = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(
-                Intent(context, MainActivity::class.java).apply {
-                    putExtra(
-                        MainActivity.LAUNCH_PAYLOAD,
-                        Intent(context, RotationService::class.java).apply {
-                            action = STOP_SERVICE_ACTION
-                        }
-                    )
-                }
-            )
-
-            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-
-        events.tryEmit(
-            RotationServiceView.UiEvent.NotificationUpdated(
-                notification = NotificationCompat
-                    .Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_rotate)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentText("Permissions not granted")
-                    .setContentIntent(contentIntent)
-                    .build()
-            )
-        )
-    }
-
-    private fun createRemoteViews(): RemoteViews {
-        return RemoteViews(
-            context.packageName,
-            R.layout.layout_notification,
-        )
-    }
-
-    private fun getUiEventFromButtonId(id: Int): RotationServiceView.UiEvent? {
-        return when (id) {
-            R.id.btn_auto -> RotationServiceView.UiEvent.ButtonEvent.AutoClicked
-            R.id.btn_portrait -> RotationServiceView.UiEvent.ButtonEvent.PortraitClicked
-            R.id.btn_portrait_reverse -> RotationServiceView.UiEvent.ButtonEvent.PortraitReverseClicked
-            R.id.btn_landscape -> RotationServiceView.UiEvent.ButtonEvent.LandscapeClicked
-            R.id.btn_landscape_reverse -> RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked
-            else -> null
-        }
-    }
-
-    private fun createNotification(
-        remoteViews: RemoteViews,
-    ): Notification {
         return NotificationCompat
             .Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_rotate)
@@ -219,6 +140,54 @@ class RotationServiceViewImpl(
             .apply {
                 flags = NotificationCompat.FLAG_ONLY_ALERT_ONCE
             }
+    }
+
+    @SuppressLint("LaunchActivityFromNotification")
+    private fun createErrorNotification(
+        text: String,
+    ): Notification {
+        val contentIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(
+                Intent(context, MainActivity::class.java).apply {
+                    putExtra(
+                        MainActivity.LAUNCH_PAYLOAD,
+                        Intent(context, RotationService::class.java).apply {
+                            action = STOP_SERVICE_ACTION
+                        }
+                    )
+                }
+            )
+
+            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        return NotificationCompat
+            .Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_rotate)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentText(text)
+            .setContentIntent(contentIntent)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+            .setOngoing(true)
+            .build()
+    }
+
+    private fun createRemoteViews(): RemoteViews {
+        return RemoteViews(
+            context.packageName,
+            R.layout.layout_notification,
+        )
+    }
+
+    private fun getUiEventFromButtonId(id: Int): RotationServiceView.UiEvent? {
+        return when (id) {
+            R.id.btn_auto -> RotationServiceView.UiEvent.ButtonEvent.AutoClicked
+            R.id.btn_portrait -> RotationServiceView.UiEvent.ButtonEvent.PortraitClicked
+            R.id.btn_portrait_reverse -> RotationServiceView.UiEvent.ButtonEvent.PortraitReverseClicked
+            R.id.btn_landscape -> RotationServiceView.UiEvent.ButtonEvent.LandscapeClicked
+            R.id.btn_landscape_reverse -> RotationServiceView.UiEvent.ButtonEvent.LandscapeReverseClicked
+            else -> null
+        }
     }
 
     private fun RemoteViews.configureButtons(

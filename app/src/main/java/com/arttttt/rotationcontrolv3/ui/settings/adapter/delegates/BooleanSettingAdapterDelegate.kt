@@ -6,13 +6,12 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import com.arttttt.adapterdelegates.dsl.adapterDelegate
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 import com.arttttt.rotationcontrolv3.ui.settings.adapter.models.SettingAdapterItem
 import timber.log.Timber
-import kotlin.reflect.KClass
 
 fun BooleanSettingAdapterDelegate(
-    onCheckedChanged: (KClass<out Setting<Boolean>>, Boolean) -> Unit,
+    onCheckedChanged: (SettingKey<Boolean>, Boolean) -> Unit,
 ) = adapterDelegate<SettingAdapterItem<Boolean>>(
     layout = R.layout.item_settings,
     layoutInflater = ::inflateSettingItem,
@@ -21,7 +20,7 @@ fun BooleanSettingAdapterDelegate(
     val switcher = findViewById<CompoundButton>(R.id.switcher)
 
     switcher.setOnCheckedChangeListener { _, isChecked ->
-        onCheckedChanged.invoke(item.type, isChecked)
+        onCheckedChanged.invoke(item.key, isChecked)
     }
 
     bind {

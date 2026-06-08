@@ -1,13 +1,13 @@
 package com.arttttt.rotationcontrolv3.domain.stores.settings
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
-import kotlin.reflect.KClass
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingValue
 
 interface SettingsStore : Store<SettingsStore.Intent, SettingsStore.State, SettingsStore.Label> {
 
     data class State(
-        val settings: List<Setting<*>>,
+        val settings: List<SettingValue<*>>,
     )
 
     sealed class Action {
@@ -18,15 +18,15 @@ interface SettingsStore : Store<SettingsStore.Intent, SettingsStore.State, Setti
     sealed class Intent {
 
         data class UpdateSettingValue<T>(
+            val key: SettingKey<T>,
             val value: T,
-            val clazz: KClass<out Setting<T>>,
         ) : Intent()
     }
 
     sealed class Message {
 
         data class SettingsLoaded(
-            val settings: List<Setting<*>>
+            val settings: List<SettingValue<*>>
         ) : Message()
     }
 

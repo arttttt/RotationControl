@@ -1,13 +1,10 @@
 package com.arttttt.rotationcontrolv3.domain.stores.settings
 
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
-import com.arttttt.utils.unsafeCastTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.reflect.KClass
 
 class SettingsStoreExecutor(
     private val settingsRepository: SettingsRepository,
@@ -21,39 +18,32 @@ class SettingsStoreExecutor(
 
     override fun executeIntent(intent: SettingsStore.Intent) {
         when (intent) {
-            is SettingsStore.Intent.UpdateSettingValue<*> -> {
-                updateSetting(
-                    clazz = intent.clazz.unsafeCastTo(),
-                    value = intent.value,
-                )
-            }
+            is SettingsStore.Intent.UpdateSettingValue<*> -> updateSetting(intent)
         }
     }
 
     private fun loadSettings() {
         scope.launch {
-            val settings = withContext(Dispatchers.IO) {
-                settingsRepository.getAllSettings()
-            }
-
             dispatch(
                 SettingsStore.Message.SettingsLoaded(
-                    settings = settings,
+                    settings = withContext(Dispatchers.IO) {
+                        settingsRepository.getAll()
+                    }
                 )
             )
         }
     }
 
-    private fun <T> updateSetting(clazz: KClass<out Setting<T>>, value: T) {
+    private fun <T> updateSetting(intent: SettingsStore.Intent.UpdateSettingValue<T>) {
         scope.launch {
             withContext(Dispatchers.IO) {
-                settingsRepository.saveSetting(clazz, value)
+                settingsRepository.save(intent.key, intent.value)
             }
 
             dispatch(
                 SettingsStore.Message.SettingsLoaded(
                     settings = withContext(Dispatchers.IO) {
-                        settingsRepository.getAllSettings()
+                        settingsRepository.getAll()
                     }
                 )
             )

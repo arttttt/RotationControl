@@ -2,8 +2,7 @@ package com.arttttt.rotationcontrolv3.ui.settings.view
 
 import com.arkivanov.mvikotlin.core.view.MviView
 import com.arttttt.adapterdelegates.ListItem
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
-import kotlin.reflect.KClass
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 
 interface SettingsView : MviView<SettingsView.Model, SettingsView.UiEvent> {
 
@@ -14,7 +13,7 @@ interface SettingsView : MviView<SettingsView.Model, SettingsView.UiEvent> {
     sealed class UiEvent {
 
         data class SettingsChanged<T>(
-            val type: KClass<out Setting<T>>,
+            val key: SettingKey<T>,
             val value: T,
         ) : UiEvent()
     }

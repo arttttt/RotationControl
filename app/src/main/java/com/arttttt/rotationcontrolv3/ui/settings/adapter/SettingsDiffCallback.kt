@@ -8,7 +8,7 @@ class SettingsDiffCallback : EqualsDiffCallback() {
 
     override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
         return when {
-            oldItem is SettingAdapterItem<*> && newItem is SettingAdapterItem<*> -> oldItem.type == newItem.type
+            oldItem is SettingAdapterItem<*> && newItem is SettingAdapterItem<*> -> oldItem.key == newItem.key
             else -> super.areItemsTheSame(oldItem, newItem)
         }
     }

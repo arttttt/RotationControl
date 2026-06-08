@@ -15,7 +15,7 @@ import com.arttttt.permissions.domain.entity.Permission
 import com.arttttt.permissions.domain.repository.PermissionsRequester
 import com.arttttt.permissions.utils.extensions.toBoolean
 import com.arttttt.rotationcontrolv3.R
-import com.arttttt.rotationcontrolv3.domain.entity.settings.Setting
+import com.arttttt.rotationcontrolv3.domain.entity.settings.SettingKey
 import com.arttttt.rotationcontrolv3.domain.repository.PermissionsRepository
 import com.arttttt.rotationcontrolv3.domain.repository.SettingsRepository
 import com.arttttt.rotationcontrolv3.framework.model.DrawOverlayPermission
@@ -169,8 +169,7 @@ class MainFragment2(
         if (!isPermissionGranted) return false
 
         val isForcedModeEnabled = settingsRepository
-            .getSetting(Setting.ForcedMode::class)
-            .value
+            .get(SettingKey.ForcedMode)
 
         isPermissionGranted = if (isForcedModeEnabled) {
             checkAndRequestPermissions(DrawOverlayPermission)

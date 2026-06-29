@@ -140,6 +140,10 @@ class MainFragment2(
     }
 
     private fun setFragment(item: MenuItem) {
+        if (childFragmentManager.isStateSaved) {
+            return
+        }
+
         when (item) {
             MenuItem.Settings -> {
                 childFragmentManager.commit {
